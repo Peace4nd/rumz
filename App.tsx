@@ -7,18 +7,23 @@
  *
  */
 
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from "react-native/Libraries/NewAppScreen";
+import { NativeRouter } from "react-router-native";
 
 const App = (): JSX.Element => {
 	return (
-		<>
+		<NativeRouter>
 			<StatusBar barStyle="dark-content" />
 			<SafeAreaView>
 				<ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
 					<Header />
 					<View style={styles.body}>
+						<FontAwesomeIcon icon={faCoffee} />
+
 						<View style={styles.sectionContainer}>
 							<Text style={styles.sectionTitle}>Step One</Text>
 							<Text style={styles.sectionDescription}>
@@ -45,7 +50,7 @@ const App = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</SafeAreaView>
-		</>
+		</NativeRouter>
 	);
 };
 

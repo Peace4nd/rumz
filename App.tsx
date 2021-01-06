@@ -12,13 +12,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from "react-native/Libraries/NewAppScreen";
-import { NativeRouter } from "react-router-native";
+import { Link, NativeRouter, Route, RouteComponentProps } from "react-router-native";
+
+const Home = (): JSX.Element => <Text style={{ color: "#ff0000" }}>Home</Text>;
+
+const About = (): JSX.Element => <Text style={{ color: "#00ff00" }}>About</Text>;
+
+const Topic = ({ match }: RouteComponentProps): JSX.Element => <Text style={{ color: "#aaaaaa", fontFamily: "monospace" }}>{JSON.stringify(match)}</Text>;
 
 const App = (): JSX.Element => {
 	return (
 		<NativeRouter>
 			<StatusBar barStyle="dark-content" />
 			<SafeAreaView>
+				<View>
+					<Link to="/" underlayColor="#ff0000">
+						<Text>Home</Text>
+					</Link>
+					<Link to="/about" underlayColor="#00ff00">
+						<Text>About</Text>
+					</Link>
+					<Link to="/topic" underlayColor="#aaaaaa">
+						<Text>Topic</Text>
+					</Link>
+				</View>
+
+				<View>
+					<Route exact={true} path="/" component={Home} />
+					<Route path="/about" component={About} />
+					<Route path="/topic" component={Topic} />
+				</View>
+
 				<ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
 					<Header />
 					<View style={styles.body}>

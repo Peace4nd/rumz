@@ -14,11 +14,11 @@ import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "rea
 import { DebugInstructions, Header, LearnMoreLinks, ReloadInstructions } from "react-native/Libraries/NewAppScreen";
 import { Link, NativeRouter, Route, RouteComponentProps } from "react-router-native";
 
-const Home = (): JSX.Element => <Text style={{ color: "#ff0000" }}>Home</Text>;
+const Home = (): JSX.Element => <Text style={styles.routerHoume}>Home</Text>;
 
-const About = (): JSX.Element => <Text style={{ color: "#00ff00" }}>About</Text>;
+const About = (): JSX.Element => <Text style={styles.routerAbout}>About</Text>;
 
-const Topic = ({ match }: RouteComponentProps): JSX.Element => <Text style={{ color: "#aaaaaa", fontFamily: "monospace" }}>{JSON.stringify(match)}</Text>;
+const Topic = ({ match }: RouteComponentProps): JSX.Element => <Text style={styles.routerTopic}>{JSON.stringify(match)}</Text>;
 
 const App = (): JSX.Element => {
 	return (
@@ -96,6 +96,16 @@ const styles = StyleSheet.create({
 	},
 	highlight: {
 		fontWeight: "700"
+	},
+	routerAbout: {
+		color: "#00ff00"
+	},
+	routerHoume: {
+		color: "#ff0000"
+	},
+	routerTopic: {
+		color: "#aaaaaa",
+		fontFamily: "monospace"
 	},
 	scrollView: {
 		backgroundColor: "white"

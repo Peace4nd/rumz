@@ -1,4 +1,3 @@
 {
-	"upgrade": true,
-	"reject": ["@stoplight/prism-cli", "@icewarp/public-api-sdk"]
+	"upgrade": true
 }

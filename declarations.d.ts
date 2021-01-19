@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/naming-convention */
 
 import React from "react";
-import { ImageSourcePropType, TouchableHighlightProps } from "react-native";
+import { ImageURISource, TouchableHighlightProps } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 declare module "react-router-native" {
@@ -9,7 +9,7 @@ declare module "react-router-native" {
 }
 
 declare module "*.png" {
-	const content: ImageSourcePropType;
+	const content: ImageURISource;
 	export default content;
 }
 

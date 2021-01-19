@@ -28,12 +28,16 @@ export const styles = StyleSheet.create({
 
 class Header extends React.Component<RouteComponentProps> {
 	public render(): JSX.Element {
+		// rozlozeni props
+		const { match } = this.props;
+		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
-				<TouchableOpacity onPress={this.handlePress} style={styles.back}>
-					<FontAwesomeIcon icon={faChevronLeft} style={styles.icon} size={24} />
-				</TouchableOpacity>
-
+				{match.path !== "/" && (
+					<TouchableOpacity onPress={this.handlePress} style={styles.back}>
+						<FontAwesomeIcon icon={faChevronLeft} style={styles.icon} size={24} />
+					</TouchableOpacity>
+				)}
 				<Text style={styles.title}>RUMZ</Text>
 			</View>
 		);

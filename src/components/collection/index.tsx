@@ -2,15 +2,15 @@ import { Moment } from "moment";
 import React from "react";
 import { Dimensions, FlatList, ImageBackground, ImageSourcePropType, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Link } from "react-router-native";
+import { Country } from "..";
 import { Color, opacify, Size, Typography } from "../../styles";
-import flags from "../flag";
 
 export interface ICollectionItem {
 	id: string;
 	source: ImageSourcePropType;
 	label: string;
 	added: Moment;
-	origin: string;
+	country: string;
 }
 
 export interface ICollection {
@@ -67,12 +67,23 @@ export const styles = StyleSheet.create({
 });
 
 export default class Collection extends React.Component<ICollection> {
+	/**
+	 * Vychozi vlastnosti
+	 */
 	public static defaultProps: ICollection = {
 		items: []
 	};
 
+	/**
+	 * Velikost jedne polozky
+	 */
 	private readonly itemSize = this.calculateItemSize();
 
+	/**
+	 * Render
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	public render(): JSX.Element {
 		// rozlozeni props
 		const { items } = this.props;
@@ -89,27 +100,33 @@ export default class Collection extends React.Component<ICollection> {
 		);
 	}
 
-	private renderItem = ({ index, item }: ListRenderItemInfo<ICollectionItem>): JSX.Element => {
-		// sestaveni a vraceni polozky seznamu
-		return (
-			<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
-				<Link to={"/view/" + item.id} style={styles.itemLink} component={TouchableOpacity}>
-					<ImageBackground source={item.source} resizeMode="contain" style={styles.itemImage}>
-						<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * GRID_BORDER }])}>
-							<Text style={styles.infoLabel}>{item.label}</Text>
-							<View style={styles.infoAdditional}>
-								<Text style={styles.infoAdditionalDate}>{item.added.format("D. M. YYYY")}</Text>
-								{React.createElement(flags[item.origin], {
-									style: styles.infoAdditionalFlag
-								})}
-							</View>
+	/**
+	 * Sestaveni polozky seznamu
+	 *
+	 * @param {ListRenderItemInfo<ICollectionItem>} params Parametry
+	 * @returns {JSX.Element} Element polozky
+	 */
+	private renderItem = ({ index, item }: ListRenderItemInfo<ICollectionItem>): JSX.Element => (
+		<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
+			<Link to={"/view/" + item.id} style={styles.itemLink} component={TouchableOpacity}>
+				<ImageBackground source={item.source} resizeMode="contain" style={styles.itemImage}>
+					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * GRID_BORDER }])}>
+						<Text style={styles.infoLabel}>{item.label}</Text>
+						<View style={styles.infoAdditional}>
+							<Text style={styles.infoAdditionalDate}>{item.added.format("D. M. YYYY")}</Text>
+							<Country.Flag code={item.country} style={styles.infoAdditionalFlag} />
 						</View>
-					</ImageBackground>
-				</Link>
-			</View>
-		);
-	};
+					</View>
+				</ImageBackground>
+			</Link>
+		</View>
+	);
 
+	/**
+	 * Vypocet velikosti polozky
+	 *
+	 * @returns {number} Velikost polozky
+	 */
 	private calculateItemSize(): number {
 		// rozlozeni vlastnosti
 		const { width } = Dimensions.get("window");

@@ -2,9 +2,17 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import React from "react";
 import { Button, Collection } from "../../components";
+import { IHeader } from "../../components/header";
+import strings from "../../utils/strings";
 import BaseRoute from "../base";
 
 export default class Home extends BaseRoute {
+	protected setHeaderProps(): IHeader {
+		return {
+			title: strings("headerMain")
+		};
+	}
+
 	protected renderRoute(): JSX.Element {
 		return (
 			<React.Fragment>

@@ -1,47 +1,22 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router-native";
-import { Color, Size, Typography } from "../../styles";
+import { RouterPath } from "../../utils/router";
+import styles from "./styles";
 
-export const styles = StyleSheet.create({
-	icon: {
-		color: Color.Primary.Text
-	},
-	sectionAction: {
-		alignItems: "flex-end",
-		flex: 1,
-		justifyContent: "center"
-	},
-	sectionBack: {
-		alignItems: "flex-start",
-		flex: 1,
-		justifyContent: "center"
-	},
-	sectionTitle: {
-		alignItems: "center",
-		flex: 2,
-		justifyContent: "center"
-	},
-	title: {
-		...Typography.Headline6,
-		color: Color.Primary.Text
-	},
-	wrapper: {
-		backgroundColor: Color.Primary.Base,
-		flexDirection: "row",
-		height: Size["6x"],
-		paddingHorizontal: Size["1x"]
-	}
-});
-
+/**
+ * Akce
+ */
 export interface IHeaderAction {
-	icon: IconProp;
+	icon: IconDefinition;
 	onPress: () => void;
 }
 
+/**
+ * Dostupne vlastnosti
+ */
 export interface IHeader {
 	title: string;
 	actions?: IHeaderAction[];
@@ -71,7 +46,7 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 		return (
 			<View style={styles.wrapper}>
 				<View style={styles.sectionBack}>
-					{match.path !== "/" && (
+					{match.path !== RouterPath["/overview"] && (
 						<TouchableOpacity onPress={this.handlePress}>
 							<FontAwesomeIcon icon={faChevronLeft} style={styles.icon} size={24} />
 						</TouchableOpacity>

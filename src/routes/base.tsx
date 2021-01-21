@@ -1,9 +1,11 @@
+import { faBars, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import { RouteComponentProps } from "react-router-native";
-import { Header } from "../components";
+import { Header, Navigation } from "../components";
 import { IHeader } from "../components/header";
 import { Color } from "../styles";
+import { RouterPath } from "../utils/router";
 
 const styles = StyleSheet.create({
 	wrapper: {
@@ -18,7 +20,21 @@ export default abstract class BaseRoute extends React.Component<RouteComponentPr
 				<StatusBar barStyle="default" backgroundColor={Color.Primary.Dark} />
 				<SafeAreaView style={styles.wrapper}>
 					<Header {...this.setHeaderProps()} />
-					{this.renderRoute()}
+					<View style={styles.wrapper}>{this.renderRoute()}</View>
+					<Navigation
+						tabs={[
+							{
+								icon: faBars,
+								label: "Přehled",
+								path: RouterPath["/overview"]
+							},
+							{
+								icon: faLightbulb,
+								label: "Statistika",
+								path: RouterPath["/create"]
+							}
+						]}
+					/>
 				</SafeAreaView>
 			</React.Fragment>
 		);

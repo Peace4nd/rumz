@@ -1,22 +1,8 @@
 import { StyleSheet } from "react-native";
 
 /**
- * Zakladni velikost
+ * Typografie
  */
-const root = 8;
-
-/**
- * Velikosti
- */
-export const Size = {
-	"1x": 1 * root,
-	"2x": 2 * root,
-	"3x": 3 * root,
-	"4x": 4 * root,
-	"5x": 5 * root,
-	"6x": 6 * root
-};
-
 export const Typography = StyleSheet.create({
 	Body1: {
 		fontFamily: "Ubuntu-Regular",

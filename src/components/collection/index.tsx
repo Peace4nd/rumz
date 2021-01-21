@@ -3,8 +3,12 @@ import React from "react";
 import { Dimensions, FlatList, ImageBackground, ImageSourcePropType, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Link } from "react-router-native";
 import { Country } from "..";
-import { Color, opacify, Size, Typography } from "../../styles";
+import { preparePath } from "../../utils/router";
+import styles, { GRID_BORDER, GRID_COLUMNS, GRID_GAP_ITEM, GRID_GAP_WRAPPER } from "./styles";
 
+/**
+ * Polozka sbirky
+ */
 export interface ICollectionItem {
 	id: string;
 	source: ImageSourcePropType;
@@ -13,59 +17,18 @@ export interface ICollectionItem {
 	country: string;
 }
 
+/**
+ * Dostupne vlastnosti
+ */
 export interface ICollection {
 	items: ICollectionItem[];
 }
 
-const GRID_COLUMNS: number = 2;
-const GRID_GAP_WRAPPER: number = 5;
-const GRID_GAP_ITEM: number = 10;
-const GRID_BORDER: number = 1;
-
-export const styles = StyleSheet.create({
-	infoAdditional: {
-		flexDirection: "row",
-		justifyContent: "space-between"
-	},
-	infoAdditionalDate: {
-		...Typography.Subtitle2,
-		color: Color.Primary.Text
-	},
-	infoAdditionalFlag: {
-		width: Size["3x"]
-	},
-	infoLabel: {
-		...Typography.Subtitle1,
-		color: Color.Primary.Text,
-		paddingBottom: Size["1x"] / 2
-	},
-	infoWrapper: {
-		backgroundColor: opacify(Color.Primary.Base, 0.75),
-		bottom: -GRID_GAP_ITEM,
-		flexDirection: "column",
-		left: -GRID_GAP_ITEM,
-		padding: Size["1x"] / 2,
-		position: "absolute",
-		right: -GRID_GAP_ITEM
-	},
-	itemImage: {
-		flex: 1
-	},
-	itemLink: {
-		flex: 1
-	},
-	itemWrapper: {
-		borderColor: opacify(Color.Primary.Base, 0.75),
-		borderRadius: 5,
-		borderWidth: GRID_BORDER,
-		margin: GRID_GAP_ITEM,
-		padding: GRID_GAP_ITEM
-	},
-	wrapper: {
-		paddingHorizontal: GRID_GAP_WRAPPER
-	}
-});
-
+/**
+ * Sbirka
+ *
+ * @returns {JSX.Element} Element
+ */
 export default class Collection extends React.Component<ICollection> {
 	/**
 	 * Vychozi vlastnosti
@@ -108,7 +71,7 @@ export default class Collection extends React.Component<ICollection> {
 	 */
 	private renderItem = ({ index, item }: ListRenderItemInfo<ICollectionItem>): JSX.Element => (
 		<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
-			<Link to={"/view/" + item.id} style={styles.itemLink} component={TouchableOpacity}>
+			<Link to={preparePath("/detail/:id", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
 				<ImageBackground source={item.source} resizeMode="contain" style={styles.itemImage}>
 					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * GRID_BORDER }])}>
 						<Text style={styles.infoLabel}>{item.label}</Text>

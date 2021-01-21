@@ -6,7 +6,7 @@ import { IHeader } from "../../components/header";
 import strings from "../../utils/strings";
 import BaseRoute from "../base";
 
-export default class Home extends BaseRoute {
+export default class Overview extends BaseRoute {
 	protected setHeaderProps(): IHeader {
 		return {
 			title: strings("headerMain")
@@ -48,7 +48,7 @@ export default class Home extends BaseRoute {
 						}
 					]}
 				/>
-				<Button icon={faPlus} route="/add" />
+				<Button.Link icon={faPlus} to="/create" />
 			</React.Fragment>
 		);
 	}

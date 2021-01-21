@@ -1,11 +1,12 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 import DocumentPicker from "react-native-document-picker";
+import styles from "./styles";
 
 export default class ImagePicker extends React.Component {
 	public render(): JSX.Element {
 		return (
-			<Pressable onPress={this.handleClick}>
+			<Pressable style={styles.wrapper} onPress={this.handleClick}>
 				<Text>obrazek</Text>
 			</Pressable>
 		);

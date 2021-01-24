@@ -1,17 +1,16 @@
 import { ComponentType } from "react";
 import { ExtractRouteParams, generatePath } from "react-router";
 import Create from "../routes/create";
-import Detail from "../routes/detail";
-import Overview from "../routes/overview";
+import { Collection, Detail } from "../routes/overview";
 
 /**
  * Definice dostupnych rout
  */
 const routes = {
 	"/create": Create,
-	"/detail/:id": Detail,
 	"/edit/:id": null,
-	"/overview": Overview
+	"/overview": Collection,
+	"/overview/:id": Detail
 };
 
 export type IRouterAvailable = keyof typeof routes;

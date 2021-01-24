@@ -1,27 +1,21 @@
-import { Moment } from "moment";
+import { faListUl } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import moment from "moment";
 import React from "react";
-import { Dimensions, FlatList, ImageBackground, ImageSourcePropType, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, ImageBackground, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Link } from "react-router-native";
 import { Country } from "..";
+import { Measurement, Typography } from "../../styles";
+import { ICollectionRecord } from "../../types/collection";
 import { preparePath } from "../../utils/router";
+import strings from "../../utils/strings";
 import styles, { GRID_BORDER, GRID_COLUMNS, GRID_GAP_ITEM, GRID_GAP_WRAPPER } from "./styles";
-
-/**
- * Polozka sbirky
- */
-export interface ICollectionItem {
-	id: string;
-	source: ImageSourcePropType;
-	label: string;
-	added: Moment;
-	country: string;
-}
 
 /**
  * Dostupne vlastnosti
  */
 export interface ICollection {
-	items: ICollectionItem[];
+	records: ICollectionRecord[];
 }
 
 /**
@@ -34,13 +28,13 @@ export default class Collection extends React.Component<ICollection> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: ICollection = {
-		items: []
+		records: []
 	};
 
 	/**
 	 * Velikost jedne polozky
 	 */
-	private readonly itemSize = this.calculateItemSize();
+	private readonly itemSize = this.calculateRecordSize();
 
 	/**
 	 * Render
@@ -49,15 +43,24 @@ export default class Collection extends React.Component<ICollection> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { items } = this.props;
+		const { records } = this.props;
+		// prazdna kolekce
+		if (records.length === 0) {
+			return (
+				<View style={styles.emptyWrapper}>
+					<FontAwesomeIcon icon={faListUl} size={Measurement.Icon * 3} style={styles.emptyIcon} />
+					<Text style={StyleSheet.flatten([Typography.Headline4, styles.emptyText])}>{strings("overviewEmpty")}</Text>
+				</View>
+			);
+		}
 		// sestaveni a vraceni
 		return (
 			<FlatList
-				data={items}
+				data={records}
 				numColumns={GRID_COLUMNS}
 				scrollEnabled={true}
-				renderItem={this.renderItem}
-				keyExtractor={(item) => item.label}
+				renderItem={this.renderRecord}
+				keyExtractor={(item) => item.id}
 				style={styles.wrapper}
 			/>
 		);
@@ -66,18 +69,18 @@ export default class Collection extends React.Component<ICollection> {
 	/**
 	 * Sestaveni polozky seznamu
 	 *
-	 * @param {ListRenderItemInfo<ICollectionItem>} params Parametry
+	 * @param {ListRenderItemInfo<ICollectionRecord>} params Parametry
 	 * @returns {JSX.Element} Element polozky
 	 */
-	private renderItem = ({ index, item }: ListRenderItemInfo<ICollectionItem>): JSX.Element => (
+	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => (
 		<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
-			<Link to={preparePath("/detail/:id", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
-				<ImageBackground source={item.source} resizeMode="contain" style={styles.itemImage}>
+			<Link to={preparePath("/overview/:id", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
+				<ImageBackground source={item.images?.[0]} resizeMode="contain" style={styles.itemImage}>
 					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * GRID_BORDER }])}>
-						<Text style={styles.infoLabel}>{item.label}</Text>
+						<Text style={styles.infoLabel}>{item.name}</Text>
 						<View style={styles.infoAdditional}>
-							<Text style={styles.infoAdditionalDate}>{item.added.format("D. M. YYYY")}</Text>
-							<Country.Flag code={item.country} style={styles.infoAdditionalFlag} />
+							<Text style={styles.infoAdditionalDate}>{moment(item.purchased).format("D. M. YYYY")}</Text>
+							<Country.Flag code={item.origin} />
 						</View>
 					</View>
 				</ImageBackground>
@@ -90,7 +93,7 @@ export default class Collection extends React.Component<ICollection> {
 	 *
 	 * @returns {number} Velikost polozky
 	 */
-	private calculateItemSize(): number {
+	private calculateRecordSize(): number {
 		// rozlozeni vlastnosti
 		const { width } = Dimensions.get("window");
 		// vypocet a vraceni

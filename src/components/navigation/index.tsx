@@ -2,7 +2,9 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { matchPath } from "react-router";
 import { Link, RouteComponentProps, withRouter } from "react-router-native";
+import { Measurement } from "../../styles";
 import styles from "./styles";
 
 /**
@@ -43,16 +45,23 @@ class Navigation extends React.Component<INavigation & RouteComponentProps> {
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
-				{tabs.map((tab) => (
-					<Link to={tab.path} key={tab.path} component={TouchableOpacity} style={styles.tab}>
-						<FontAwesomeIcon
-							icon={tab.icon}
-							size={24}
-							style={StyleSheet.flatten([styles.tabIcon, match.path === tab.path ? styles.tabActive : null])}
-						/>
-						<Text style={StyleSheet.flatten([styles.tabText, match.path === tab.path ? styles.tabActive : null])}>{tab.label}</Text>
-					</Link>
-				))}
+				{tabs.map((tab) => {
+					// overeni cesty
+					const matched = matchPath(match.url, {
+						path: tab.path
+					});
+					// sestaveni a vraceni
+					return (
+						<Link to={tab.path} key={tab.path} component={TouchableOpacity} style={styles.tab}>
+							<FontAwesomeIcon
+								icon={tab.icon}
+								size={Measurement.Icon}
+								style={StyleSheet.flatten([styles.tabIcon, matched !== null ? styles.tabActive : null])}
+							/>
+							<Text style={StyleSheet.flatten([styles.tabText, matched !== null ? styles.tabActive : null])}>{tab.label}</Text>
+						</Link>
+					);
+				})}
 			</View>
 		);
 	}

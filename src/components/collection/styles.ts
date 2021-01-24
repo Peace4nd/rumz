@@ -1,12 +1,24 @@
 import { StyleSheet } from "react-native";
-import { Color, opacify, Typography } from "../../styles";
+import { Color, Measurement, opacify, Typography } from "../../styles";
 
 export const GRID_COLUMNS: number = 2;
 export const GRID_GAP_WRAPPER: number = 5;
 export const GRID_GAP_ITEM: number = 10;
 export const GRID_BORDER: number = 1;
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
+	emptyIcon: {
+		color: Color.Primary.Muted
+	},
+	emptyText: {
+		color: Color.Primary.Muted,
+		marginTop: Measurement.Padding * 3
+	},
+	emptyWrapper: {
+		alignItems: "center",
+		flex: 1,
+		justifyContent: "center"
+	},
 	infoAdditional: {
 		flexDirection: "row",
 		justifyContent: "space-between"
@@ -14,9 +26,6 @@ export const styles = StyleSheet.create({
 	infoAdditionalDate: {
 		...Typography.Subtitle2,
 		color: Color.Primary.Text
-	},
-	infoAdditionalFlag: {
-		width: 24
 	},
 	infoLabel: {
 		...Typography.Subtitle1,
@@ -39,10 +48,13 @@ export const styles = StyleSheet.create({
 		flex: 1
 	},
 	itemWrapper: {
+		backgroundColor: Color.White,
 		borderColor: opacify(Color.Primary.Base, 0.75),
 		borderRadius: 5,
 		borderWidth: GRID_BORDER,
+		elevation: 4,
 		margin: GRID_GAP_ITEM,
+		overflow: "hidden",
 		padding: GRID_GAP_ITEM
 	},
 	wrapper: {

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { Color } from "../../styles";
+import { Color, Measurement } from "../../styles";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	tab: {
 		alignItems: "center",
 		flex: 1,
@@ -21,8 +21,9 @@ export const styles = StyleSheet.create({
 	},
 	wrapper: {
 		backgroundColor: Color.Primary.Base,
+		elevation: 8,
 		flexDirection: "row",
-		height: 80,
+		height: Measurement.Navigation,
 		justifyContent: "space-evenly"
 	}
 });

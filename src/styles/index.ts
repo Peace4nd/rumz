@@ -1,5 +1,8 @@
 import { StyleSheet } from "react-native";
 
+// utility
+export * from "./utils";
+
 /**
  * Typografie
  */
@@ -75,10 +78,12 @@ export const Typography = StyleSheet.create({
  * Barvy
  */
 export const Color = {
+	Black: "#000000",
 	Primary: {
 		Base: "#546e7a",
 		Dark: "#29434e",
 		Light: "#819ca9",
+		Muted: "#aaaaaa",
 		Text: "#fafafa"
 	},
 	Secondary: {
@@ -91,12 +96,14 @@ export const Color = {
 };
 
 /**
- * Zpruhledneni barvy
- *
- * @param {string} color Barva
- * @param {number} opacity Mira pruhlednosti
- * @returns {string} Pruhledna barva
+ * Zakladni rozmery
  */
-export function opacify(color: string, opacity: number): string {
-	return color + Math.round(255 * opacity).toString(16);
-}
+export const Measurement = {
+	Button: 48,
+	Header: 48,
+	Icon: 24,
+	Input: 48,
+	Navigation: 80,
+	Padding: 8,
+	Radius: 8
+};

@@ -1,4 +1,21 @@
 {
 	"headerMain": "Rumotéka",
-	"headerAdd": "Nový rum"
+	"headerAdd": "Nový rum",
+	"navigationOverview": "Přehled",
+	"navigationStats": "Statistika",
+	"navigationCreate": "Přidat",
+	"createName": "Název",
+	"createPurchased": "Zakoupeno",
+	"createOrigin": "Země původu",
+	"createManufacturer": "Výrobce",
+	"createPrice": "Cena",
+	"createVolume": "Objem",
+	"createAlcohol": "Alkohol",
+	"createNotes": "Poznámky",
+	"createRating": "Hodnocení",
+	"createRipening": "Délka zrání",
+	"createCharacteristicsColor": "Barva",
+	"createCharacteristicsSmell": "Čich",
+	"createCharacteristicsTaste": "Chuť",
+	"overviewEmpty": "Kolekce je prázdná"
 }

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { Color, Typography } from "../../styles";
+import { Color, Measurement, Typography } from "../../styles";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	icon: {
 		color: Color.Primary.Text
 	},
@@ -26,9 +26,10 @@ export const styles = StyleSheet.create({
 	},
 	wrapper: {
 		backgroundColor: Color.Primary.Base,
+		elevation: 8,
 		flexDirection: "row",
-		height: 48,
-		paddingHorizontal: 8
+		height: Measurement.Header,
+		padding: 8
 	}
 });
 

@@ -1,16 +1,29 @@
 import React from "react";
-import { ViewProps } from "react-native";
-import definition from "../definition";
+import { View, ViewProps } from "react-native";
+import { Measurement } from "../../../styles";
+import country from "../../../utils/country";
+import styles from "../styles";
 
+/**
+ * Dostupne vlastnosti
+ */
 export interface ICountryFlag extends ViewProps {
 	code: string;
 }
 
-const Image = (props: ICountryFlag): JSX.Element => {
+/**
+ * Vlajka zeme
+ *
+ * @param {ICountryFlag} props Vlastnosti
+ * @returns {JSX.Element} Element
+ */
+const CountryFlag = (props: ICountryFlag): JSX.Element => {
 	// rozlozeni props
-	const { code, ...rest } = props;
+	const { code } = props;
 	// sestaveni a vraceni
-	return React.createElement(definition[code].flag.default, rest);
+	return (
+		<View style={styles.flagWrapper}>{React.createElement(country[code].flag.default, { height: Measurement.Icon / 1.5, width: Measurement.Icon })}</View>
+	);
 };
 
-export default Image;
+export default CountryFlag;

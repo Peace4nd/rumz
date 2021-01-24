@@ -3,6 +3,7 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Link as RouterLink } from "react-router-native";
 import { IButton } from "..";
+import { Measurement } from "../../../styles";
 import { IRouterAvailable } from "../../../utils/router";
 import styles from "../styles";
 
@@ -26,7 +27,7 @@ const Link = (props: IButtonLink): JSX.Element => {
 	return (
 		<View style={styles.wrapper}>
 			<RouterLink to={to} component={TouchableOpacity} style={styles.base}>
-				<FontAwesomeIcon icon={icon} style={styles.icon} size={size || 24} />
+				<FontAwesomeIcon icon={icon} style={styles.icon} size={size || Measurement.Icon} />
 			</RouterLink>
 		</View>
 	);

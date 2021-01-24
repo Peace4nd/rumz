@@ -2,17 +2,12 @@ import { StyleSheet } from "react-native";
 import { Color, Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
-	base: {
+	flagWrapper: {
 		alignItems: "center",
-		flex: 1,
-		justifyContent: "center"
-	},
-	icon: {
-		color: Color.Secondary.Text
-	},
-	wrapper: {
-		height: Measurement.Button,
-		width: Measurement.Button
+		backgroundColor: Color.White,
+		height: Measurement.Icon / 1.5,
+		justifyContent: "center",
+		width: Measurement.Icon
 	}
 });
 

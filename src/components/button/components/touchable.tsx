@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { IButton } from "..";
+import { Measurement } from "../../../styles";
 import styles from "../styles";
 
 /**
@@ -24,7 +25,7 @@ const Touchable = (props: IButtonTouchable): JSX.Element => {
 	return (
 		<View style={styles.wrapper}>
 			<TouchableOpacity onPress={onPress} style={styles.base}>
-				<FontAwesomeIcon icon={icon} style={styles.icon} size={size || 24} />
+				<FontAwesomeIcon icon={icon} style={styles.icon} size={size || Measurement.Icon} />
 			</TouchableOpacity>
 		</View>
 	);

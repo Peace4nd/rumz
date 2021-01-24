@@ -1,16 +1,14 @@
 import { ComponentType } from "react";
 import { ExtractRouteParams, generatePath } from "react-router";
-import Create from "../routes/create";
-import { Collection, Detail } from "../routes/overview";
 
 /**
  * Definice dostupnych rout
  */
 const routes = {
-	"/create": Create,
+	"/create": null,
 	"/edit/:id": null,
-	"/overview": Collection,
-	"/overview/:id": Detail
+	"/overview": null,
+	"/overview/:id": null
 };
 
 export type IRouterAvailable = keyof typeof routes;
@@ -39,11 +37,3 @@ export const RouterPath: IRouterPath = Object.keys(routes).reduce((paths, value)
 	paths[value] = value;
 	return paths;
 }, {} as IRouterPath);
-
-/**
- * Pole existujicich rout
- */
-export const RouterList: IRouterList = Object.entries(routes).map((route) => ({
-	component: route[1] as ComponentType,
-	path: route[0] as IRouterAvailable
-}));

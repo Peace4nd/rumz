@@ -4,8 +4,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import React from "react";
 import { Text, View } from "react-native";
-import { Button } from "../..";
 import { Measurement } from "../../../styles";
+import Button from "../../button";
 import styles from "../styles";
 
 interface IInputDateState {

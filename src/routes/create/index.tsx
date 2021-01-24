@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
 	faCheck,
-	faCircle,
 	faComments,
 	faEuroSign,
+	faFlask,
 	faGlobeAmericas,
+	faGrinTongue,
 	faIndustry,
 	faPalette,
 	faPencilAlt,
 	faPercentage,
+	faSeedling,
 	faStarHalfAlt,
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
@@ -135,27 +137,24 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 					onChange={this.handleChange.bind(this, "alcohol")}
 				/>
 				{/* barva */}
-				<Input.Multiline
+				<Input.Text
 					icon={faPalette}
 					value={record.color}
 					placeholder={strings("createCharacteristicsColor")}
-					lines={2}
 					onChange={this.handleChange.bind(this, "color")}
 				/>
 				{/* cichova charakteristika */}
-				<Input.Multiline
-					icon={faCircle}
+				<Input.Text
+					icon={faFlask}
 					value={record.smell}
 					placeholder={strings("createCharacteristicsSmell")}
-					lines={2}
 					onChange={this.handleChange.bind(this, "smell")}
 				/>
 				{/* chutova charakteristika */}
-				<Input.Multiline
-					icon={faCircle}
+				<Input.Text
+					icon={faGrinTongue}
 					value={record.taste}
 					placeholder={strings("createCharacteristicsTaste")}
-					lines={2}
 					onChange={this.handleChange.bind(this, "taste")}
 				/>
 				{/* poznamka */}
@@ -190,7 +189,7 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 				/>
 				{/* delka zrani */}
 				<Input.Number
-					icon={faCircle}
+					icon={faSeedling}
 					value={record.ripening}
 					placeholder={strings("createRipening")}
 					onChange={this.handleChange.bind(this, "ripening")}

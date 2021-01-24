@@ -4,11 +4,11 @@ import moment from "moment";
 import React from "react";
 import { Dimensions, FlatList, ImageBackground, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Link } from "react-router-native";
-import { Country } from "..";
 import { Measurement, Typography } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
 import { preparePath } from "../../utils/router";
 import strings from "../../utils/strings";
+import Country from "../country";
 import styles, { GRID_BORDER, GRID_COLUMNS, GRID_GAP_ITEM, GRID_GAP_WRAPPER } from "./styles";
 
 /**

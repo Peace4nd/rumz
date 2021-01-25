@@ -22,8 +22,9 @@ import { Input, Loading } from "../../components";
 import { IHeader } from "../../components/header";
 import { ICollectionRecord } from "../../types/collection";
 import country from "../../utils/country";
+import fs from "../../utils/file-system";
 import { RouterPath } from "../../utils/router";
-import { collection } from "../../utils/storage";
+import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 import BaseRoute from "../base";
 
@@ -84,7 +85,7 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 								saving: true
 							},
 							() => {
-								collection.push(this.state.record).then(() => {
+								storage.collection.push(this.state.record).then(() => {
 									history.push(RouterPath["/overview"]);
 								});
 							}
@@ -112,7 +113,18 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
 				{/* obrazek */}
-				<Input.Image onChange={(value) => console.log(value)} />
+				<Input.Image
+					onChange={(value) => {
+						fs.collection.add(value, this.state.record.id).then((path) => {
+							this.setState({
+								record: {
+									...this.state.record,
+									images: [path]
+								}
+							});
+						});
+					}}
+				/>
 				{/* nazev */}
 				<Input.Text icon={faPencilAlt} value={record.name} placeholder={strings("createName")} onChange={this.handleChange.bind(this, "name")} />
 				{/* vyrobce */}

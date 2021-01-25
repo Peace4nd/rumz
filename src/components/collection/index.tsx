@@ -75,7 +75,7 @@ export default class Collection extends React.Component<ICollection> {
 	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => (
 		<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
 			<Link to={preparePath("/overview/:id", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
-				<ImageBackground source={item.images?.[0]} resizeMode="contain" style={styles.itemImage}>
+				<ImageBackground source={{ uri: item.images[0] }} resizeMode="contain" style={styles.itemImage}>
 					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * GRID_BORDER }])}>
 						<Text style={styles.infoLabel}>{item.name}</Text>
 						<View style={styles.infoAdditional}>

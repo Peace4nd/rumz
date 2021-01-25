@@ -1,10 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ICollectionRecord } from "../types/collection";
-
-/**
- * Typ uloziste
- */
-type IStorageKey = "collection";
+import { IStorageKey } from "../types/storage";
 
 /**
  * Ulozeni dat
@@ -105,4 +101,9 @@ export const collection = {
 		// vraceni kolekce
 		return storage;
 	}
+};
+
+// vychozi export
+export default {
+	collection
 };

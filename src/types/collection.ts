@@ -1,5 +1,3 @@
-import { ImageSourcePropType } from "react-native";
-
 /**
  * Datovy typ zaznamu kolekce
  */
@@ -22,7 +20,7 @@ export interface ICollectionRecord {
 	/**
 	 * Obrazky
 	 */
-	images: ImageSourcePropType[];
+	images: string[];
 
 	/**
 	 * Zeme puvodu (ISO kod zeme)

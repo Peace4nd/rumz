@@ -26,11 +26,11 @@ class App extends React.Component {
 			<NativeRouter>
 				<BackButton />
 				<Switch>
-					<Redirect exact={true} strict={true} from="/" to={RouterPath["/overview"]} />
-					<Route exact={true} strict={true} path={RouterPath["/create"]} component={Create} />
-					<Route exact={true} strict={true} path={RouterPath["/overview"]} component={Collection} />
-					<Route exact={true} strict={true} path={RouterPath["/overview/:id"]} component={Detail} />
-					<Route exact={true} strict={true} path={RouterPath["/edit/:id"]} component={null} />
+					<Redirect exact={true} strict={true} from="/" to={RouterPath.Overview} />
+					<Route exact={true} strict={true} path={RouterPath.Create} component={Create} />
+					<Route exact={true} strict={true} path={RouterPath.Overview} component={Collection} />
+					<Route exact={true} strict={true} path={RouterPath.Detail} component={Detail} />
+					<Route exact={true} strict={true} path={RouterPath.Edit} component={null} />
 				</Switch>
 			</NativeRouter>
 		);

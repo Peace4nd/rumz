@@ -2,14 +2,15 @@ import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import moment from "moment";
 import React from "react";
-import { Dimensions, FlatList, ImageBackground, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, ImageBackground, ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Link } from "react-router-native";
-import { Measurement, Typography } from "../../styles";
+import { Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
 import { preparePath } from "../../utils/router";
 import strings from "../../utils/strings";
 import Country from "../country";
-import styles, { GRID_BORDER, GRID_COLUMNS, GRID_GAP_ITEM, GRID_GAP_WRAPPER } from "./styles";
+import Typography from "../typography";
+import styles, { GRID_COLUMNS, GRID_GAP_ITEM, GRID_GAP_WRAPPER } from "./styles";
 
 /**
  * Dostupne vlastnosti
@@ -49,7 +50,9 @@ export default class Collection extends React.Component<ICollection> {
 			return (
 				<View style={styles.emptyWrapper}>
 					<FontAwesomeIcon icon={faListUl} size={Measurement.Icon * 3} style={styles.emptyIcon} />
-					<Text style={StyleSheet.flatten([Typography.Headline4, styles.emptyText])}>{strings("overviewEmpty")}</Text>
+					<Typography type="Headline4" style={styles.emptyText}>
+						{strings("overviewEmpty")}
+					</Typography>
 				</View>
 			);
 		}
@@ -76,10 +79,14 @@ export default class Collection extends React.Component<ICollection> {
 		<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
 			<Link to={preparePath("/overview/:id", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
 				<ImageBackground source={{ uri: item.images[0] }} resizeMode="contain" style={styles.itemImage}>
-					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * GRID_BORDER }])}>
-						<Text style={styles.infoLabel}>{item.name}</Text>
+					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * StyleSheet.hairlineWidth }])}>
+						<Typography type="Subtitle1" style={styles.infoLabel}>
+							{item.name}
+						</Typography>
 						<View style={styles.infoAdditional}>
-							<Text style={styles.infoAdditionalDate}>{moment(item.purchased).format("D. M. YYYY")}</Text>
+							<Typography type="Subtitle2" style={styles.infoAdditionalDate}>
+								{moment(item.purchased).format("D. M. YYYY")}
+							</Typography>
 							<Country.Flag code={item.origin} />
 						</View>
 					</View>
@@ -97,6 +104,6 @@ export default class Collection extends React.Component<ICollection> {
 		// rozlozeni vlastnosti
 		const { width } = Dimensions.get("window");
 		// vypocet a vraceni
-		return (width - (2 * GRID_GAP_WRAPPER + 4 * GRID_GAP_ITEM + 4 * GRID_BORDER)) / GRID_COLUMNS;
+		return (width - (2 * GRID_GAP_WRAPPER + 4 * GRID_GAP_ITEM + 4 * StyleSheet.hairlineWidth)) / GRID_COLUMNS;
 	}
 }

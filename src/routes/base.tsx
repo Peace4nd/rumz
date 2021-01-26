@@ -40,17 +40,17 @@ export default abstract class BaseRoute<P = unknown, S = unknown, M = unknown> e
 								{
 									icon: faListUl,
 									label: strings("navigationOverview"),
-									path: RouterPath["/overview"]
+									path: RouterPath.Overview
 								},
 								{
 									icon: faLightbulb,
 									label: strings("navigationStats"),
-									path: RouterPath["/edit/:id"]
+									path: RouterPath.Edit
 								},
 								{
 									icon: faCartPlus,
 									label: strings("navigationCreate"),
-									path: RouterPath["/create"]
+									path: RouterPath.Create
 								}
 							]}
 						/>

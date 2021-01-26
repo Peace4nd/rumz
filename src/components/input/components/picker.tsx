@@ -1,21 +1,18 @@
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Picker } from "@react-native-picker/picker";
 import { PickerItemProps } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { IInput } from "..";
 import { Measurement } from "../../../styles";
+import Typography from "../../typography";
 import styles from "../styles";
 
 /**
  * Dostupne vlastnosti
  */
-export interface IInputPicker {
-	placeholder: string;
-	value: string;
-	icon: IconDefinition;
+export interface IInputPicker extends IInput<string> {
 	items: PickerItemProps[];
-	onChange: (value: string, index?: number) => void;
 }
 
 /**
@@ -36,7 +33,11 @@ const InputPicker = (props: IInputPicker): JSX.Element => {
 					<Picker.Item key={item.value} {...item} />
 				))}
 			</Picker>
-			{!value && <Text style={styles.placeholder}>{placeholder}</Text>}
+			{!value && (
+				<Typography type="Body1" style={StyleSheet.flatten([styles.placeholder, styles.placeholderOverlay])}>
+					{placeholder}
+				</Typography>
+			)}
 		</View>
 	);
 };

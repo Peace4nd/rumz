@@ -1,9 +1,11 @@
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { faImage, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { Image, Pressable, StyleSheet } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
+import { IInput } from "..";
 import { Measurement } from "../../../styles";
+import Typography from "../../typography";
 import styles from "../styles";
 
 interface IInputImageState {
@@ -13,8 +15,8 @@ interface IInputImageState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputImage {
-	onChange: (value: DocumentPickerResponse) => void;
+export interface IInputImage extends Omit<IInput<DocumentPickerResponse>, "value" | "icon"> {
+	icon?: IconDefinition;
 }
 
 /**
@@ -28,7 +30,9 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputImage = {
-		onChange: null
+		icon: faImage,
+		onChange: null,
+		placeholder: null
 	};
 
 	/**
@@ -45,17 +49,29 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
+		const { icon, placeholder } = this.props;
 		const { selected } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Pressable style={StyleSheet.flatten([styles.wrapperBasic, styles.wrapperImage])} onPress={this.handleClick}>
-				{selected === null && <FontAwesomeIcon style={styles.iconBasic} icon={faImage} size={Measurement.Icon * 2} />}
+				{selected === null && (
+					<View style={styles.wrapperFill}>
+						<FontAwesomeIcon style={StyleSheet.flatten([styles.iconBasic, styles.iconBasicVertical])} icon={icon} size={Measurement.Icon * 2} />
+						{placeholder && (
+							<Typography type="Body1" style={styles.placeholder}>
+								{placeholder}
+							</Typography>
+						)}
+					</View>
+				)}
 				{selected !== null && <Image source={{ uri: selected.uri }} resizeMode="contain" style={styles.image} />}
 			</Pressable>
 		);
 	}
-	// view se ctvereckem a klikatkem uprostred. po nahrani se soubor ulozi a zobrazi se preview v tom okynku
 
+	/**
+	 * Otevreni vyberu souboru
+	 */
 	private handleClick = (): void => {
 		DocumentPicker.pick({
 			type: [DocumentPicker.types.images]

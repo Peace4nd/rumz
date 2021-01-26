@@ -1,11 +1,12 @@
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { IInput } from "..";
 import { Measurement } from "../../../styles";
-import Button from "../../button";
+import Typography from "../../typography";
 import styles from "../styles";
 
 interface IInputDateState {
@@ -16,10 +17,8 @@ interface IInputDateState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputDate {
-	placeholder: string;
-	value: Date;
-	onChange: (value: Date) => void;
+export interface IInputDate extends Omit<IInput<Date>, "icon"> {
+	icon?: IconDefinition;
 }
 
 /**
@@ -33,9 +32,10 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputDate = {
+		icon: faCalendarAlt,
 		onChange: null,
 		placeholder: null,
-		value: new Date()
+		value: null
 	};
 
 	/**
@@ -53,23 +53,19 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { placeholder } = this.props;
+		const { icon, placeholder } = this.props;
 		const { value, visible } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={styles.wrapperBasic}>
-				<FontAwesomeIcon style={styles.iconBasic} icon={faCalendarAlt} size={Measurement.Icon} />
-				<Text style={styles.fieldBasic}>{value ? moment(value).format("DD. MM. YYYY") : placeholder}</Text>
-				<Button.Touchable
-					icon={faCalendarAlt}
-					onPress={() => {
-						this.setState({
-							visible: true
-						});
-					}}
-				/>
-				{visible && <DateTimePicker value={value} mode="date" display="calendar" onChange={this.handleChange} />}
-			</View>
+			<TouchableWithoutFeedback onPress={this.handleOpen}>
+				<View style={styles.wrapperBasic}>
+					<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
+					<Typography type="Body2" style={StyleSheet.flatten([styles.fieldBasic, value ? null : styles.fieldPlaceholder])}>
+						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
+					</Typography>
+					{visible && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 
@@ -89,5 +85,14 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 				this.props.onChange(date);
 			}
 		);
+	};
+
+	/**
+	 * Otevreni vyberu data
+	 */
+	private handleOpen = (): void => {
+		this.setState({
+			visible: true
+		});
 	};
 }

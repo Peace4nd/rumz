@@ -1,19 +1,14 @@
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TextInput, View } from "react-native";
-import { Measurement } from "../../../styles";
+import { IInput } from "..";
+import { Color, Measurement } from "../../../styles";
 import styles from "../styles";
 
 /**
  * Dostupne vlastnosti
  */
-export interface IInputNumber {
-	placeholder: string;
-	value: number;
-	icon: IconDefinition;
-	onChange: (value: number) => void;
-}
+export type IInputNumber = IInput<number>;
 
 /**
  * Ciselny vstup
@@ -35,6 +30,7 @@ class InputNumber extends React.Component<IInputNumber> {
 					style={styles.fieldBasic}
 					value={value !== null ? String(value) : ""}
 					placeholder={placeholder}
+					placeholderTextColor={Color.Primary.Muted}
 					keyboardType="numeric"
 					onChangeText={(text) => {
 						const parsed = parseFloat(text);

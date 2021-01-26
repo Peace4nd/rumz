@@ -1,19 +1,15 @@
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { Measurement } from "../../../styles";
+import { IInput } from "..";
+import { Color, Measurement } from "../../../styles";
 import styles from "../styles";
 
 /**
  * Dostupne vlastnosti
  */
-export interface IInputMultiline {
-	placeholder: string;
-	value: string;
-	icon: IconDefinition;
+export interface IInputMultiline extends IInput<string> {
 	lines: number;
-	onChange: (value: string) => void;
 }
 
 /**
@@ -35,6 +31,7 @@ const InputMultiline = (props: IInputMultiline): JSX.Element => {
 				multiline={true}
 				numberOfLines={lines}
 				placeholder={placeholder}
+				placeholderTextColor={Color.Primary.Muted}
 				onChangeText={onChange}
 			/>
 		</View>

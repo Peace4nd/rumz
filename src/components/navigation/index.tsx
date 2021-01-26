@@ -1,10 +1,11 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { matchPath } from "react-router";
 import { Link, RouteComponentProps, withRouter } from "react-router-native";
 import { Measurement } from "../../styles";
+import Typography from "../typography";
 import styles from "./styles";
 
 /**
@@ -58,7 +59,9 @@ class Navigation extends React.Component<INavigation & RouteComponentProps> {
 								size={Measurement.Icon}
 								style={StyleSheet.flatten([styles.tabIcon, matched !== null ? styles.tabActive : null])}
 							/>
-							<Text style={StyleSheet.flatten([styles.tabText, matched !== null ? styles.tabActive : null])}>{tab.label}</Text>
+							<Typography type="Body1" style={StyleSheet.flatten([styles.tabText, matched !== null ? styles.tabActive : null])}>
+								{tab.label}
+							</Typography>
 						</Link>
 					);
 				})}

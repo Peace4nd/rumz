@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 });
 
 interface IAddState {
+	errors: Record<keyof ICollectionRecord, boolean>;
 	record: ICollectionRecord;
 	saving: boolean;
 }
@@ -48,6 +49,23 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 	 * Vychozi stav
 	 */
 	public state: IAddState = {
+		errors: {
+			alcohol: false,
+			color: false,
+			id: false,
+			images: false,
+			manufacturer: false,
+			name: false,
+			notes: false,
+			origin: false,
+			price: false,
+			purchased: false,
+			rating: false,
+			ripening: false,
+			smell: false,
+			taste: false,
+			volume: false
+		},
 		record: {
 			alcohol: null,
 			color: null,
@@ -58,7 +76,7 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 			notes: null,
 			origin: null,
 			price: null,
-			purchased: new Date(),
+			purchased: null,
 			rating: null,
 			ripening: null,
 			smell: null,
@@ -85,9 +103,30 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 								saving: true
 							},
 							() => {
-								storage.collection.push(this.state.record).then(() => {
-									history.push(RouterPath["/overview"]);
+								// rozlozeni props
+								const { errors, record } = this.state;
+								// definice
+								const result = {
+									fields: Object.assign({}, errors),
+									valid: true
+								};
+								// overeni polozek
+								Object.entries(record).forEach((entry) => {
+									const valid = !entry[1];
+									result.fields[entry[0] as keyof ICollectionRecord] = valid;
+									result.valid = result.valid && valid;
 								});
+								// ulozeni
+								if (result.valid) {
+									storage.collection.push(this.state.record).then(() => {
+										history.push(RouterPath.Overview);
+									});
+								} else {
+									this.setState({
+										errors: result.fields,
+										saving: false
+									});
+								}
 							}
 						);
 					}
@@ -104,7 +143,7 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 	 */
 	protected renderRoute(): JSX.Element {
 		// rozlozeni props
-		const { record, saving } = this.state;
+		const { errors, record, saving } = this.state;
 		// zpracovani
 		if (saving) {
 			return <Loading />;
@@ -114,6 +153,7 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 			<ScrollView contentContainerStyle={styles.container}>
 				{/* obrazek */}
 				<Input.Image
+					placeholder={strings("createImage")}
 					onChange={(value) => {
 						fs.collection.add(value, this.state.record.id).then((path) => {
 							this.setState({
@@ -126,7 +166,13 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 					}}
 				/>
 				{/* nazev */}
-				<Input.Text icon={faPencilAlt} value={record.name} placeholder={strings("createName")} onChange={this.handleChange.bind(this, "name")} />
+				<Input.Text
+					icon={faPencilAlt}
+					error={errors.name ? "je to blbe" : null}
+					value={record.name}
+					placeholder={strings("createName")}
+					onChange={this.handleChange.bind(this, "name")}
+				/>
 				{/* vyrobce */}
 				<Input.Text
 					icon={faIndustry}

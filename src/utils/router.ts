@@ -1,23 +1,24 @@
-import { ComponentType } from "react";
 import { ExtractRouteParams, generatePath } from "react-router";
 
 /**
  * Definice dostupnych rout
  */
 const routes = {
-	"/create": null,
-	"/edit/:id": null,
-	"/overview": null,
-	"/overview/:id": null
+	Create: "/create",
+	Detail: "/overview/:id",
+	Edit: "/edit/:id",
+	Overview: "/overview"
 };
 
+/**
+ * Dostupne routy
+ */
 export type IRouterAvailable = keyof typeof routes;
 
+/**
+ * Mapa dostupnych rout
+ */
 export type IRouterPath = Record<IRouterAvailable, string>;
-export type IRouterList = Array<{
-	path: IRouterAvailable;
-	component: ComponentType;
-}>;
 
 /**
  * Sestaveni cesty pro presmerovani
@@ -33,7 +34,7 @@ export function preparePath<P extends IRouterAvailable>(path: P, params?: Extrac
 /**
  * Dostupne routy
  */
-export const RouterPath: IRouterPath = Object.keys(routes).reduce((paths, value) => {
-	paths[value] = value;
+export const RouterPath: IRouterPath = Object.entries(routes).reduce((paths, entry) => {
+	paths[entry[0]] = entry[1];
 	return paths;
 }, {} as IRouterPath);

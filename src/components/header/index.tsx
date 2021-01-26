@@ -2,10 +2,11 @@ import { faChevronLeft, IconDefinition } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { History } from "history";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router-native";
 import { Measurement } from "../../styles";
 import { RouterPath } from "../../utils/router";
+import Typography from "../typography";
 import styles from "./styles";
 
 /**
@@ -48,15 +49,17 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
-				<View style={styles.sectionBack}>
-					{match.path !== RouterPath["/overview"] && (
+				<View style={styles.sectionAction}>
+					{match.path !== RouterPath.Overview && (
 						<TouchableOpacity onPress={this.handlePress}>
 							<FontAwesomeIcon icon={faChevronLeft} style={styles.icon} size={Measurement.Icon} />
 						</TouchableOpacity>
 					)}
 				</View>
 				<View style={styles.sectionTitle}>
-					<Text style={styles.title}>{title}</Text>
+					<Typography type="Headline6" style={styles.title}>
+						{title}
+					</Typography>
 				</View>
 				<View style={styles.sectionAction}>
 					{actions.map((action, index) => (

@@ -1,6 +1,5 @@
 import React from "react";
 import { View, ViewProps } from "react-native";
-import { Measurement } from "../../../styles";
 import country from "../../../utils/country";
 import styles from "../styles";
 
@@ -22,7 +21,13 @@ const CountryFlag = (props: ICountryFlag): JSX.Element => {
 	const { code } = props;
 	// sestaveni a vraceni
 	return (
-		<View style={styles.flagWrapper}>{React.createElement(country[code].flag.default, { height: Measurement.Icon / 1.5, width: Measurement.Icon })}</View>
+		<View style={styles.flagWrapper}>
+			{React.createElement(country[code].flag.default, {
+				height: "100%",
+				preserveAspectRatio: "none",
+				width: "100%"
+			})}
+		</View>
 	);
 };
 

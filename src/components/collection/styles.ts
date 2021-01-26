@@ -1,10 +1,9 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement, opacify, Typography } from "../../styles";
+import { Color, Measurement, opacify } from "../../styles";
 
 export const GRID_COLUMNS: number = 2;
-export const GRID_GAP_WRAPPER: number = 5;
-export const GRID_GAP_ITEM: number = 10;
-export const GRID_BORDER: number = 1;
+export const GRID_GAP_WRAPPER: number = Measurement.Padding / 2;
+export const GRID_GAP_ITEM: number = Measurement.Padding;
 
 const styles = StyleSheet.create({
 	emptyIcon: {
@@ -24,20 +23,18 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between"
 	},
 	infoAdditionalDate: {
-		...Typography.Subtitle2,
 		color: Color.Primary.Text
 	},
 	infoLabel: {
-		...Typography.Subtitle1,
 		color: Color.Primary.Text,
-		paddingBottom: 4
+		paddingBottom: Measurement.Padding / 2
 	},
 	infoWrapper: {
 		backgroundColor: opacify(Color.Primary.Base, 0.75),
 		bottom: -GRID_GAP_ITEM,
 		flexDirection: "column",
 		left: -GRID_GAP_ITEM,
-		padding: 4,
+		padding: Measurement.Padding / 2,
 		position: "absolute",
 		right: -GRID_GAP_ITEM
 	},
@@ -51,7 +48,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Color.White,
 		borderColor: opacify(Color.Primary.Base, 0.75),
 		borderRadius: 5,
-		borderWidth: GRID_BORDER,
+		borderWidth: StyleSheet.hairlineWidth,
 		elevation: 4,
 		margin: GRID_GAP_ITEM,
 		overflow: "hidden",

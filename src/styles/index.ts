@@ -100,7 +100,8 @@ export const Color = {
  */
 export const Measurement = {
 	Button: 48,
-	Header: 48,
+	Error: 24,
+	Header: 56,
 	Icon: 24,
 	Input: 48,
 	Navigation: 80,

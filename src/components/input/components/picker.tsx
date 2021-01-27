@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Picker } from "@react-native-picker/picker";
 import { PickerItemProps } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { IInput } from "..";
 import { Measurement } from "../../../styles";
 import Typography from "../../typography";
@@ -34,7 +34,7 @@ const InputPicker = (props: IInputPicker): JSX.Element => {
 				))}
 			</Picker>
 			{!value && (
-				<Typography type="Body1" style={StyleSheet.flatten([styles.placeholder, styles.placeholderOverlay])}>
+				<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay]}>
 					{placeholder}
 				</Typography>
 			)}

@@ -3,7 +3,7 @@ import { Permission, PermissionsAndroid } from "react-native";
 import { BackButton, NativeRouter, Redirect, Route, Switch } from "react-router-native";
 import Create from "./routes/create";
 import { Collection, Detail } from "./routes/overview";
-import { RouterPath } from "./utils/router";
+import { getRouterPath } from "./utils/router";
 
 /**
  * Aplikacni vstupni bod
@@ -26,11 +26,11 @@ class App extends React.Component {
 			<NativeRouter>
 				<BackButton />
 				<Switch>
-					<Redirect exact={true} strict={true} from="/" to={RouterPath.Overview} />
-					<Route exact={true} strict={true} path={RouterPath.Create} component={Create} />
-					<Route exact={true} strict={true} path={RouterPath.Overview} component={Collection} />
-					<Route exact={true} strict={true} path={RouterPath.Detail} component={Detail} />
-					<Route exact={true} strict={true} path={RouterPath.Edit} component={null} />
+					<Redirect exact={true} strict={true} from="/" to={getRouterPath("/overview")} />
+					<Route exact={true} strict={true} path={getRouterPath("/create")} component={Create} />
+					<Route exact={true} strict={true} path={getRouterPath("/overview")} component={Collection} />
+					<Route exact={true} strict={true} path={getRouterPath("/overview/:id")} component={Detail} />
+					<Route exact={true} strict={true} path={getRouterPath("/edit/:id")} component={null} />
 				</Switch>
 			</NativeRouter>
 		);

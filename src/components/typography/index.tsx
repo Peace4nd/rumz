@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextProps } from "react-native";
+import { Text, TextProps } from "react-native";
 import { Typography as TypeStyle } from "../../styles";
 
 /**
@@ -30,7 +30,7 @@ export default class Typography extends React.Component<ITypography> {
 		const { children, style, type, ...rest } = this.props;
 		// sestaveni a vraceni
 		return (
-			<Text style={StyleSheet.flatten([TypeStyle[type], style])} {...rest}>
+			<Text style={[TypeStyle[type], style]} {...rest}>
 				{children}
 			</Text>
 		);

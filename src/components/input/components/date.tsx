@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import React from "react";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { TouchableWithoutFeedback, View } from "react-native";
 import { IInput } from "..";
 import { Measurement } from "../../../styles";
 import Typography from "../../typography";
@@ -60,7 +60,7 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
 				<View style={styles.wrapperBasic}>
 					<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
-					<Typography type="Body2" style={StyleSheet.flatten([styles.fieldBasic, value ? null : styles.fieldPlaceholder])}>
+					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
 					</Typography>
 					{visible && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}

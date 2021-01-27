@@ -23,7 +23,7 @@ import { IHeader } from "../../components/header";
 import { ICollectionRecord } from "../../types/collection";
 import country from "../../utils/country";
 import fs from "../../utils/file-system";
-import { RouterPath } from "../../utils/router";
+import { getRouterPath } from "../../utils/router";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 import BaseRoute from "../base";
@@ -119,7 +119,7 @@ export default class Add extends BaseRoute<unknown, IAddState> {
 								// ulozeni
 								if (result.valid) {
 									storage.collection.push(this.state.record).then(() => {
-										history.push(RouterPath.Overview);
+										history.push(getRouterPath("/overview"));
 									});
 								} else {
 									this.setState({

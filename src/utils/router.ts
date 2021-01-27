@@ -1,24 +1,9 @@
-import { ExtractRouteParams, generatePath } from "react-router";
-
-/**
- * Definice dostupnych rout
- */
-const routes = {
-	Create: "/create",
-	Detail: "/overview/:id",
-	Edit: "/edit/:id",
-	Overview: "/overview"
-};
+import { ExtractRouteParams, generatePath, matchPath } from "react-router";
 
 /**
  * Dostupne routy
  */
-export type IRouterAvailable = keyof typeof routes;
-
-/**
- * Mapa dostupnych rout
- */
-export type IRouterPath = Record<IRouterAvailable, string>;
+export type IRouterPath = "/create" | "/overview/:id" | "/edit/:id" | "/overview";
 
 /**
  * Sestaveni cesty pro presmerovani
@@ -27,14 +12,29 @@ export type IRouterPath = Record<IRouterAvailable, string>;
  * @param {ExtractRouteParams<P>} params Parametry
  * @returns {string} Cesta
  */
-export function preparePath<P extends IRouterAvailable>(path: P, params?: ExtractRouteParams<P>): string {
+export function getRouterPath<P extends IRouterPath>(path: P, params?: ExtractRouteParams<P>): string {
+	// pokud nejsou definovany parametry, vraci se pouze cesta
+	if (!params) {
+		return path;
+	}
+	// jinak se sestavi
 	return generatePath(path, params);
 }
 
 /**
- * Dostupne routy
+ * Overeni ouhlasu pozadovane cesty a aktualniho URL
+ *
+ * @param {IRouterPath} path Pozadovana cesta
+ * @param {string} url URL
+ * @returns {boolean} Souhlas
  */
-export const RouterPath: IRouterPath = Object.entries(routes).reduce((paths, entry) => {
-	paths[entry[0]] = entry[1];
-	return paths;
-}, {} as IRouterPath);
+export function matchRouterPath(path: IRouterPath, url: string): boolean {
+	// overeni
+	const match = matchPath(url, {
+		exact: true,
+		path,
+		strict: false
+	});
+	// vyhodnoceni
+	return match !== null;
+}

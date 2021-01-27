@@ -1,10 +1,10 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { matchPath } from "react-router";
+import { TouchableOpacity, View } from "react-native";
 import { Link, RouteComponentProps, withRouter } from "react-router-native";
 import { Measurement } from "../../styles";
+import { IRouterPath, matchRouterPath } from "../../utils/router";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -13,7 +13,7 @@ import styles from "./styles";
  */
 export interface INavigationTab {
 	icon: IconDefinition;
-	path: string;
+	path: IRouterPath;
 	label: string;
 }
 
@@ -48,18 +48,12 @@ class Navigation extends React.Component<INavigation & RouteComponentProps> {
 			<View style={styles.wrapper}>
 				{tabs.map((tab) => {
 					// overeni cesty
-					const matched = matchPath(match.url, {
-						path: tab.path
-					});
+					const matched = matchRouterPath(tab.path, match.url);
 					// sestaveni a vraceni
 					return (
 						<Link to={tab.path} key={tab.path} component={TouchableOpacity} style={styles.tab}>
-							<FontAwesomeIcon
-								icon={tab.icon}
-								size={Measurement.Icon}
-								style={StyleSheet.flatten([styles.tabIcon, matched !== null ? styles.tabActive : null])}
-							/>
-							<Typography type="Body1" style={StyleSheet.flatten([styles.tabText, matched !== null ? styles.tabActive : null])}>
+							<FontAwesomeIcon icon={tab.icon} size={Measurement.Icon} color={matched ? styles.tabActive.color : styles.tabIcon.color} />
+							<Typography type="Body1" style={[styles.tabText, matched ? styles.tabActive : null]}>
 								{tab.label}
 							</Typography>
 						</Link>

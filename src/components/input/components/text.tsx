@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { TextInput, View } from "react-native";
 import { IInput } from "..";
 import { Color, Measurement } from "../../../styles";
 import Typography from "../../typography";
@@ -22,7 +22,7 @@ const InputText = (props: IInputText): JSX.Element => {
 	const { error, icon, onChange, placeholder, value } = props;
 	// sestaveni a vraceni
 	return (
-		<View style={StyleSheet.flatten([styles.wrapperBasic, error ? styles.wrapperError : null])}>
+		<View style={[styles.wrapperBasic, error ? styles.wrapperError : null]}>
 			<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
 			<TextInput
 				style={styles.fieldBasic}

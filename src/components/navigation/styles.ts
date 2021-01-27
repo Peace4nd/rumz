@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
 	},
 	tabActive: {
 		color: Color.Primary.Text
-		// color: Color.Primary.Light
 	},
 	tabIcon: {
 		color: Color.Primary.Dark

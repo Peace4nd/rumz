@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, Easing, StyleSheet, View } from "react-native";
+import { Animated, Easing, View } from "react-native";
 import styles from "./styles";
 
 /**
@@ -27,7 +27,7 @@ const Load = (): JSX.Element => {
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
-			<Animated.View style={StyleSheet.flatten([styles.indicator, { transform: [{ rotate: spin }] }])} />
+			<Animated.View style={[styles.indicator, { transform: [{ rotate: spin }] }]} />
 		</View>
 	);
 };

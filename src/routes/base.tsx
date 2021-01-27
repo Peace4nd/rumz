@@ -5,7 +5,6 @@ import { RouteComponentProps } from "react-router-native";
 import { Header, Navigation } from "../components";
 import { IHeader } from "../components/header";
 import { Color } from "../styles";
-import { RouterPath } from "../utils/router";
 import strings from "../utils/strings";
 
 const styles = StyleSheet.create({
@@ -40,17 +39,17 @@ export default abstract class BaseRoute<P = unknown, S = unknown, M = unknown> e
 								{
 									icon: faListUl,
 									label: strings("navigationOverview"),
-									path: RouterPath.Overview
+									path: "/overview"
 								},
 								{
 									icon: faLightbulb,
 									label: strings("navigationStats"),
-									path: RouterPath.Edit
+									path: "/edit/:id"
 								},
 								{
 									icon: faCartPlus,
 									label: strings("navigationCreate"),
-									path: RouterPath.Create
+									path: "/create"
 								}
 							]}
 						/>

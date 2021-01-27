@@ -1,7 +1,7 @@
 import { faImage, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { IInput } from "..";
 import { Measurement } from "../../../styles";
@@ -53,10 +53,10 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 		const { selected } = this.state;
 		// sestaveni a vraceni
 		return (
-			<Pressable style={StyleSheet.flatten([styles.wrapperBasic, styles.wrapperImage])} onPress={this.handleClick}>
+			<Pressable style={[styles.wrapperBasic, styles.wrapperImage]} onPress={this.handleClick}>
 				{selected === null && (
 					<View style={styles.wrapperFill}>
-						<FontAwesomeIcon style={StyleSheet.flatten([styles.iconBasic, styles.iconBasicVertical])} icon={icon} size={Measurement.Icon * 2} />
+						<FontAwesomeIcon style={[styles.iconBasic, styles.iconBasicVertical]} icon={icon} size={Measurement.Icon * 2} />
 						{placeholder && (
 							<Typography type="Body1" style={styles.placeholder}>
 								{placeholder}

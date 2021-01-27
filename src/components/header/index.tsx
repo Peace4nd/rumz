@@ -5,7 +5,7 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router-native";
 import { Measurement } from "../../styles";
-import { RouterPath } from "../../utils/router";
+import { matchRouterPath } from "../../utils/router";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -50,7 +50,7 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 		return (
 			<View style={styles.wrapper}>
 				<View style={styles.sectionAction}>
-					{match.path !== RouterPath.Overview && (
+					{!matchRouterPath("/overview", match.url) && (
 						<TouchableOpacity onPress={this.handlePress}>
 							<FontAwesomeIcon icon={faChevronLeft} style={styles.icon} size={Measurement.Icon} />
 						</TouchableOpacity>

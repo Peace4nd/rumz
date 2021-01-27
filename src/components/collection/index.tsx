@@ -6,7 +6,7 @@ import { Dimensions, FlatList, ImageBackground, ListRenderItemInfo, StyleSheet, 
 import { Link } from "react-router-native";
 import { Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
-import { preparePath } from "../../utils/router";
+import { getRouterPath } from "../../utils/router";
 import strings from "../../utils/strings";
 import Country from "../country";
 import Typography from "../typography";
@@ -76,10 +76,10 @@ export default class Collection extends React.Component<ICollection> {
 	 * @returns {JSX.Element} Element polozky
 	 */
 	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => (
-		<View key={index} style={StyleSheet.flatten([styles.itemWrapper, { height: this.itemSize, width: this.itemSize }])}>
-			<Link to={preparePath("/overview/:id", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
+		<View key={index} style={[styles.itemWrapper, { height: this.itemSize, width: this.itemSize }]}>
+			<Link to={getRouterPath("/overview", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
 				<ImageBackground source={{ uri: item.images[0] }} resizeMode="contain" style={styles.itemImage}>
-					<View style={StyleSheet.flatten([styles.infoWrapper, { width: this.itemSize - 2 * StyleSheet.hairlineWidth }])}>
+					<View style={[styles.infoWrapper, { width: this.itemSize - 2 * StyleSheet.hairlineWidth }]}>
 						<Typography type="Subtitle1" style={styles.infoLabel}>
 							{item.name}
 						</Typography>

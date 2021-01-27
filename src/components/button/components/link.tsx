@@ -4,14 +4,14 @@ import { TouchableOpacity, View } from "react-native";
 import { Link as RouterLink } from "react-router-native";
 import { IButton } from "..";
 import { Measurement } from "../../../styles";
-import { IRouterAvailable } from "../../../utils/router";
+import { IRouterPath } from "../../../utils/router";
 import styles from "../styles";
 
 /**
  * Dostupne vlastnosti
  */
 export interface IButtonLink extends IButton {
-	to: IRouterAvailable;
+	to: IRouterPath;
 }
 
 /**

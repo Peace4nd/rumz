@@ -17,30 +17,43 @@ export interface IInputPicker extends IInput<string> {
 
 /**
  * Vyberovy vstup
- *
- * @param {IInputPicker} props Vlastnosti
- * @returns {JSX.Element} Element
  */
-const InputPicker = (props: IInputPicker): JSX.Element => {
-	// rozlozeni props
-	const { icon, items, onChange, placeholder, value } = props;
-	// sestaveni a vraceni
-	return (
-		<View style={styles.wrapperBasic}>
-			<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
-			<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={onChange}>
-				{items.map((item) => (
-					<Picker.Item key={item.value} {...item} />
-				))}
-			</Picker>
-			{!value && (
-				<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay]}>
-					{placeholder}
-				</Typography>
-			)}
-		</View>
-	);
-};
+class InputPicker extends React.Component<IInputPicker> {
+	/**
+	 * Render
+	 *
+	 * @returns {JSX.Element} Element
+	 */
+	public render(): JSX.Element {
+		// rozlozeni props
+		const { icon, items, placeholder, value } = this.props;
+		// sestaveni a vraceni
+		return (
+			<View style={styles.wrapperBasic}>
+				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
+				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
+					{items.map((item) => (
+						<Picker.Item key={item.value} {...item} />
+					))}
+				</Picker>
+				{!value && (
+					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay]}>
+						{placeholder}
+					</Typography>
+				)}
+			</View>
+		);
+	}
+
+	/**
+	 * Zmena
+	 *
+	 * @param {string} value Hodnota
+	 */
+	private handleChange = (value: string): void => {
+		this.props.onChange(value, true);
+	};
+}
 
 // export
 export default InputPicker;

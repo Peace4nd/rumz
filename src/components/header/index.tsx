@@ -1,6 +1,5 @@
 import { faChevronLeft, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { History } from "history";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { RouteComponentProps, withRouter } from "react-router-native";
@@ -15,7 +14,7 @@ import styles from "./styles";
 export interface IHeaderAction {
 	icon: IconDefinition;
 	disabled?: boolean;
-	onPress: (history: History) => void;
+	onPress: () => void;
 }
 
 /**
@@ -45,7 +44,7 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { actions, history, match, title } = this.props;
+		const { actions, match, title } = this.props;
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
@@ -63,7 +62,7 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 				</View>
 				<View style={styles.sectionAction}>
 					{actions.map((action, index) => (
-						<TouchableOpacity key={index} onPress={() => action.onPress(history)} disabled={action.disabled || false}>
+						<TouchableOpacity key={index} onPress={action.onPress} disabled={action.disabled || false}>
 							<FontAwesomeIcon icon={action.icon} style={styles.icon} size={Measurement.Icon} />
 						</TouchableOpacity>
 					))}

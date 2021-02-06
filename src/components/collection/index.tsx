@@ -2,21 +2,20 @@ import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import moment from "moment";
 import React from "react";
-import { Dimensions, FlatList, ImageBackground, ListRenderItemInfo, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Link } from "react-router-native";
+import { FlatList, Image, ListRenderItemInfo, TouchableOpacity, View } from "react-native";
 import { Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
-import { getRouterPath } from "../../utils/router";
 import strings from "../../utils/strings";
 import Country from "../country";
 import Typography from "../typography";
-import styles, { GRID_COLUMNS, GRID_GAP_ITEM, GRID_GAP_WRAPPER } from "./styles";
+import styles from "./styles";
 
 /**
  * Dostupne vlastnosti
  */
 export interface ICollection {
 	records: ICollectionRecord[];
+	onClick: (record: ICollectionRecord) => void;
 }
 
 /**
@@ -29,13 +28,9 @@ export default class Collection extends React.Component<ICollection> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: ICollection = {
+		onClick: null,
 		records: []
 	};
-
-	/**
-	 * Velikost jedne polozky
-	 */
-	private readonly itemSize = this.calculateRecordSize();
 
 	/**
 	 * Render
@@ -60,10 +55,12 @@ export default class Collection extends React.Component<ICollection> {
 		return (
 			<FlatList
 				data={records}
-				numColumns={GRID_COLUMNS}
+				numColumns={2}
 				scrollEnabled={true}
 				renderItem={this.renderRecord}
+				ItemSeparatorComponent={() => <View style={styles.itemWrapperGapRow} />}
 				keyExtractor={(item) => item.id}
+				columnWrapperStyle={styles.itemContainer}
 				style={styles.wrapper}
 			/>
 		);
@@ -75,11 +72,15 @@ export default class Collection extends React.Component<ICollection> {
 	 * @param {ListRenderItemInfo<ICollectionRecord>} params Parametry
 	 * @returns {JSX.Element} Element polozky
 	 */
-	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => (
-		<View key={index} style={[styles.itemWrapper, { height: this.itemSize, width: this.itemSize }]}>
-			<Link to={getRouterPath("/overview", { id: item.id })} style={styles.itemLink} component={TouchableOpacity}>
-				<ImageBackground source={{ uri: item.images[0] }} resizeMode="contain" style={styles.itemImage}>
-					<View style={[styles.infoWrapper, { width: this.itemSize - 2 * StyleSheet.hairlineWidth }]}>
+	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => {
+		// rozlozeni props
+		const { onClick } = this.props;
+		// sestaveni a vraceni
+		return (
+			<View key={index} style={[styles.itemWrapper, index % 2 === 0 && index < this.props.records.length - 1 ? styles.itemWrapperGapColumn : null]}>
+				<TouchableOpacity style={styles.itemLink} onPress={() => onClick(item)}>
+					<Image source={{ uri: item.images[0] }} resizeMode="contain" style={styles.itemImage} />
+					<View style={styles.infoWrapper}>
 						<Typography type="Subtitle1" style={styles.infoLabel}>
 							{item.name}
 						</Typography>
@@ -90,20 +91,8 @@ export default class Collection extends React.Component<ICollection> {
 							<Country.Flag code={item.origin} />
 						</View>
 					</View>
-				</ImageBackground>
-			</Link>
-		</View>
-	);
-
-	/**
-	 * Vypocet velikosti polozky
-	 *
-	 * @returns {number} Velikost polozky
-	 */
-	private calculateRecordSize(): number {
-		// rozlozeni vlastnosti
-		const { width } = Dimensions.get("window");
-		// vypocet a vraceni
-		return (width - (2 * GRID_GAP_WRAPPER + 4 * GRID_GAP_ITEM + 4 * StyleSheet.hairlineWidth)) / GRID_COLUMNS;
-	}
+				</TouchableOpacity>
+			</View>
+		);
+	};
 }

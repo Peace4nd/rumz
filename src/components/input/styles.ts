@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: "row",
-		marginBottom: Measurement.Padding * 2,
 		minHeight: Measurement.Input,
 		paddingHorizontal: (Measurement.Input - Measurement.Icon) / 2
 	},
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
 		borderBottomLeftRadius: 0,
 		borderBottomRightRadius: 0,
 		borderColor: "red",
-		marginBottom: Measurement.Error + Measurement.Padding * 2
+		marginBottom: Measurement.Error
 	},
 	wrapperFill: {
 		alignItems: "center",
@@ -80,8 +79,8 @@ const styles = StyleSheet.create({
 	wrapperImage: {
 		height: width / 2,
 		justifyContent: "center",
-		padding: Measurement.Padding,
-		width: width / 2
+		marginHorizontal: width / 6,
+		padding: Measurement.Padding
 	},
 	wrapperMultiline: {
 		alignItems: "flex-start"

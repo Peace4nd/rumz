@@ -1,10 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Color, Measurement, opacify } from "../../styles";
 
-export const GRID_COLUMNS: number = 2;
-export const GRID_GAP_WRAPPER: number = Measurement.Padding / 2;
-export const GRID_GAP_ITEM: number = Measurement.Padding;
-
 const styles = StyleSheet.create({
 	emptyIcon: {
 		color: Color.Primary.Muted
@@ -31,32 +27,44 @@ const styles = StyleSheet.create({
 	},
 	infoWrapper: {
 		backgroundColor: opacify(Color.Primary.Base, 0.75),
-		bottom: -GRID_GAP_ITEM,
+		bottom: -StyleSheet.hairlineWidth,
 		flexDirection: "column",
-		left: -GRID_GAP_ITEM,
-		padding: Measurement.Padding / 2,
+		left: -StyleSheet.hairlineWidth,
+		padding: Measurement.Padding,
 		position: "absolute",
-		right: -GRID_GAP_ITEM
+		right: -StyleSheet.hairlineWidth
+	},
+	itemContainer: {
+		justifyContent: "center"
 	},
 	itemImage: {
-		flex: 1
+		flex: 1,
+		margin: Measurement.Padding
 	},
 	itemLink: {
 		flex: 1
 	},
 	itemWrapper: {
+		aspectRatio: 1,
 		backgroundColor: Color.White,
 		borderColor: opacify(Color.Primary.Base, 0.75),
 		borderRadius: 5,
 		borderWidth: StyleSheet.hairlineWidth,
 		elevation: 4,
-		margin: GRID_GAP_ITEM,
-		overflow: "hidden",
-		padding: GRID_GAP_ITEM
+		flex: 1,
+		flexBasis: "50%",
+		flexGrow: 0,
+		flexShrink: 1,
+		overflow: "hidden"
 	},
-	wrapper: {
-		paddingHorizontal: GRID_GAP_WRAPPER
-	}
+	itemWrapperGapColumn: {
+		marginRight: 2 * Measurement.Padding
+	},
+	itemWrapperGapRow: {
+		flex: 1,
+		height: 2 * Measurement.Padding
+	},
+	wrapper: {}
 });
 
 export default styles;

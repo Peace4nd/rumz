@@ -7,11 +7,30 @@ import Picker from "./components/picker";
 import Text from "./components/text";
 
 export interface IInput<V> {
-	placeholder: string;
-	value: V;
-	onChange: (value: V) => void;
-	icon: IconDefinition;
-	error?: string;
+	/**
+	 * Placeholder
+	 */
+	placeholder?: string;
+
+	/**
+	 * Vychozi hodnota
+	 */
+	value?: V;
+
+	/**
+	 * Zmena hodnoty
+	 */
+	onChange: (value: V, valid: boolean) => void;
+
+	/**
+	 * Ikona
+	 */
+	icon?: IconDefinition;
+
+	/**
+	 * Validator
+	 */
+	validator?: (value: V) => string;
 }
 
 export default {

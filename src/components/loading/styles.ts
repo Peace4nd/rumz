@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement } from "../../styles";
+import { Color, Measurement, opacify } from "../../styles";
 
 const styles = StyleSheet.create({
 	indicator: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		...StyleSheet.absoluteFillObject,
 		alignItems: "center",
-		backgroundColor: Color.White,
+		backgroundColor: opacify(Color.White, 0.75),
 		justifyContent: "center"
 	}
 });

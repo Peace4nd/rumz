@@ -1,25 +1,9 @@
-import { ExtractRouteParams, generatePath, matchPath } from "react-router";
+import { matchPath } from "react-router";
 
 /**
  * Dostupne routy
  */
 export type IRouterPath = "/create" | "/overview/:id" | "/edit/:id" | "/overview";
-
-/**
- * Sestaveni cesty pro presmerovani
- *
- * @param {P} path Cesta
- * @param {ExtractRouteParams<P>} params Parametry
- * @returns {string} Cesta
- */
-export function getRouterPath<P extends IRouterPath>(path: P, params?: ExtractRouteParams<P>): string {
-	// pokud nejsou definovany parametry, vraci se pouze cesta
-	if (!params) {
-		return path;
-	}
-	// jinak se sestavi
-	return generatePath(path, params);
-}
 
 /**
  * Overeni ouhlasu pozadovane cesty a aktualniho URL
@@ -31,7 +15,7 @@ export function getRouterPath<P extends IRouterPath>(path: P, params?: ExtractRo
 export function matchRouterPath(path: IRouterPath, url: string): boolean {
 	// overeni
 	const match = matchPath(url, {
-		exact: true,
+		exact: false,
 		path,
 		strict: false
 	});

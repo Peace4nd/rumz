@@ -1,4 +1,4 @@
-import { faCalendarAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
@@ -17,9 +17,7 @@ interface IInputDateState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputDate extends Omit<IInput<Date>, "icon"> {
-	icon?: IconDefinition;
-}
+export type IInputDate = IInput<Date>;
 
 /**
  * Textovy vstup
@@ -82,7 +80,7 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 				visible: false
 			},
 			() => {
-				this.props.onChange(date);
+				this.props.onChange(date, true);
 			}
 		);
 	};

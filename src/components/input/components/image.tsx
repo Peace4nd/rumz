@@ -1,4 +1,4 @@
-import { faImage, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
@@ -9,15 +9,14 @@ import Typography from "../../typography";
 import styles from "../styles";
 
 interface IInputImageState {
+	error: string;
 	selected: DocumentPickerResponse;
 }
 
 /**
  * Dostupne vlastnosti
  */
-export interface IInputImage extends Omit<IInput<DocumentPickerResponse>, "value" | "icon"> {
-	icon?: IconDefinition;
-}
+export type IInputImage = IInput<DocumentPickerResponse>;
 
 /**
  * Obrazkovy vstup
@@ -39,6 +38,7 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 	 * Vychozi stav
 	 */
 	public state: IInputImageState = {
+		error: null,
 		selected: null
 	};
 
@@ -82,15 +82,15 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 						selected: res
 					},
 					() => {
-						this.props.onChange(res);
+						this.props.onChange(res, true);
 					}
 				);
 			})
-			.catch((err) => {
-				if (DocumentPicker.isCancel(err)) {
-					console.log("CANCELED");
-				} else {
-					console.log("FUCKED UP", err);
+			.catch((error) => {
+				if (!DocumentPicker.isCancel(error)) {
+					this.setState({
+						error: String(error)
+					});
 				}
 			});
 	};

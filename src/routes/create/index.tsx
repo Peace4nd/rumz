@@ -4,15 +4,15 @@ import {
 	faComments,
 	faEuroSign,
 	faFlask,
+	faGlassCheers,
 	faGlobeAmericas,
-	faGrinTongue,
 	faImage,
 	faIndustry,
 	faPalette,
 	faPencilAlt,
 	faPercentage,
 	faSeedling,
-	faStarHalfAlt,
+	faSmile,
 	faTimes,
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
@@ -160,7 +160,7 @@ export default class Add extends Route.Content<unknown, IAddState> {
 					{/* chutova charakteristika */}
 					<Input.Text
 						highlight={highlight && !filled.taste}
-						icon={faGrinTongue}
+						icon={faGlassCheers}
 						placeholder={strings("createCharacteristicsTaste")}
 						onChange={this.handleChange.bind(this, "taste")}
 					/>
@@ -198,9 +198,9 @@ export default class Add extends Route.Content<unknown, IAddState> {
 						onChange={this.handleChange.bind(this, "purchased")}
 					/>
 					{/* hodnoceni */}
-					<Input.Number
+					<Input.Rating
 						highlight={highlight && !filled.rating}
-						icon={faStarHalfAlt}
+						icon={faSmile}
 						placeholder={strings("createRating")}
 						onChange={this.handleChange.bind(this, "rating")}
 					/>

@@ -53,9 +53,9 @@ export interface ICollectionRecord {
 	notes: string;
 
 	/**
-	 * Hodnoceni (0 - 5)
+	 * Hodnoceni (0 - 10)
 	 */
-	rating: 0 | 1 | 2 | 3 | 4 | 5;
+	rating: number;
 
 	/**
 	 * Delka zrani

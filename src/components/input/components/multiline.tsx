@@ -21,7 +21,7 @@ export interface IInputMultiline extends IInput<string> {
 /**
  * Viceradkovy textovy vstup
  */
-class InputMultiline extends React.PureComponent<IInputMultiline, IInputMultilineState> {
+export default class InputMultiline extends React.PureComponent<IInputMultiline, IInputMultilineState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -94,6 +94,3 @@ class InputMultiline extends React.PureComponent<IInputMultiline, IInputMultilin
 		);
 	};
 }
-
-// export
-export default InputMultiline;

@@ -22,7 +22,7 @@ export interface IInputPicker extends IInput<string> {
 /**
  * Vyberovy vstup
  */
-class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> {
+export default class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -86,6 +86,3 @@ class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> {
 		);
 	};
 }
-
-// export
-export default InputPicker;

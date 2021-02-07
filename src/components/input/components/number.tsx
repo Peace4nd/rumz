@@ -20,7 +20,7 @@ export type IInputNumber = IInput<number>;
 /**
  * Ciselny vstup
  */
-class InputNumber extends React.PureComponent<IInputNumber, IInputNumberState> {
+export default class InputNumber extends React.PureComponent<IInputNumber, IInputNumberState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -95,6 +95,3 @@ class InputNumber extends React.PureComponent<IInputNumber, IInputNumberState> {
 		);
 	};
 }
-
-// export
-export default InputNumber;

@@ -4,6 +4,7 @@ import Image from "./components/image";
 import Multiline from "./components/multiline";
 import Number from "./components/number";
 import Picker from "./components/picker";
+import Rating from "./components/rating";
 import Text from "./components/text";
 
 export interface IInputState {
@@ -48,5 +49,6 @@ export default {
 	Multiline,
 	Number,
 	Picker,
+	Rating,
 	Text
 };

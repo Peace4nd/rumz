@@ -19,7 +19,7 @@ export type IInputText = IInput<string>;
 /**
  * Textovy vstup
  */
-class InputText extends React.PureComponent<IInputText, IInputTextState> {
+export default class InputText extends React.PureComponent<IInputText, IInputTextState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -89,6 +89,3 @@ class InputText extends React.PureComponent<IInputText, IInputTextState> {
 		);
 	};
 }
-
-// export
-export default InputText;

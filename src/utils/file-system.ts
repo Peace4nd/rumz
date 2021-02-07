@@ -1,6 +1,6 @@
-import { DocumentPickerResponse } from "react-native-document-picker";
-import FetchBlob from "react-native-fetch-blob";
+import mime from "mime";
 import fs from "react-native-fs";
+import { IFileDocument } from "../types/file";
 import { IStorageKey } from "../types/storage";
 
 /**
@@ -19,10 +19,8 @@ async function copyAssets(key: IStorageKey, source: string, file: string): Promi
 	if (!exists) {
 		await fs.mkdir(fs.DocumentDirectoryPath + "/" + key);
 	}
-	// nalezeni prislusne cesty
-	const stat = await FetchBlob.fs.stat(source);
 	// nakopirovani
-	await fs.copyFile(stat.path, dest);
+	await fs.copyFile(source, dest);
 	// vraceni cesty
 	return "file://" + dest;
 }
@@ -34,13 +32,12 @@ export const collection = {
 	/**
 	 * Pridani obrazku do kolekce
 	 *
-	 * @param {DocumentPickerResponse} document Vybrany dokument
+	 * @param {IFileDocument} document Vybrany dokument
 	 * @param {string} id Identifikator zaznamu
 	 * @returns {Promise<string>} Cesta k pridanemu souboru
 	 */
-	add: (document: DocumentPickerResponse, id: string): Promise<string> => {
-		const ext = document.name.split(".").pop();
-		return copyAssets("collection", decodeURIComponent(document.fileCopyUri), id + "." + ext);
+	add: (document: IFileDocument, id: string): Promise<string> => {
+		return copyAssets("collection", document.path, id + "." + mime.getExtension(document.mime));
 	}
 };
 

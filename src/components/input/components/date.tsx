@@ -25,14 +25,16 @@ export type IInputDate = IInput<Date>;
  * @param {IInputDate} props Vlastnosti
  * @returns {JSX.Element} Element
  */
-export default class InputDate extends React.Component<IInputDate, IInputDateState> {
+export default class InputDate extends React.PureComponent<IInputDate, IInputDateState> {
 	/**
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputDate = {
+		highlight: false,
 		icon: faCalendarAlt,
 		onChange: null,
 		placeholder: null,
+		validator: null,
 		value: null
 	};
 
@@ -51,12 +53,12 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, placeholder } = this.props;
+		const { highlight, icon, placeholder } = this.props;
 		const { value, visible } = this.state;
 		// sestaveni a vraceni
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
-				<View style={styles.wrapperBasic}>
+				<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
 					<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
 					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
@@ -80,7 +82,7 @@ export default class InputDate extends React.Component<IInputDate, IInputDateSta
 				visible: false
 			},
 			() => {
-				this.props.onChange(date, true);
+				this.props.onChange(date, { filled: true, valid: true });
 			}
 		);
 	};

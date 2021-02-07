@@ -19,7 +19,7 @@ export type IInputText = IInput<string>;
 /**
  * Textovy vstup
  */
-class InputText extends React.Component<IInputText, IInputTextState> {
+class InputText extends React.PureComponent<IInputText, IInputTextState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -32,6 +32,7 @@ class InputText extends React.Component<IInputText, IInputTextState> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputText = {
+		highlight: false,
 		icon: null,
 		onChange: null,
 		placeholder: null,
@@ -46,18 +47,17 @@ class InputText extends React.Component<IInputText, IInputTextState> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, placeholder } = this.props;
+		const { highlight, icon, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, error ? styles.wrapperError : null]}>
+			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
 				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
 				<TextInput
 					style={styles.fieldBasic}
 					value={value}
 					placeholder={placeholder}
 					placeholderTextColor={Color.Primary.Muted}
-					onEndEditing={this.handleDone}
 					onChangeText={this.handleChange}
 				/>
 				{error && (
@@ -78,17 +78,15 @@ class InputText extends React.Component<IInputText, IInputTextState> {
 		// rozlozeni props
 		const { validator } = this.props;
 		// aktualizace
-		this.setState({
-			error: validator ? validator(value) : null,
-			value
-		});
-	};
-
-	/**
-	 * Dokonceni editace
-	 */
-	private handleDone = (): void => {
-		this.props.onChange(this.state.value, !!this.state.error);
+		this.setState(
+			{
+				error: validator ? validator(value) : null,
+				value
+			},
+			() => {
+				this.props.onChange(this.state.value, { filled: this.state.value !== "", valid: this.state.error === null });
+			}
+		);
 	};
 }
 

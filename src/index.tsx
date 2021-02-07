@@ -3,6 +3,7 @@ import { Permission, PermissionsAndroid } from "react-native";
 import { BackButton, NativeRouter, Redirect, Route, Switch } from "react-router-native";
 import Create from "./routes/create";
 import { Collection, Detail } from "./routes/overview";
+import Stats from "./routes/stats";
 
 /**
  * Aplikacni vstupni bod
@@ -26,10 +27,11 @@ class App extends React.Component {
 				<BackButton />
 				<Switch>
 					<Redirect exact={true} strict={true} from="/" to={"/overview"} />
-					<Route exact={true} strict={true} path={"/create"} component={Create} />
 					<Route exact={true} strict={true} path={"/overview"} component={Collection} />
 					<Route exact={true} strict={true} path={"/overview/:id"} component={Detail} />
-					<Route exact={true} strict={true} path={"/edit/:id"} component={null} />
+					<Route exact={true} strict={true} path={"/create"} component={Create} />
+					<Route exact={true} strict={true} path={"/create/:id"} component={Create} />
+					<Route exact={true} strict={true} path={"/stats"} component={Stats} />
 				</Switch>
 			</NativeRouter>
 		);

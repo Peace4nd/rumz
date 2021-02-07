@@ -1,10 +1,8 @@
-import { faChevronLeft, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { RouteComponentProps, withRouter } from "react-router-native";
 import { Measurement } from "../../styles";
-import { matchRouterPath } from "../../utils/router";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -22,18 +20,20 @@ export interface IHeaderAction {
  */
 export interface IHeader {
 	title: string;
-	actions?: IHeaderAction[];
+	actionLeft?: IHeaderAction;
+	actionRight?: IHeaderAction;
 }
 
 /**
  * Hlavicka
  */
-class Header extends React.Component<IHeader & RouteComponentProps> {
+export default class Header extends React.PureComponent<IHeader> {
 	/**
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IHeader = {
-		actions: [],
+		actionLeft: null,
+		actionRight: null,
 		title: null
 	};
 
@@ -44,14 +44,14 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { actions, match, title } = this.props;
+		const { actionLeft, actionRight, title } = this.props;
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
 				<View style={styles.sectionAction}>
-					{!matchRouterPath("/overview", match.url) && (
-						<TouchableOpacity onPress={this.handlePress}>
-							<FontAwesomeIcon icon={faChevronLeft} style={styles.icon} size={Measurement.Icon} />
+					{actionLeft && (
+						<TouchableOpacity onPress={actionLeft.onPress} disabled={actionLeft.disabled || false}>
+							<FontAwesomeIcon icon={actionLeft.icon} style={styles.icon} size={Measurement.Icon} />
 						</TouchableOpacity>
 					)}
 				</View>
@@ -61,22 +61,13 @@ class Header extends React.Component<IHeader & RouteComponentProps> {
 					</Typography>
 				</View>
 				<View style={styles.sectionAction}>
-					{actions.map((action, index) => (
-						<TouchableOpacity key={index} onPress={action.onPress} disabled={action.disabled || false}>
-							<FontAwesomeIcon icon={action.icon} style={styles.icon} size={Measurement.Icon} />
+					{actionRight && (
+						<TouchableOpacity onPress={actionRight.onPress} disabled={actionRight.disabled || false}>
+							<FontAwesomeIcon icon={actionRight.icon} style={styles.icon} size={Measurement.Icon} />
 						</TouchableOpacity>
-					))}
+					)}
 				</View>
 			</View>
 		);
 	}
-
-	/**
-	 * Krok zpet
-	 */
-	private handlePress = (): void => {
-		this.props.history.goBack();
-	};
 }
-
-export default withRouter(Header);

@@ -1,10 +1,11 @@
-import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
+import FetchBlob from "react-native-fetch-blob";
 import { IInput } from "..";
 import { Measurement } from "../../../styles";
+import { IFileDocument } from "../../../types/file";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -16,7 +17,7 @@ interface IInputImageState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputImage = IInput<DocumentPickerResponse>;
+export type IInputImage = IInput<IFileDocument>;
 
 /**
  * Obrazkovy vstup
@@ -24,14 +25,17 @@ export type IInputImage = IInput<DocumentPickerResponse>;
  * @param {InputImage} props Vlastnosti
  * @returns {JSX.Element} Element
  */
-export default class InputImage extends React.Component<IInputImage, IInputImageState> {
+export default class InputImage extends React.PureComponent<IInputImage, IInputImageState> {
 	/**
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputImage = {
-		icon: faImage,
+		highlight: false,
+		icon: null,
 		onChange: null,
-		placeholder: null
+		placeholder: null,
+		validator: null,
+		value: null
 	};
 
 	/**
@@ -49,11 +53,11 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, placeholder } = this.props;
+		const { highlight, icon, placeholder } = this.props;
 		const { selected } = this.state;
 		// sestaveni a vraceni
 		return (
-			<Pressable style={[styles.wrapperBasic, styles.wrapperImage]} onPress={this.handleClick}>
+			<Pressable style={[styles.wrapperBasic, styles.wrapperImage, highlight ? styles.wrapperHighlight : null]} onPress={this.handleClick}>
 				{selected === null && (
 					<View style={styles.wrapperFill}>
 						<FontAwesomeIcon style={[styles.iconBasic, styles.iconBasicVertical]} icon={icon} size={Measurement.Icon * 2} />
@@ -82,7 +86,18 @@ export default class InputImage extends React.Component<IInputImage, IInputImage
 						selected: res
 					},
 					() => {
-						this.props.onChange(res, true);
+						FetchBlob.fs.stat(decodeURIComponent(res.fileCopyUri)).then((stat) => {
+							this.props.onChange(
+								{
+									filename: stat.filename,
+									lastModified: new Date(stat.lastModified),
+									mime: res.type,
+									path: stat.path,
+									size: parseInt(stat.size, 10)
+								},
+								{ filled: true, valid: true }
+							);
+						});
 					}
 				);
 			})

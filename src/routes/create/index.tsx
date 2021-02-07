@@ -6,26 +6,34 @@ import {
 	faFlask,
 	faGlobeAmericas,
 	faGrinTongue,
+	faImage,
 	faIndustry,
 	faPalette,
 	faPencilAlt,
 	faPercentage,
 	faSeedling,
 	faStarHalfAlt,
+	faTimes,
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { Keyboard, ToastAndroid } from "react-native";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import { Form, Input, Route } from "../../components";
+import { IInputState } from "../../components/input";
 import { ICollectionRecord } from "../../types/collection";
+import { IFileDocument } from "../../types/file";
 import country from "../../utils/country";
 import fs from "../../utils/file-system";
+import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IAddState {
-	record: ICollectionRecord;
+	record: ICollectionRecord & { image: IFileDocument };
+	filled: Record<keyof ICollectionRecord, boolean>;
 	working: boolean;
+	highlight: boolean;
 }
 
 /**
@@ -35,12 +43,30 @@ export default class Add extends Route.Content<unknown, IAddState> {
 	/**
 	 * Vychozi stav
 	 */
-	public state = {
+	public state: IAddState = {
+		filled: {
+			alcohol: false,
+			color: false,
+			id: true,
+			image: false,
+			manufacturer: false,
+			name: false,
+			notes: false,
+			origin: false,
+			price: false,
+			purchased: false,
+			rating: false,
+			ripening: false,
+			smell: false,
+			taste: false,
+			volume: false
+		},
+		highlight: false,
 		record: {
 			alcohol: null,
 			color: null,
 			id: uuidv4(),
-			images: null,
+			image: null,
 			manufacturer: null,
 			name: null,
 			notes: null,
@@ -63,107 +89,93 @@ export default class Add extends Route.Content<unknown, IAddState> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { record } = this.state;
+		const { filled, highlight } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
 				busy={this.state.working}
 				header={{
-					actions: [
-						{
-							disabled: this.state.working,
-							icon: faCheck,
-							onPress: () => {
-								this.setState(
-									{
-										working: true
-									},
-									() => {
-										console.log(this.state.record);
-										/*
-										storage.collection.push(this.state.record).then(() => {
-											history.push(getRouterPath("/overview"));
-										});
-									*/
-									}
-								);
-							}
-						}
-					],
+					actionLeft: {
+						icon: faTimes,
+						onPress: () => this.redirect("/overview")
+					},
+					actionRight: {
+						disabled: this.state.working,
+						icon: faCheck,
+						onPress: this.handleSave
+					},
 					title: strings("headerAdd")
 				}}
 			>
 				<Form>
 					{/* obrazek */}
 					<Input.Image
+						highlight={highlight && !filled.image}
+						icon={faImage}
 						placeholder={strings("createImage")}
-						onChange={(value) => {
-							fs.collection.add(value, this.state.record.id).then((path) => {
-								this.setState({
-									record: {
-										...this.state.record,
-										images: [path]
-									}
-								});
-							});
-						}}
+						onChange={this.handleChange.bind(this, "image")}
 					/>
 					{/* nazev */}
-					<Input.Text icon={faPencilAlt} value={record.name} placeholder={strings("createName")} onChange={this.handleChange.bind(this, "name")} />
+					<Input.Text
+						highlight={highlight && !filled.name}
+						icon={faPencilAlt}
+						placeholder={strings("createName")}
+						onChange={this.handleChange.bind(this, "name")}
+					/>
 					{/* vyrobce */}
 					<Input.Text
+						highlight={highlight && !filled.manufacturer}
 						icon={faIndustry}
-						value={record.manufacturer}
 						placeholder={strings("createManufacturer")}
 						onChange={this.handleChange.bind(this, "manufacturer")}
 					/>
 					{/* objem lahve */}
 					<Input.Number
+						highlight={highlight && !filled.volume}
 						icon={faWineBottle}
-						value={record.volume}
 						placeholder={strings("createVolume")}
 						onChange={this.handleChange.bind(this, "volume")}
 					/>
 					{/* obsah alkoholu */}
 					<Input.Number
+						highlight={highlight && !filled.alcohol}
 						icon={faPercentage}
-						value={record.alcohol}
 						placeholder={strings("createAlcohol")}
 						onChange={this.handleChange.bind(this, "alcohol")}
 					/>
 					{/* barva */}
 					<Input.Text
+						highlight={highlight && !filled.color}
 						icon={faPalette}
-						value={record.color}
 						placeholder={strings("createCharacteristicsColor")}
 						onChange={this.handleChange.bind(this, "color")}
 					/>
 					{/* cichova charakteristika */}
 					<Input.Text
+						highlight={highlight && !filled.smell}
 						icon={faFlask}
-						value={record.smell}
 						placeholder={strings("createCharacteristicsSmell")}
 						onChange={this.handleChange.bind(this, "smell")}
 					/>
 					{/* chutova charakteristika */}
 					<Input.Text
+						highlight={highlight && !filled.taste}
 						icon={faGrinTongue}
-						value={record.taste}
 						placeholder={strings("createCharacteristicsTaste")}
 						onChange={this.handleChange.bind(this, "taste")}
 					/>
 					{/* poznamka */}
 					<Input.Multiline
+						highlight={highlight && !filled.notes}
 						icon={faComments}
-						value={record.notes}
 						placeholder={strings("createNotes")}
 						lines={5}
 						onChange={this.handleChange.bind(this, "notes")}
 					/>
 					{/* zeme puvodu */}
 					<Input.Picker
+						highlight={highlight && !filled.origin}
 						icon={faGlobeAmericas}
-						value={record.origin}
 						placeholder={strings("createOrigin")}
 						items={Object.entries(country).map((entry) => ({
 							label: entry[1].name,
@@ -173,24 +185,29 @@ export default class Add extends Route.Content<unknown, IAddState> {
 					/>
 					{/* cena */}
 					<Input.Number
+						highlight={highlight && !filled.price}
 						icon={faEuroSign}
-						value={record.price}
 						placeholder={strings("createPrice")}
 						onChange={this.handleChange.bind(this, "price")}
+						validator={(value) => (value > 0 ? null : "spatna cena")}
 					/>
 					{/* zakoupeno */}
-					<Input.Date value={record.purchased} placeholder={strings("createPurchased")} onChange={this.handleChange.bind(this, "purchased")} />
+					<Input.Date
+						highlight={highlight && !filled.purchased}
+						placeholder={strings("createPurchased")}
+						onChange={this.handleChange.bind(this, "purchased")}
+					/>
 					{/* hodnoceni */}
 					<Input.Number
+						highlight={highlight && !filled.rating}
 						icon={faStarHalfAlt}
-						value={record.rating}
 						placeholder={strings("createRating")}
 						onChange={this.handleChange.bind(this, "rating")}
 					/>
 					{/* delka zrani */}
 					<Input.Number
+						highlight={highlight && !filled.ripening}
 						icon={faSeedling}
-						value={record.ripening}
 						placeholder={strings("createRipening")}
 						onChange={this.handleChange.bind(this, "ripening")}
 					/>
@@ -199,8 +216,64 @@ export default class Add extends Route.Content<unknown, IAddState> {
 		);
 	}
 
-	private handleChange(field: keyof ICollectionRecord, value: string | number | Date): void {
+	/**
+	 * Ulozeni
+	 */
+	private handleSave = (): void => {
+		// kontrola validitz
+		const filled = Object.values(this.state.filled).reduce((prev, current) => prev && current, true);
+		// pokud je vse OK
+		if (filled) {
+			// schovani klavesnice
+			Keyboard.dismiss();
+			// zpracovani
+			this.setState(
+				{
+					highlight: false,
+					working: true
+				},
+				() => {
+					// rozlozeni zaznamu
+					const { image, ...rest } = this.state.record;
+					// ulozeni
+					fs.collection.add(image, this.state.record.id).then((path) => {
+						storage.collection
+							.push({
+								...rest,
+								image: path
+							})
+							.then(() => {
+								this.redirect("/overview");
+								ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
+							});
+					});
+				}
+			);
+		} else {
+			this.setState(
+				{
+					highlight: true
+				},
+				() => {
+					ToastAndroid.show(strings("createSaveError"), ToastAndroid.LONG);
+				}
+			);
+		}
+	};
+
+	/**
+	 * Zmena dat
+	 *
+	 * @param {keyof ICollectionRecord} field Pole
+	 * @param {unknown} value Hodnota
+	 * @param {IInputState} state Stav vstupniho pole
+	 */
+	private handleChange(field: keyof ICollectionRecord, value: unknown, state: IInputState): void {
 		this.setState({
+			filled: {
+				...this.state.filled,
+				[field]: state.filled && state.valid
+			},
 			record: {
 				...this.state.record,
 				[field]: value

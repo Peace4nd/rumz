@@ -6,16 +6,16 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
 	error: {
 		backgroundColor: "red",
-		borderBottomLeftRadius: Measurement.Radius,
-		borderBottomRightRadius: Measurement.Radius,
-		bottom: -Measurement.Error,
+		borderTopLeftRadius: Measurement.Radius,
+		borderTopRightRadius: Measurement.Radius,
 		color: "white",
 		height: Measurement.Error,
 		left: -StyleSheet.hairlineWidth,
 		paddingHorizontal: (Measurement.Input - Measurement.Icon) / 2,
 		position: "absolute",
 		right: -StyleSheet.hairlineWidth,
-		textAlignVertical: "center"
+		textAlignVertical: "center",
+		top: -Measurement.Error
 	},
 	fieldBasic: {
 		...Typography.Body1,
@@ -50,6 +50,9 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		textAlignVertical: "center"
 	},
+	placeholderHighlight: {
+		backgroundColor: Color.Secondary.Light
+	},
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: Color.White,
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
 	},
 	wrapperBasic: {
 		alignItems: "center",
-		borderColor: Color.Primary.Light,
+		borderColor: Color.Primary.Base,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: "row",
@@ -66,15 +69,19 @@ const styles = StyleSheet.create({
 		paddingHorizontal: (Measurement.Input - Measurement.Icon) / 2
 	},
 	wrapperError: {
-		borderBottomLeftRadius: 0,
-		borderBottomRightRadius: 0,
 		borderColor: "red",
-		marginBottom: Measurement.Error
+		borderTopLeftRadius: 0,
+		borderTopRightRadius: 0,
+		marginTop: Measurement.Error
 	},
 	wrapperFill: {
 		alignItems: "center",
 		flex: 1,
 		justifyContent: "center"
+	},
+	wrapperHighlight: {
+		backgroundColor: Color.Secondary.Light,
+		borderColor: Color.Secondary.Base
 	},
 	wrapperImage: {
 		height: width / 2,

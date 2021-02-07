@@ -31,6 +31,11 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 		});
 	}
 
+	/**
+	 * Render
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	public render(): JSX.Element {
 		return (
 			<Route.Wrapper header={{ title: strings("headerMain") }}>

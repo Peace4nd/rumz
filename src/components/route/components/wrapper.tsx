@@ -1,20 +1,31 @@
 import { faCartPlus, faLightbulb, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { KeyboardAvoidingView, SafeAreaView, StatusBar, View } from "react-native";
+import { SafeAreaView, StatusBar, View } from "react-native";
 import { Color } from "../../../styles";
 import strings from "../../../utils/strings";
 import Header, { IHeader } from "../../header";
 import Loading from "../../loading";
-import Navigation, { INavigation } from "../../navigation";
+import Navigation, { INavigationTab } from "../../navigation";
 import styles from "../styles";
 
 /**
  * Dostupne vlastnosti
  */
 export interface IRoute {
+	/**
+	 * Zaneprazdneno
+	 */
 	busy?: boolean;
+
+	/**
+	 * Hlavicka
+	 */
 	header: IHeader;
-	navigation?: INavigation;
+
+	/**
+	 * Navigace
+	 */
+	navigation?: INavigationTab[];
 }
 
 /**
@@ -27,25 +38,23 @@ export default class Route extends React.Component<IRoute> {
 	public static defaultProps: IRoute = {
 		busy: false,
 		header: null,
-		navigation: {
-			tabs: [
-				{
-					icon: faListUl,
-					label: strings("navigationOverview"),
-					path: "/overview"
-				},
-				{
-					icon: faLightbulb,
-					label: strings("navigationStats"),
-					path: "/edit/:id"
-				},
-				{
-					icon: faCartPlus,
-					label: strings("navigationCreate"),
-					path: "/create"
-				}
-			]
-		}
+		navigation: [
+			{
+				icon: faListUl,
+				label: strings("navigationOverview"),
+				path: "/overview"
+			},
+			{
+				icon: faLightbulb,
+				label: strings("navigationStats"),
+				path: "/stats"
+			},
+			{
+				icon: faCartPlus,
+				label: strings("navigationCreate"),
+				path: "/create"
+			}
+		]
 	};
 
 	/**
@@ -61,14 +70,12 @@ export default class Route extends React.Component<IRoute> {
 			<React.Fragment>
 				<StatusBar barStyle="default" backgroundColor={Color.Primary.Dark} />
 				<SafeAreaView style={styles.wrapper}>
-					<KeyboardAvoidingView behavior="height" style={styles.wrapper}>
-						<Header {...header} />
-						<View style={styles.content}>
-							{children}
-							{busy && <Loading />}
-						</View>
-						<Navigation {...navigation} />
-					</KeyboardAvoidingView>
+					<Header {...header} />
+					<View style={styles.content}>
+						{children}
+						{busy && <Loading />}
+					</View>
+					<Navigation tabs={navigation} />
 				</SafeAreaView>
 			</React.Fragment>
 		);

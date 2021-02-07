@@ -20,7 +20,7 @@ export type IInputNumber = IInput<number>;
 /**
  * Ciselny vstup
  */
-class InputNumber extends React.Component<IInputNumber, IInputNumberState> {
+class InputNumber extends React.PureComponent<IInputNumber, IInputNumberState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -34,6 +34,7 @@ class InputNumber extends React.Component<IInputNumber, IInputNumberState> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputNumber = {
+		highlight: false,
 		icon: null,
 		onChange: null,
 		placeholder: null,
@@ -48,11 +49,11 @@ class InputNumber extends React.Component<IInputNumber, IInputNumberState> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, placeholder } = this.props;
+		const { highlight, icon, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={styles.wrapperBasic}>
+			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
 				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
 				<TextInput
 					style={styles.fieldBasic}
@@ -61,7 +62,6 @@ class InputNumber extends React.Component<IInputNumber, IInputNumberState> {
 					placeholderTextColor={Color.Primary.Muted}
 					keyboardType="numeric"
 					onChangeText={this.handleChange}
-					onEndEditing={this.handleDone}
 				/>
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
@@ -83,18 +83,16 @@ class InputNumber extends React.Component<IInputNumber, IInputNumberState> {
 		// parsovani hodnoty
 		const parsed = parseFloat(value);
 		// aktualizace
-		this.setState({
-			error: validator ? validator(parsed) : null,
-			parsed,
-			value
-		});
-	};
-
-	/**
-	 * Dokonceni editace
-	 */
-	private handleDone = (): void => {
-		this.props.onChange(this.state.parsed, !!this.state.error);
+		this.setState(
+			{
+				error: validator ? validator(parsed) : null,
+				parsed,
+				value
+			},
+			() => {
+				this.props.onChange(this.state.parsed, { filled: this.state.parsed !== null, valid: this.state.error === null });
+			}
+		);
 	};
 }
 

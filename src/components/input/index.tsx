@@ -6,6 +6,10 @@ import Number from "./components/number";
 import Picker from "./components/picker";
 import Text from "./components/text";
 
+export interface IInputState {
+	filled: boolean;
+	valid: boolean;
+}
 export interface IInput<V> {
 	/**
 	 * Placeholder
@@ -20,7 +24,7 @@ export interface IInput<V> {
 	/**
 	 * Zmena hodnoty
 	 */
-	onChange: (value: V, valid: boolean) => void;
+	onChange: (value: V, state: IInputState) => void;
 
 	/**
 	 * Ikona
@@ -31,6 +35,11 @@ export interface IInput<V> {
 	 * Validator
 	 */
 	validator?: (value: V) => string;
+
+	/**
+	 * Zvyrazneni
+	 */
+	highlight?: boolean;
 }
 
 export default {

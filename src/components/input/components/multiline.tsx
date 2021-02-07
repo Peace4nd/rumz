@@ -21,7 +21,7 @@ export interface IInputMultiline extends IInput<string> {
 /**
  * Viceradkovy textovy vstup
  */
-class InputMultiline extends React.Component<IInputMultiline, IInputMultilineState> {
+class InputMultiline extends React.PureComponent<IInputMultiline, IInputMultilineState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -34,6 +34,7 @@ class InputMultiline extends React.Component<IInputMultiline, IInputMultilineSta
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputMultiline = {
+		highlight: false,
 		icon: null,
 		lines: 5,
 		onChange: null,
@@ -49,11 +50,11 @@ class InputMultiline extends React.Component<IInputMultiline, IInputMultilineSta
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, lines, placeholder } = this.props;
+		const { highlight, icon, lines, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, styles.wrapperMultiline]}>
+			<View style={[styles.wrapperBasic, styles.wrapperMultiline, highlight ? styles.wrapperHighlight : null]}>
 				<FontAwesomeIcon style={[styles.iconBasic, styles.iconMultiline]} icon={icon} size={Measurement.Icon} />
 				<TextInput
 					style={[styles.fieldBasic, styles.fieldMultiline]}
@@ -63,7 +64,6 @@ class InputMultiline extends React.Component<IInputMultiline, IInputMultilineSta
 					placeholder={placeholder}
 					placeholderTextColor={Color.Primary.Muted}
 					onChangeText={this.handleChange}
-					onEndEditing={this.handleDone}
 				/>
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
@@ -83,17 +83,15 @@ class InputMultiline extends React.Component<IInputMultiline, IInputMultilineSta
 		// rozlozeni props
 		const { validator } = this.props;
 		// aktualizace
-		this.setState({
-			error: validator ? validator(value) : null,
-			value
-		});
-	};
-
-	/**
-	 * Dokonceni editace
-	 */
-	private handleDone = (): void => {
-		this.props.onChange(this.state.value, !!this.state.error);
+		this.setState(
+			{
+				error: validator ? validator(value) : null,
+				value
+			},
+			() => {
+				this.props.onChange(this.state.value, { filled: this.state.value.trim() !== "", valid: this.state.error === null });
+			}
+		);
 	};
 }
 

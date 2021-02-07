@@ -8,6 +8,10 @@ import { Measurement } from "../../../styles";
 import Typography from "../../typography";
 import styles from "../styles";
 
+interface IInputPickerState {
+	value: string;
+}
+
 /**
  * Dostupne vlastnosti
  */
@@ -18,7 +22,27 @@ export interface IInputPicker extends IInput<string> {
 /**
  * Vyberovy vstup
  */
-class InputPicker extends React.Component<IInputPicker> {
+class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> {
+	/**
+	 * Vychozi stav
+	 */
+	public state: IInputPickerState = {
+		value: this.props.value
+	};
+
+	/**
+	 * Vychozi vlastnosti
+	 */
+	public static defaultProps: IInputPicker = {
+		highlight: false,
+		icon: null,
+		items: [],
+		onChange: null,
+		placeholder: null,
+		validator: null,
+		value: ""
+	};
+
 	/**
 	 * Render
 	 *
@@ -26,10 +50,11 @@ class InputPicker extends React.Component<IInputPicker> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, items, placeholder, value } = this.props;
+		const { highlight, icon, items, placeholder } = this.props;
+		const { value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={styles.wrapperBasic}>
+			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
 				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
 				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
 					{items.map((item) => (
@@ -37,7 +62,7 @@ class InputPicker extends React.Component<IInputPicker> {
 					))}
 				</Picker>
 				{!value && (
-					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay]}>
+					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay, highlight ? styles.placeholderHighlight : null]}>
 						{placeholder}
 					</Typography>
 				)}
@@ -51,7 +76,14 @@ class InputPicker extends React.Component<IInputPicker> {
 	 * @param {string} value Hodnota
 	 */
 	private handleChange = (value: string): void => {
-		this.props.onChange(value, true);
+		this.setState(
+			{
+				value
+			},
+			() => {
+				this.props.onChange(value, { filled: true, valid: true });
+			}
+		);
 	};
 }
 

@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { FlatList, ListRenderItemInfo, View } from "react-native";
+import React from "react";
+import { ScrollView, View } from "react-native";
 import styles from "./styles";
 
 /**
@@ -18,23 +18,16 @@ export default class Form extends React.Component<unknown> {
 		const { children } = this.props;
 		// sestaveni a vraceni
 		return (
-			<FlatList
-				data={React.Children.toArray(children)}
-				horizontal={false}
-				scrollEnabled={true}
-				renderItem={this.renderRecord}
-				ItemSeparatorComponent={() => <View style={styles.fieldRowGap} />}
-			/>
+			<ScrollView keyboardDismissMode="on-drag" style={styles.wrapper}>
+				{React.Children.map(children, (child, index) => {
+					return (
+						<React.Fragment>
+							{index > 0 && <View style={styles.rowGap} />}
+							{child}
+						</React.Fragment>
+					);
+				})}
+			</ScrollView>
 		);
 	}
-
-	/**
-	 * Sestaveni polozky seznamu
-	 *
-	 * @param {ListRenderItemInfo<ReactElement>} params Parametry
-	 * @returns {ReactElement} Element polozky
-	 */
-	private renderRecord = ({ item }: ListRenderItemInfo<ReactElement>): ReactElement => {
-		return item;
-	};
 }

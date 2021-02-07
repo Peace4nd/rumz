@@ -20,7 +20,7 @@ export interface ICollectionRecord {
 	/**
 	 * Obrazky
 	 */
-	images: string[];
+	image: string;
 
 	/**
 	 * Zeme puvodu (ISO kod zeme)

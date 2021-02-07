@@ -23,4 +23,21 @@ export default abstract class RouteContent<P = unknown, S = unknown, M = unknown
 	public redirect<T extends IRouterPath>(path: T, params?: ExtractRouteParams<T>): void {
 		this.props.history.push(generatePath(path, params));
 	}
+
+	/**
+	 * Zpet
+	 */
+	public back = (): void => {
+		this.props.history.goBack();
+	};
+
+	/**
+	 * Ziskani hodnoty parametru
+	 *
+	 * @param {N} name Nazev parametru
+	 * @returns {M[N]} Hodnota
+	 */
+	public getParamValue<N extends keyof M>(name: N): M[N] {
+		return this.props.match?.params?.[name];
+	}
 }

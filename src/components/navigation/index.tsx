@@ -27,7 +27,7 @@ export interface INavigation {
 /**
  * Hlavicka
  */
-class Navigation extends React.Component<INavigation & RouteComponentProps> {
+class Navigation extends React.PureComponent<INavigation & RouteComponentProps> {
 	/**
 	 * Vychozi vlastnosti
 	 */

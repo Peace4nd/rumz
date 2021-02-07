@@ -36,7 +36,7 @@ export const collection = {
 	 * @param {string} id Identifikator zaznamu
 	 * @returns {Promise<string>} Cesta k pridanemu souboru
 	 */
-	add: (document: IFileDocument, id: string): Promise<string> => {
+	save: (document: IFileDocument, id: string): Promise<string> => {
 		return copyAssets("collection", document.path, id + "." + mime.getExtension(document.mime));
 	}
 };

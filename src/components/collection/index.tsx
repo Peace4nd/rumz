@@ -23,7 +23,7 @@ export interface ICollection {
  *
  * @returns {JSX.Element} Element
  */
-export default class Collection extends React.Component<ICollection> {
+export default class Collection extends React.PureComponent<ICollection> {
 	/**
 	 * Vychozi vlastnosti
 	 */
@@ -79,7 +79,7 @@ export default class Collection extends React.Component<ICollection> {
 		return (
 			<View key={index} style={[styles.itemWrapper, index % 2 === 0 && index < this.props.records.length - 1 ? styles.itemWrapperGapColumn : null]}>
 				<TouchableOpacity style={styles.itemLink} onPress={() => onClick(item)}>
-					<Image source={{ uri: item.image }} resizeMode="contain" style={styles.itemImage} />
+					<Image source={{ uri: item.image.path }} resizeMode="contain" style={styles.itemImage} />
 					<View style={styles.infoWrapper}>
 						<Typography type="Subtitle1" style={styles.infoLabel}>
 							{item.name}

@@ -41,6 +41,17 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	};
 
 	/**
+	 * Aktualizace komponenty
+	 *
+	 * @param {IInputText} prevProps Predchozi vlastnosti
+	 */
+	public componentDidUpdate(prevProps: IInputText): void {
+		if (this.props.value !== prevProps.value) {
+			this.handleChange(this.props.value);
+		}
+	}
+
+	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element

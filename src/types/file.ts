@@ -5,25 +5,25 @@ export interface IFileDocument {
 	/**
 	 * MIME typ
 	 */
-	mime: string;
+	mime?: string;
 
 	/**
 	 * Nazev
 	 */
-	filename: string;
+	filename?: string;
 
 	/**
 	 * Plna cesta
 	 */
-	path: string;
+	path?: string;
 
 	/**
 	 * Velikost
 	 */
-	size: number;
+	size?: number;
 
 	/**
 	 * Posledni modifikace
 	 */
-	lastModified: Date;
+	lastModified?: Date;
 }

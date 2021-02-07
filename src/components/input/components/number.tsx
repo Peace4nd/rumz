@@ -27,7 +27,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 	public state: IInputNumberState = {
 		error: null,
 		parsed: 0,
-		value: isFinite(this.props.value) ? "" : String(this.props.value)
+		value: this.prepareValue(this.props.value)
 	};
 
 	/**
@@ -41,6 +41,17 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		validator: null,
 		value: null
 	};
+
+	/**
+	 * Aktualizace komponenty
+	 *
+	 * @param {IInputNumber} prevProps Predchozi vlastnosti
+	 */
+	public componentDidUpdate(prevProps: IInputNumber): void {
+		if (this.props.value !== prevProps.value) {
+			this.handleChange(this.prepareValue(this.props.value));
+		}
+	}
 
 	/**
 	 * Render
@@ -70,6 +81,16 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 				)}
 			</View>
 		);
+	}
+
+	/**
+	 * Priprava hodnoty
+	 *
+	 * @param {number} value Hodnota
+	 * @returns {string} Pripravena hodnota
+	 */
+	private prepareValue(value: number): string {
+		return value === null ? "" : String(value);
 	}
 
 	/**

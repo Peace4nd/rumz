@@ -7,7 +7,7 @@ import styles from "./styles";
  *
  * @returns {JSX.Element} Element
  */
-export default class Form extends React.Component<unknown> {
+export default class Form extends React.PureComponent<unknown> {
 	/**
 	 * Render
 	 *

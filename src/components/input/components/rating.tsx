@@ -39,6 +39,17 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 	};
 
 	/**
+	 * Aktualizace komponenty
+	 *
+	 * @param {IInputRating} prevProps Predchozi vlastnosti
+	 */
+	public componentDidUpdate(prevProps: IInputRating): void {
+		if (this.props.value !== prevProps.value) {
+			this.handleChange(this.props.value);
+		}
+	}
+
+	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element

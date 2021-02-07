@@ -53,12 +53,14 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder } = this.props;
+		const { highlight, icon, placeholder, value } = this.props;
 		const { selected } = this.state;
+		// cesta k obrazku
+		const path = selected?.uri || value?.path;
 		// sestaveni a vraceni
 		return (
 			<Pressable style={[styles.wrapperBasic, styles.wrapperImage, highlight ? styles.wrapperHighlight : null]} onPress={this.handleClick}>
-				{selected === null && (
+				{!path && (
 					<View style={styles.wrapperFill}>
 						<FontAwesomeIcon style={[styles.iconBasic, styles.iconBasicVertical]} icon={icon} size={Measurement.Icon * 2} />
 						{placeholder && (
@@ -68,7 +70,7 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 						)}
 					</View>
 				)}
-				{selected !== null && <Image source={{ uri: selected.uri }} resizeMode="contain" style={styles.image} />}
+				{path && <Image source={{ uri: path }} resizeMode="contain" style={styles.image} />}
 			</Pressable>
 		);
 	}

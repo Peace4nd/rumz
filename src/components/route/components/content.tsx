@@ -6,7 +6,7 @@ import { IRouterPath } from "../../../utils/router";
 /**
  * Obecna routa
  */
-export default abstract class RouteContent<P = unknown, S = unknown, M = unknown> extends React.Component<P & RouteComponentProps<M>, S> {
+export default abstract class RouteContent<P = unknown, S = unknown, M = unknown> extends React.PureComponent<P & RouteComponentProps<M>, S> {
 	/**
 	 * Render
 	 *

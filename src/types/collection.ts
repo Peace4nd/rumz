@@ -1,3 +1,5 @@
+import { IFileDocument } from "./file";
+
 /**
  * Datovy typ zaznamu kolekce
  */
@@ -20,7 +22,7 @@ export interface ICollectionRecord {
 	/**
 	 * Obrazky
 	 */
-	image: string;
+	image: IFileDocument;
 
 	/**
 	 * Zeme puvodu (ISO kod zeme)

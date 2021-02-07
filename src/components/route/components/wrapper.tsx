@@ -31,7 +31,7 @@ export interface IRoute {
 /**
  * Obecna routa
  */
-export default class Route extends React.Component<IRoute> {
+export default class Route extends React.PureComponent<IRoute> {
 	/**
 	 * Vychozi vlastnosti
 	 */

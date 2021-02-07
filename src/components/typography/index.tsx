@@ -12,7 +12,7 @@ export interface ITypography extends TextProps {
 /**
  * Hlavicka
  */
-export default class Typography extends React.Component<ITypography> {
+export default class Typography extends React.PureComponent<ITypography> {
 	/**
 	 * Vychozi vlastnosti
 	 */

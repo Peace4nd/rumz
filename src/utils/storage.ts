@@ -49,9 +49,7 @@ export const collection = {
 		// nacteni uloziste
 		const storage = await storageRead<ICollectionRecord[]>("collection");
 		// nazeleni zaznamu
-		return storage.find((record) => {
-			return record.id === id;
-		});
+		return storage.find((record) => record.id === id);
 	},
 
 	/**
@@ -96,6 +94,25 @@ export const collection = {
 		const index = storage.findIndex((record) => record.id === id);
 		// odstraneni zaznamu
 		storage.splice(index, 1);
+		// ulozeni date
+		storageWrite("collection", storage);
+		// vraceni kolekce
+		return storage;
+	},
+
+	/**
+	 * Aktualizace zaznamu v kolekci
+	 *
+	 * @param {ICollectionRecord} record Zaznam
+	 * @returns {Promise<ICollectionRecord>} Kompletni kolekce
+	 */
+	update: async (record: ICollectionRecord): Promise<ICollectionRecord[]> => {
+		// nacteni uloziste
+		const storage = await storageRead<ICollectionRecord[]>("collection");
+		// nalezeni zaznamu
+		const index = storage.findIndex((rec) => rec.id === record.id);
+		// aktualizace dat
+		storage[index] = record;
 		// ulozeni date
 		storageWrite("collection", storage);
 		// vraceni kolekce

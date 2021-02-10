@@ -1,12 +1,10 @@
-import { faListUl } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import moment from "moment";
+import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { FlatList, Image, ListRenderItemInfo, TouchableOpacity, View } from "react-native";
-import { Measurement } from "../../styles";
+import { Country, Icon } from "..";
+import { Color, Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
 import strings from "../../utils/strings";
-import Country from "../country";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -44,7 +42,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 		if (records.length === 0) {
 			return (
 				<View style={styles.emptyWrapper}>
-					<FontAwesomeIcon icon={faListUl} size={Measurement.Icon * 3} style={styles.emptyIcon} />
+					<Icon icon={faListUl} size={Measurement.Icon * 3} color={Color.Muted} />
 					<Typography type="Headline4" style={styles.emptyText}>
 						{strings("overviewEmpty")}
 					</Typography>
@@ -52,18 +50,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 			);
 		}
 		// sestaveni a vraceni
-		return (
-			<FlatList
-				data={records}
-				numColumns={2}
-				scrollEnabled={true}
-				renderItem={this.renderRecord}
-				ItemSeparatorComponent={() => <View style={styles.itemWrapperGapRow} />}
-				keyExtractor={(item) => item.id}
-				columnWrapperStyle={styles.itemContainer}
-				style={styles.wrapper}
-			/>
-		);
+		return <FlatList data={records} scrollEnabled={true} renderItem={this.renderRecord} keyExtractor={(item) => item.id} style={styles.wrapper} />;
 	}
 
 	/**
@@ -77,22 +64,28 @@ export default class Collection extends React.PureComponent<ICollection> {
 		const { onClick } = this.props;
 		// sestaveni a vraceni
 		return (
-			<View key={index} style={[styles.itemWrapper, index % 2 === 0 && index < this.props.records.length - 1 ? styles.itemWrapperGapColumn : null]}>
-				<TouchableOpacity style={styles.itemLink} onPress={() => onClick(item)}>
-					<Image source={{ uri: item.image.path }} resizeMode="contain" style={styles.itemImage} />
-					<View style={styles.infoWrapper}>
-						<Typography type="Subtitle1" style={styles.infoLabel}>
-							{item.name}
+			<TouchableOpacity key={index} style={styles.itemWrapper} onPress={() => onClick(item)}>
+				<Image source={{ uri: item.image.path }} resizeMode="contain" style={styles.itemImage} />
+				<View style={styles.itemInfo}>
+					<Typography type="Headline6" style={styles.infoName}>
+						{item.name}
+					</Typography>
+					<Typography type="Body1" style={styles.infoManufacturer}>
+						{item.manufacturer}
+					</Typography>
+					<View style={styles.infoAdditional}>
+						<Country.Flag code={item.origin} />
+						{/* <Typography type="Subtitle2" style={styles.infoAdditionalDate}>
+							{moment(item.purchased).format("D. M. YYYY")}
 						</Typography>
-						<View style={styles.infoAdditional}>
-							<Typography type="Subtitle2" style={styles.infoAdditionalDate}>
-								{moment(item.purchased).format("D. M. YYYY")}
-							</Typography>
-							<Country.Flag code={item.origin} />
+						*/}
+						<View style={styles.infoPortions}>
+							<Icon icon={faGlassWhiskey} size={Measurement.Icon / 2} style={styles.infoPortionsIcon} />
+							<Typography type="Body2">2x</Typography>
 						</View>
 					</View>
-				</TouchableOpacity>
-			</View>
+				</View>
+			</TouchableOpacity>
 		);
 	};
 }

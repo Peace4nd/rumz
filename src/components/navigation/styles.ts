@@ -9,20 +9,17 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	tabActive: {
-		color: Color.Primary.Text
-	},
-	tabIcon: {
-		color: Color.Primary.Dark
+		color: Color.Highlight
 	},
 	tabText: {
-		color: Color.Primary.Dark,
-		marginTop: 8
+		color: Color.Dark,
+		marginTop: Measurement.Padding
 	},
 	wrapper: {
-		backgroundColor: Color.Primary.Base,
+		backgroundColor: Color.Base,
 		elevation: 8,
 		flexDirection: "row",
-		height: Measurement.Navigation,
+		height: Measurement.Components.Navigation.Height,
 		justifyContent: "space-evenly"
 	}
 });

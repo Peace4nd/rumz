@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TextInput, View } from "react-native";
 import { IInput } from "..";
-import { Color, Measurement } from "../../../styles";
+import { Color } from "../../../styles";
+import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -65,12 +65,12 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
-				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
+				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<TextInput
 					style={styles.fieldBasic}
 					value={value}
 					placeholder={placeholder}
-					placeholderTextColor={Color.Primary.Muted}
+					placeholderTextColor={Color.Muted}
 					keyboardType="numeric"
 					onChangeText={this.handleChange}
 				/>

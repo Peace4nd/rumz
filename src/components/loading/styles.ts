@@ -3,11 +3,11 @@ import { Color, Measurement, opacify } from "../../styles";
 
 const styles = StyleSheet.create({
 	indicator: {
-		borderBottomColor: Color.Secondary.Base,
-		borderLeftColor: Color.White,
+		borderBottomColor: Color.Base,
+		borderLeftColor: Color.Highlight,
 		borderRadius: Measurement.Icon,
-		borderRightColor: Color.Secondary.Base,
-		borderTopColor: Color.Secondary.Base,
+		borderRightColor: Color.Base,
+		borderTopColor: Color.Base,
 		borderWidth: 4,
 		height: Measurement.Icon * 2,
 		width: Measurement.Icon * 2
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		...StyleSheet.absoluteFillObject,
 		alignItems: "center",
-		backgroundColor: opacify(Color.White, 0.75),
+		backgroundColor: opacify(Color.Highlight, 0.75),
 		justifyContent: "center"
 	}
 });

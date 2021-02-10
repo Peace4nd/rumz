@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { TextInput, View } from "react-native";
+import { TextInput, TextInputProps, View } from "react-native";
 import { IInput } from "..";
-import { Color, Measurement } from "../../../styles";
+import { Color } from "../../../styles";
+import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -14,7 +14,7 @@ interface IInputTextState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputText = IInput<string>;
+export type IInputText = IInput<string, TextInputProps>;
 
 /**
  * Textovy vstup
@@ -58,17 +58,18 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder } = this.props;
+		const { field, highlight, icon, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
-				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
+				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<TextInput
+					{...field}
 					style={styles.fieldBasic}
 					value={value}
 					placeholder={placeholder}
-					placeholderTextColor={Color.Primary.Muted}
+					placeholderTextColor={Color.Muted}
 					onChangeText={this.handleChange}
 				/>
 				{error && (

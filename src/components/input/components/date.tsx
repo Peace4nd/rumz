@@ -1,11 +1,11 @@
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import React from "react";
 import { TouchableWithoutFeedback, View } from "react-native";
 import { IInput } from "..";
-import { Measurement } from "../../../styles";
+import { Color } from "../../../styles";
+import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -64,17 +64,17 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder } = this.props;
+		const { focus, highlight, icon, placeholder } = this.props;
 		const { value, visible } = this.state;
 		// sestaveni a vraceni
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
 				<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-					<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
+					<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
 					</Typography>
-					{visible && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}
+					{(focus || visible) && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}
 				</View>
 			</TouchableWithoutFeedback>
 		);

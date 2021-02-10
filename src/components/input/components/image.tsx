@@ -1,11 +1,11 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { Image, Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import FetchBlob from "react-native-fetch-blob";
 import { IInput } from "..";
-import { Measurement } from "../../../styles";
+import { Color, Measurement } from "../../../styles";
 import { IFileDocument } from "../../../types/file";
+import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -62,7 +62,7 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 			<Pressable style={[styles.wrapperBasic, styles.wrapperImage, highlight ? styles.wrapperHighlight : null]} onPress={this.handleClick}>
 				{!path && (
 					<View style={styles.wrapperFill}>
-						<FontAwesomeIcon style={[styles.iconBasic, styles.iconBasicVertical]} icon={icon} size={Measurement.Icon * 2} />
+						<Icon style={[styles.iconBasic, styles.iconBasicVertical]} icon={icon} color={Color.Dark} size={Measurement.Icon * 2} />
 						{placeholder && (
 							<Typography type="Body1" style={styles.placeholder}>
 								{placeholder}

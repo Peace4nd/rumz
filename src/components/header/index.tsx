@@ -1,8 +1,8 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { Measurement } from "../../styles";
+import { Icon } from "..";
+import { Color } from "../../styles";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -51,7 +51,7 @@ export default class Header extends React.PureComponent<IHeader> {
 				<View style={styles.sectionAction}>
 					{actionLeft && (
 						<TouchableOpacity onPress={actionLeft.onPress} disabled={actionLeft.disabled || false}>
-							<FontAwesomeIcon icon={actionLeft.icon} style={styles.icon} size={Measurement.Icon} />
+							<Icon icon={actionLeft.icon} color={Color.Highlight} />
 						</TouchableOpacity>
 					)}
 				</View>
@@ -63,7 +63,7 @@ export default class Header extends React.PureComponent<IHeader> {
 				<View style={styles.sectionAction}>
 					{actionRight && (
 						<TouchableOpacity onPress={actionRight.onPress} disabled={actionRight.disabled || false}>
-							<FontAwesomeIcon icon={actionRight.icon} style={styles.icon} size={Measurement.Icon} />
+							<Icon icon={actionRight.icon} color={Color.Highlight} />
 						</TouchableOpacity>
 					)}
 				</View>

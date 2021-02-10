@@ -11,7 +11,7 @@ export interface IInputState {
 	filled: boolean;
 	valid: boolean;
 }
-export interface IInput<V> {
+export interface IInput<V, F = never> {
 	/**
 	 * Placeholder
 	 */
@@ -41,6 +41,13 @@ export interface IInput<V> {
 	 * Zvyrazneni
 	 */
 	highlight?: boolean;
+
+	/**
+	 * Zamereni
+	 */
+	focus?: boolean;
+
+	field?: F;
 }
 
 export default {

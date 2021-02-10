@@ -1,9 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Link as RouterLink } from "react-router-native";
 import { IButton } from "..";
-import { Measurement } from "../../../styles";
+import { Icon } from "../..";
 import { IRouterPath } from "../../../utils/router";
 import styles from "../styles";
 
@@ -22,12 +21,12 @@ export interface IButtonLink extends IButton {
  */
 const Link = (props: IButtonLink): JSX.Element => {
 	// rozlozeni props
-	const { icon, size, to } = props;
+	const { icon, to } = props;
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
 			<RouterLink to={to} component={TouchableOpacity} style={styles.base}>
-				<FontAwesomeIcon icon={icon} style={styles.icon} size={size || Measurement.Icon} />
+				<Icon icon={icon} />
 			</RouterLink>
 		</View>
 	);

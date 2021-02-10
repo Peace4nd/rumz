@@ -4,10 +4,10 @@ import { Color, Measurement } from "../../styles";
 const styles = StyleSheet.create({
 	content: {
 		flex: 1,
-		padding: Measurement.Padding * 2
+		padding: Measurement.Padding
 	},
 	wrapper: {
-		backgroundColor: Color.White,
+		backgroundColor: Color.Highlight,
 		flex: 1
 	}
 });

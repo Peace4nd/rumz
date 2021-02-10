@@ -1,12 +1,9 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement, opacify } from "../../styles";
+import { Color, Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
-	emptyIcon: {
-		color: Color.Primary.Muted
-	},
 	emptyText: {
-		color: Color.Primary.Muted,
+		color: Color.Muted,
 		marginTop: Measurement.Padding * 3
 	},
 	emptyWrapper: {
@@ -15,54 +12,55 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	infoAdditional: {
+		flex: 1,
+		justifyContent: "flex-end"
+	},
+	infoManufacturer: {
+		flex: 0,
+		marginBottom: Measurement.Padding / 2
+	},
+	infoName: {
+		flex: 0,
+		fontWeight: "bold",
+		marginBottom: Measurement.Padding / 2
+	},
+	infoPortions: {
+		alignItems: "center",
+		backgroundColor: Color.Light,
+		borderRadius: Measurement.Radius,
+		bottom: 0,
 		flexDirection: "row",
-		justifyContent: "space-between"
-	},
-	infoAdditionalDate: {
-		color: Color.Primary.Text
-	},
-	infoLabel: {
-		color: Color.Primary.Text,
-		paddingBottom: Measurement.Padding / 2
-	},
-	infoWrapper: {
-		backgroundColor: opacify(Color.Primary.Base, 0.75),
-		bottom: -StyleSheet.hairlineWidth,
-		flexDirection: "column",
-		left: -StyleSheet.hairlineWidth,
+		justifyContent: "center",
 		padding: Measurement.Padding,
 		position: "absolute",
-		right: -StyleSheet.hairlineWidth
+		right: 0
 	},
-	itemContainer: {
-		justifyContent: "center"
+	infoPortionsIcon: {
+		marginRight: Measurement.Padding
 	},
 	itemImage: {
-		flex: 1,
-		margin: Measurement.Padding
+		aspectRatio: 1,
+		flex: 0,
+		height: "100%"
 	},
-	itemLink: {
-		flex: 1
+	itemInfo: {
+		flex: 1,
+		flexDirection: "column",
+		padding: Measurement.Padding
 	},
 	itemWrapper: {
-		aspectRatio: 1,
-		backgroundColor: Color.White,
-		borderColor: opacify(Color.Primary.Base, 0.75),
-		borderRadius: 5,
+		backgroundColor: Color.Highlight,
+		borderColor: Color.Base,
+		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
 		elevation: 4,
 		flex: 1,
-		flexBasis: "50%",
-		flexGrow: 0,
-		flexShrink: 1,
-		overflow: "hidden"
-	},
-	itemWrapperGapColumn: {
-		marginRight: 2 * Measurement.Padding
-	},
-	itemWrapperGapRow: {
-		flex: 1,
-		height: 2 * Measurement.Padding
+		flexDirection: "row",
+		height: Measurement.Components.Collection.Height,
+		margin: Measurement.Padding,
+		marginBottom: Measurement.Padding * 2,
+		overflow: "hidden",
+		padding: Measurement.Padding
 	},
 	wrapper: {}
 });

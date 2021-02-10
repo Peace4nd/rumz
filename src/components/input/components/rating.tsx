@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { View } from "react-native";
 import { IInput } from "..";
-import { Measurement } from "../../../styles";
+import { Color } from "../../../styles";
+import Icon from "../../icon";
 import Rating from "../../rating";
 import styles from "../styles";
 
@@ -61,7 +61,7 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-				<FontAwesomeIcon style={styles.iconBasic} icon={icon} size={Measurement.Icon} />
+				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<Rating value={value} onChange={this.handleChange} />
 			</View>
 		);

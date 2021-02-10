@@ -1,8 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { IButton } from "..";
-import { Measurement } from "../../../styles";
+import { Icon } from "../..";
 import styles from "../styles";
 
 /**
@@ -20,12 +19,12 @@ export interface IButtonTouchable extends IButton {
  */
 const Touchable = (props: IButtonTouchable): JSX.Element => {
 	// rozlozeni props
-	const { icon, onPress, size } = props;
+	const { icon, onPress } = props;
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
 			<TouchableOpacity onPress={onPress} style={styles.base}>
-				<FontAwesomeIcon icon={icon} style={styles.icon} size={size || Measurement.Icon} />
+				<Icon icon={icon} />
 			</TouchableOpacity>
 		</View>
 	);

@@ -9,70 +9,69 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: Measurement.Radius,
 		borderTopRightRadius: Measurement.Radius,
 		color: "white",
-		height: Measurement.Error,
+		height: Measurement.Components.Input.Error,
 		left: -StyleSheet.hairlineWidth,
-		paddingHorizontal: (Measurement.Input - Measurement.Icon) / 2,
+		paddingHorizontal: (Measurement.Components.Input.Height - Measurement.Icon) / 2,
 		position: "absolute",
 		right: -StyleSheet.hairlineWidth,
 		textAlignVertical: "center",
-		top: -Measurement.Error
+		top: -Measurement.Components.Input.Error
 	},
 	fieldBasic: {
 		...Typography.Body1,
-		color: Color.Secondary.Text,
+		color: Color.Text,
 		flex: 1,
-		paddingVertical: (Measurement.Input - Measurement.Icon) / 2,
+		paddingVertical: (Measurement.Components.Input.Height - Measurement.Icon) / 2,
 		textAlignVertical: "center"
 	},
 	fieldMultiline: {
 		textAlignVertical: "top"
 	},
 	fieldPlaceholder: {
-		color: Color.Primary.Muted
+		color: Color.Muted
 	},
 	iconBasic: {
-		color: Color.Primary.Base,
-		marginRight: (Measurement.Input - Measurement.Icon) / 2
+		marginRight: (Measurement.Components.Input.Height - Measurement.Icon) / 2
 	},
 	iconBasicVertical: {
-		marginBottom: (Measurement.Input - Measurement.Icon) / 2,
+		marginBottom: (Measurement.Components.Input.Height - Measurement.Icon) / 2,
 		marginRight: 0
 	},
 	iconMultiline: {
-		marginTop: (Measurement.Input - Measurement.Icon) / 2
+		marginTop: (Measurement.Components.Input.Height - Measurement.Icon) / 2
 	},
 	image: {
 		height: width / 2 - 2 * Measurement.Padding,
 		width: width / 2 - 2 * Measurement.Padding
 	},
 	placeholder: {
-		color: Color.Primary.Muted,
+		color: Color.Muted,
 		textAlign: "left",
 		textAlignVertical: "center"
 	},
 	placeholderHighlight: {
-		backgroundColor: Color.Secondary.Light
+		backgroundColor: Color.Light
 	},
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
-		backgroundColor: Color.White,
+		backgroundColor: Color.Highlight,
 		marginLeft: 48,
 		marginRight: 48
 	},
 	wrapperBasic: {
 		alignItems: "center",
-		borderColor: Color.Primary.Base,
+		borderColor: Color.Base,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: "row",
-		minHeight: Measurement.Input,
-		paddingHorizontal: (Measurement.Input - Measurement.Icon) / 2
+		minHeight: Measurement.Components.Input.Height,
+		paddingHorizontal: (Measurement.Components.Input.Height - Measurement.Icon) / 2
 	},
 	wrapperError: {
 		borderColor: "red",
 		borderTopLeftRadius: 0,
 		borderTopRightRadius: 0,
-		marginTop: Measurement.Error
+		marginTop: Measurement.Components.Input.Error
 	},
 	wrapperFill: {
 		alignItems: "center",
@@ -80,8 +79,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	wrapperHighlight: {
-		backgroundColor: Color.Secondary.Light,
-		borderColor: Color.Secondary.Base
+		backgroundColor: Color.Light,
+		borderColor: Color.Base
 	},
 	wrapperImage: {
 		height: width / 2,

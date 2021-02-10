@@ -2,13 +2,10 @@ import { StyleSheet } from "react-native";
 import { Color, Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
-	icon: {
-		color: Color.Primary.Text
-	},
 	sectionAction: {
 		alignItems: "center",
 		justifyContent: "center",
-		width: Measurement.Header
+		width: Measurement.Components.Header.Height
 	},
 	sectionTitle: {
 		alignItems: "center",
@@ -16,13 +13,13 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	title: {
-		color: Color.Primary.Text
+		color: Color.Text
 	},
 	wrapper: {
-		backgroundColor: Color.Primary.Base,
+		backgroundColor: Color.Base,
 		elevation: 8,
 		flexDirection: "row",
-		height: Measurement.Header
+		height: Measurement.Components.Header.Height
 	}
 });
 

@@ -68,7 +68,7 @@ export default class Route extends React.PureComponent<IRoute> {
 		// sestaveni a vraceni
 		return (
 			<React.Fragment>
-				<StatusBar barStyle="default" backgroundColor={Color.Primary.Dark} />
+				<StatusBar barStyle="default" backgroundColor={Color.Dark} />
 				<SafeAreaView style={styles.wrapper}>
 					<Header {...header} />
 					<View style={styles.content}>

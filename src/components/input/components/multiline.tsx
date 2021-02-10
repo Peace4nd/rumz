@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { TextInput, View } from "react-native";
 import { IInput } from "..";
-import { Color, Measurement } from "../../../styles";
+import { Color } from "../../../styles";
+import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -66,14 +66,14 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, styles.wrapperMultiline, highlight ? styles.wrapperHighlight : null]}>
-				<FontAwesomeIcon style={[styles.iconBasic, styles.iconMultiline]} icon={icon} size={Measurement.Icon} />
+				<Icon style={[styles.iconBasic, styles.iconMultiline]} icon={icon} color={Color.Dark} />
 				<TextInput
 					style={[styles.fieldBasic, styles.fieldMultiline]}
 					value={value}
 					multiline={true}
 					numberOfLines={lines}
 					placeholder={placeholder}
-					placeholderTextColor={Color.Primary.Muted}
+					placeholderTextColor={Color.Muted}
 					onChangeText={this.handleChange}
 				/>
 				{error && (

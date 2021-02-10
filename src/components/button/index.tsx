@@ -4,7 +4,6 @@ import Touchable from "./components/touchable";
 
 export interface IButton {
 	icon: IconDefinition;
-	size?: number;
 }
 
 export default {

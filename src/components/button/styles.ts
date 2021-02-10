@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement } from "../../styles";
+import { Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
 	base: {
@@ -7,12 +7,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center"
 	},
-	icon: {
-		color: Color.Secondary.Text
-	},
 	wrapper: {
-		height: Measurement.Button,
-		width: Measurement.Button
+		height: Measurement.Components.Button.Height,
+		width: Measurement.Components.Button.Height
 	}
 });
 

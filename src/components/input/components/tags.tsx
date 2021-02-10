@@ -44,17 +44,6 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 	};
 
 	/**
-	 * Aktualizace komponenty
-	 *
-	 * @param {IInputPicker} prevProps Predchozi vlastnosti
-	 */
-	public componentDidUpdate(prevProps: IInputPicker): void {
-		if (this.props.value !== prevProps.value) {
-			this.handleChange(this.props.value);
-		}
-	}
-
-	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element

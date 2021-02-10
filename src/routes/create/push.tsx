@@ -8,10 +8,11 @@ import {
 	faGlobeAmericas,
 	faImage,
 	faIndustry,
+	faLongArrowAltDown,
+	faLongArrowAltUp,
 	faPalette,
 	faPencilAlt,
 	faPercentage,
-	faSeedling,
 	faSmile,
 	faTimes,
 	faWineBottle
@@ -51,6 +52,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 		filled: {
 			alcohol: false,
 			color: false,
+			drunk: false,
 			id: true,
 			image: false,
 			manufacturer: false,
@@ -69,6 +71,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 		record: {
 			alcohol: null,
 			color: null,
+			drunk: null,
 			id: uuidv4(),
 			image: null,
 			manufacturer: null,
@@ -208,10 +211,10 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 						onChange={this.handleChange.bind(this, "rating")}
 					/>
 					{/* delka zrani */}
-					<Input.Number
+					<Input.Range
 						highlight={highlight && !filled.ripening}
-						icon={faSeedling}
-						placeholder={strings("createRipening")}
+						icon={[faLongArrowAltDown, faLongArrowAltUp]}
+						placeholder={[strings("createRipeningLowest"), strings("createRipeningHighest")]}
 						onChange={this.handleChange.bind(this, "ripening")}
 					/>
 				</Form>

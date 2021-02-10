@@ -47,17 +47,6 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 	};
 
 	/**
-	 * Aktualizace komponenty
-	 *
-	 * @param {IInputDate} prevProps Predchozi vlastnosti
-	 */
-	public componentDidUpdate(prevProps: IInputDate): void {
-		if (this.props.value !== prevProps.value) {
-			this.handleChange(null, this.props.value);
-		}
-	}
-
-	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element

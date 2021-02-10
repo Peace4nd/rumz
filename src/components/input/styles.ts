@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: "row",
-		minHeight: Measurement.Components.Input.Height,
+		height: Measurement.Components.Input.Height,
 		paddingHorizontal: (Measurement.Components.Input.Height - Measurement.Icon) / 2
 	},
 	wrapperError: {
@@ -89,7 +89,9 @@ const styles = StyleSheet.create({
 		padding: Measurement.Padding
 	},
 	wrapperMultiline: {
-		alignItems: "flex-start"
+		alignItems: "flex-start",
+		height: "auto",
+		minHeight: Measurement.Components.Input.Height
 	}
 });
 

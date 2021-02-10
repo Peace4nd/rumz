@@ -7,8 +7,7 @@ import Typography from "../../typography";
 import styles from "../styles";
 
 interface IInputNumberState {
-	value: string;
-	parsed: number;
+	value: number;
 	error: string;
 }
 
@@ -26,8 +25,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 	 */
 	public state: IInputNumberState = {
 		error: null,
-		parsed: 0,
-		value: this.prepareValue(this.props.value)
+		value: this.props.value
 	};
 
 	/**
@@ -41,17 +39,6 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		validator: null,
 		value: null
 	};
-
-	/**
-	 * Aktualizace komponenty
-	 *
-	 * @param {IInputNumber} prevProps Predchozi vlastnosti
-	 */
-	public componentDidUpdate(prevProps: IInputNumber): void {
-		if (this.props.value !== prevProps.value) {
-			this.handleChange(this.prepareValue(this.props.value));
-		}
-	}
 
 	/**
 	 * Render
@@ -68,7 +55,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<TextInput
 					style={styles.fieldBasic}
-					value={value}
+					value={value ? String(value) : ""}
 					placeholder={placeholder}
 					placeholderTextColor={Color.Muted}
 					keyboardType="numeric"
@@ -84,16 +71,6 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 	}
 
 	/**
-	 * Priprava hodnoty
-	 *
-	 * @param {number} value Hodnota
-	 * @returns {string} Pripravena hodnota
-	 */
-	private prepareValue(value: number): string {
-		return value === null ? "" : String(value);
-	}
-
-	/**
 	 * Zmenova udalost
 	 *
 	 * @param {string} value Hodnota
@@ -102,16 +79,15 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		// rozlozeni props
 		const { validator } = this.props;
 		// parsovani hodnoty
-		const parsed = parseFloat(value);
+		const parsed = parseInt(value, 10);
 		// aktualizace
 		this.setState(
 			{
 				error: validator ? validator(parsed) : null,
-				parsed,
-				value
+				value: parsed
 			},
 			() => {
-				this.props.onChange(this.state.parsed, { filled: this.state.parsed !== null, valid: this.state.error === null });
+				this.props.onChange(parsed, { filled: parsed !== null, valid: this.state.error === null });
 			}
 		);
 	};

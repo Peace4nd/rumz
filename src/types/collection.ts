@@ -62,7 +62,17 @@ export interface ICollectionRecord {
 	/**
 	 * Delka zrani
 	 */
-	ripening: number;
+	ripening: [
+		/**
+		 * Nejnizsi delka zrani
+		 */
+		lowest: number,
+
+		/**
+		 * Nejvyssi delka zrani
+		 */
+		highest: number
+	];
 
 	/**
 	 * Barva (zlata, hneda, tmava zlata, ...)
@@ -78,4 +88,9 @@ export interface ICollectionRecord {
 	 * Chutove vlastnosti (pomerance, vanilka, ...)
 	 */
 	taste: string;
+
+	/**
+	 * Pocet vypitych panaku (a 40ml)
+	 */
+	drunk: number;
 }

@@ -44,17 +44,6 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 	};
 
 	/**
-	 * Aktualizace komponenty
-	 *
-	 * @param {IInputMultiline} prevProps Predchozi vlastnosti
-	 */
-	public componentDidUpdate(prevProps: IInputMultiline): void {
-		if (this.props.value !== prevProps.value) {
-			this.handleChange(this.props.value);
-		}
-	}
-
-	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element

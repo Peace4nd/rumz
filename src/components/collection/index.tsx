@@ -1,7 +1,7 @@
 import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { FlatList, Image, ListRenderItemInfo, TouchableOpacity, View } from "react-native";
-import { Country, Icon } from "..";
+import { CountryFlag, Icon } from "..";
 import { Color, Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
 import strings from "../../utils/strings";
@@ -74,7 +74,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 						{item.manufacturer}
 					</Typography>
 					<View style={styles.infoAdditional}>
-						<Country.Flag code={item.origin} />
+						<CountryFlag code={item.origin} />
 						{/* <Typography type="Subtitle2" style={styles.infoAdditionalDate}>
 							{moment(item.purchased).format("D. M. YYYY")}
 						</Typography>

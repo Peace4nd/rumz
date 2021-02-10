@@ -1,7 +1,7 @@
 import React from "react";
 import { View, ViewProps } from "react-native";
-import country from "../../../utils/country";
-import styles from "../styles";
+import country from "../../utils/country";
+import styles from "./styles";
 
 /**
  * Dostupne vlastnosti

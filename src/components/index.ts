@@ -1,6 +1,6 @@
 export { default as Button } from "./button";
 export { default as Collection } from "./collection";
-export { default as Country } from "./country";
+export { default as CountryFlag } from "./country-flag";
 export { default as Form } from "./form";
 export { default as Header } from "./header";
 export { default as Icon } from "./icon";

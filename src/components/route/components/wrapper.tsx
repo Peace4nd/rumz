@@ -71,10 +71,7 @@ export default class Route extends React.PureComponent<IRoute> {
 				<StatusBar barStyle="default" backgroundColor={Color.Dark} />
 				<SafeAreaView style={styles.wrapper}>
 					<Header {...header} />
-					<View style={styles.content}>
-						{children}
-						{busy && <Loading />}
-					</View>
+					<View style={[styles.content, busy ? styles.contentBusy : null]}>{busy ? <Loading /> : children}</View>
 					<Navigation tabs={navigation} />
 				</SafeAreaView>
 			</React.Fragment>

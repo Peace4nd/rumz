@@ -1,6 +1,6 @@
 import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { FlatList, Image, ListRenderItemInfo, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ListRenderItemInfo, Pressable, View } from "react-native";
 import { CountryFlag, Icon } from "..";
 import { Color, Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
@@ -13,7 +13,8 @@ import styles from "./styles";
  */
 export interface ICollection {
 	records: ICollectionRecord[];
-	onClick: (record: ICollectionRecord) => void;
+	onPress: (record: ICollectionRecord) => void;
+	onLongPress: (record: ICollectionRecord) => void;
 }
 
 /**
@@ -26,7 +27,8 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: ICollection = {
-		onClick: null,
+		onLongPress: null,
+		onPress: null,
 		records: []
 	};
 
@@ -61,10 +63,15 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 */
 	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => {
 		// rozlozeni props
-		const { onClick } = this.props;
+		const { onLongPress, onPress } = this.props;
 		// sestaveni a vraceni
 		return (
-			<TouchableOpacity key={index} style={styles.itemWrapper} onPress={() => onClick(item)}>
+			<Pressable
+				key={index}
+				style={({ pressed }) => [styles.itemWrapper, pressed ? styles.itemWrapperPressed : null]}
+				onPress={() => onPress(item)}
+				onLongPress={() => onLongPress(item)}
+			>
 				<Image source={{ uri: item.image.path }} resizeMode="contain" style={styles.itemImage} />
 				<View style={styles.itemInfo}>
 					<Typography type="Headline6" style={styles.infoName}>
@@ -75,17 +82,14 @@ export default class Collection extends React.PureComponent<ICollection> {
 					</Typography>
 					<View style={styles.infoAdditional}>
 						<CountryFlag code={item.origin} />
-						{/* <Typography type="Subtitle2" style={styles.infoAdditionalDate}>
-							{moment(item.purchased).format("D. M. YYYY")}
-						</Typography>
-						*/}
 						<View style={styles.infoPortions}>
 							<Icon icon={faGlassWhiskey} size={Measurement.Icon / 2} style={styles.infoPortionsIcon} />
-							<Typography type="Body2">2x</Typography>
+							{/* 40 je konfigurovatelna hodnota, ktera bude ulozena nekde ve storu */}
+							<Typography type="Body2">{Math.ceil((item.volume - item.drunk * 40) / 40)}x</Typography>
 						</View>
 					</View>
 				</View>
-			</TouchableOpacity>
+			</Pressable>
 		);
 	};
 }

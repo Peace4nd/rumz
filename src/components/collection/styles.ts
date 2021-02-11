@@ -62,6 +62,9 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		padding: Measurement.Padding
 	},
+	itemWrapperPressed: {
+		opacity: 0.2
+	},
 	wrapper: {}
 });
 

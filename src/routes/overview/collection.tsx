@@ -1,11 +1,14 @@
 import React from "react";
-import { Collection, Route } from "../../components";
+import { Text } from "react-native";
+import { Collection, Dialog, Route } from "../../components";
 import { ICollectionRecord } from "../../types/collection";
 import { collection } from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOverviewCollectionState {
 	records: ICollectionRecord[];
+	current: ICollectionRecord;
+	opened: boolean;
 }
 
 /**
@@ -15,9 +18,10 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	/**
 	 * Vychozi stav
 	 */
-	public state = {
-		records: [],
-		working: false
+	public state: IOverviewCollectionState = {
+		current: null,
+		opened: false,
+		records: []
 	};
 
 	/**
@@ -37,14 +41,32 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
+		const { current, opened, records } = this.state;
 		return (
-			<Route.Wrapper header={{ title: strings("headerMain") }}>
+			<Route.Wrapper header={{ title: strings("headerMain") }} busy={records === null}>
+				{/* kolekce */}
 				<Collection
-					records={this.state.records}
-					onClick={(record) => {
+					records={records}
+					onPress={(record) => {
 						this.redirect("/overview/:id", { id: record.id });
 					}}
+					onLongPress={(record) => {
+						this.setState({
+							current: record,
+							opened: true
+						});
+					}}
 				/>
+				{/* modal pro pridani panaku */}
+				<Dialog
+					opened={opened}
+					title="vypiti"
+					onToggle={(state) => {
+						this.setState({ opened: state });
+					}}
+				>
+					<Text>nejaky obsah</Text>
+				</Dialog>
 			</Route.Wrapper>
 		);
 	}

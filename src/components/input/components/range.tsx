@@ -41,7 +41,7 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 		onChange: null,
 		placeholder: null,
 		validator: null,
-		value: [null, null]
+		value: [0, 0]
 	};
 
 	/**
@@ -94,18 +94,17 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 		const { validator } = this.props;
 		const { value: current } = this.state;
 		// parsovani hodnoty
-		const parsed = parseInt(value, 10);
+		const parsed = parseInt(value, 10) || 0;
 		// zmena rozsahu
 		current[index] = parsed;
 		// aktualizace
 		this.setState(
 			{
 				error: validator ? validator(current) : null,
-
 				value: current
 			},
 			() => {
-				this.props.onChange(current, { filled: parsed !== null, valid: this.state.error === null });
+				this.props.onChange(current, { filled: current.reduce((prev, cur) => prev + cur, 0) > 0, valid: this.state.error === null });
 			}
 		);
 	}

@@ -37,7 +37,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		onChange: null,
 		placeholder: null,
 		validator: null,
-		value: null
+		value: 0
 	};
 
 	/**
@@ -79,7 +79,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		// rozlozeni props
 		const { validator } = this.props;
 		// parsovani hodnoty
-		const parsed = parseInt(value, 10);
+		const parsed = parseInt(value, 10) || 0;
 		// aktualizace
 		this.setState(
 			{
@@ -87,7 +87,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 				value: parsed
 			},
 			() => {
-				this.props.onChange(parsed, { filled: parsed !== null, valid: this.state.error === null });
+				this.props.onChange(parsed, { filled: parsed > 0, valid: this.state.error === null });
 			}
 		);
 	};

@@ -1,14 +1,10 @@
+import { IStorageRecord } from "../utils/storage";
 import { IFileDocument } from "./file";
 
 /**
  * Datovy typ zaznamu kolekce
  */
-export interface ICollectionRecord {
-	/**
-	 * Unikatni identifikator
-	 */
-	id: string;
-
+export interface ICollectionRecord extends IStorageRecord {
 	/**
 	 * Nazev
 	 */

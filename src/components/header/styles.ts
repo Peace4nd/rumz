@@ -2,6 +2,9 @@ import { StyleSheet } from "react-native";
 import { Color, Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
+	actionOption: {
+		padding: 2 * Measurement.Padding
+	},
 	sectionAction: {
 		alignItems: "center",
 		justifyContent: "center",

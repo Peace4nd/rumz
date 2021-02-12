@@ -84,7 +84,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 						<CountryFlag code={item.origin} />
 						<View style={styles.infoPortions}>
 							<Icon icon={faGlassWhiskey} size={Measurement.Icon / 2} style={styles.infoPortionsIcon} />
-							{/* 40 je konfigurovatelna hodnota, ktera bude ulozena nekde ve storu */}
+							{/* TODO: 40 je konfigurovatelna hodnota, ktera bude ulozena nekde ve storu */}
 							<Typography type="Body2">{Math.ceil((item.volume - item.drunk * 40) / 40)}x</Typography>
 						</View>
 					</View>

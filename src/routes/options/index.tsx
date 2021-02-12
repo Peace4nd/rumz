@@ -3,9 +3,9 @@ import { Text } from "react-native";
 import { Route } from "../../components";
 
 /**
- * Statistika
+ * Nastaveni
  */
-export default class Stats extends Route.Content {
+export default class Options extends Route.Content {
 	/**
 	 * Render
 	 *
@@ -14,7 +14,7 @@ export default class Stats extends Route.Content {
 	public render(): JSX.Element {
 		return (
 			<Route.Wrapper>
-				<Text>statistika</Text>
+				<Text>nastaveni</Text>
 			</Route.Wrapper>
 		);
 	}

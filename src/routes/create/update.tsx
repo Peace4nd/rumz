@@ -1,6 +1,5 @@
 import React from "react";
 import { Text } from "react-native";
-import "react-native-get-random-values";
 import { Route } from "../../components";
 import { ICollectionRecord } from "../../types/collection";
 import storage from "../../utils/storage";

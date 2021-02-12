@@ -1,3 +1,4 @@
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Text } from "react-native";
 import { Collection, Dialog, Route } from "../../components";
@@ -43,7 +44,19 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	public render(): JSX.Element {
 		const { current, opened, records } = this.state;
 		return (
-			<Route.Wrapper header={{ title: strings("headerMain") }} busy={records === null}>
+			<Route.Wrapper
+				header={{
+					actionRight: {
+						icon: faEllipsisV,
+						items: {
+							options: "Nastavení"
+						},
+						onPress: (item) => console.log(item)
+					},
+					title: strings("headerMain")
+				}}
+				busy={records === null}
+			>
 				{/* kolekce */}
 				<Collection
 					records={records}
@@ -65,6 +78,7 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 						this.setState({ opened: state });
 					}}
 				>
+					{/* TODO: tady doplnit "form" na zadavani poctu vypitych panaku */}
 					<Text>nejaky obsah</Text>
 				</Dialog>
 			</Route.Wrapper>

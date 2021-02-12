@@ -3,12 +3,65 @@ import { ICollectionRecord } from "../types/collection";
 import { IStorageKey } from "../types/storage";
 
 /**
+ * Zakladni struktura zaznamu
+ */
+export interface IStorageRecord {
+	/**
+	 * Unikatni identifikator
+	 */
+	id: string;
+}
+
+/**
+ * Kolekce uloziste
+ */
+export interface IStorageCollection<R, I> {
+	/**
+	 * Nalezeni zaznamu v kolekci
+	 *
+	 * @param {I} id ID
+	 * @returns {Promise<R>} Zaznam z kolekce
+	 */
+	find: (id: I) => Promise<R>;
+	/**
+	 * Pridani zaznamu do kolekce
+	 *
+	 * @param {R} record Zaznam
+	 * @returns {Promise<R[]>} Kompletni kolekce
+	 */
+	push: (record: R) => Promise<R[]>;
+
+	/**
+	 * Nacteni cele kolekce
+	 *
+	 * @returns {Promise<R[]>} Kompletni kolekce
+	 */
+	read: () => Promise<R[]>;
+
+	/**
+	 * Odstraneni zaznamu z kolekce
+	 *
+	 * @param {I} id ID
+	 * @returns {Promise<R>} Kompletni kolekce
+	 */
+	remove: (id: I) => Promise<R[]>;
+
+	/**
+	 * Aktualizace zaznamu v kolekci
+	 *
+	 * @param {R} record Zaznam
+	 * @returns {Promise<R>} Kompletni kolekce
+	 */
+	update: (record: R) => Promise<R[]>;
+}
+
+/**
  * Ulozeni dat
  *
  * @param {IStorageKey} key Klic
  * @param {unknown} value Data
  */
-async function storageWrite(key: IStorageKey, value: unknown): Promise<void> {
+async function write(key: IStorageKey, value: unknown): Promise<void> {
 	try {
 		const raw = JSON.stringify(value);
 		await AsyncStorage.setItem(key, raw);
@@ -18,106 +71,126 @@ async function storageWrite(key: IStorageKey, value: unknown): Promise<void> {
 }
 
 /**
- * Nacteni dat
+ * Nacteni objektu dat
  *
  * @param {IStorageKey} key Klic
  * @returns {Promise<T>} Data
  */
-async function storageRead<T = unknown>(key: IStorageKey): Promise<T> {
+async function objectRead<T extends IStorageRecord>(key: IStorageKey): Promise<T> {
+	// nacteni dat
 	try {
 		const raw = await AsyncStorage.getItem(key);
 		if (raw != null) {
 			return JSON.parse(raw) as T;
 		}
-		return null;
 	} catch (e) {
-		// error
+		// chyba se neresi
 	}
+	// failsafe
+	return {} as T;
+}
+
+/**
+ * Nacteni kolekce
+ *
+ * @param {IStorageKey} key Klic
+ * @returns {Promise<T[]>} Kolekce
+ */
+async function arrayRead<T extends IStorageRecord>(key: IStorageKey): Promise<T[]> {
+	// nacteni dat
+	try {
+		const raw = await AsyncStorage.getItem(key);
+		if (raw != null) {
+			return JSON.parse(raw) as T[];
+		}
+	} catch (e) {
+		// chyba se neresi
+	}
+	// failsafe
+	return [] as T[];
+}
+
+/**
+ * Odstraneni zaznamu z kolekce
+ *
+ * @param {IStorageKey} key Klic
+ * @param {string} id Identifikator
+ * @returns {Promise<T[]>} Kolekce
+ */
+async function arrayRemove<T extends IStorageRecord>(key: IStorageKey, id: string): Promise<T[]> {
+	// nacteni uloziste
+	const storage = await arrayRead<T>(key);
+	// nazeleni zaznamu
+	const index = storage.findIndex((rec) => rec.id === id);
+	// odstraneni zaznamu
+	storage.splice(index, 1);
+	// ulozeni date
+	await write(key, storage);
+	// vraceni kolekce
+	return storage;
+}
+
+/**
+ * Nalezeni zaznamu v kolekci
+ *
+ * @param {IStorageKey} key Klic
+ * @param {string} id Identifikator
+ * @returns {Promise<T[]>} Kolekce
+ */
+async function arrayFind<T extends IStorageRecord>(key: IStorageKey, id: string): Promise<T> {
+	// nacteni uloziste
+	const storage = await arrayRead<T>(key);
+	// nazeleni zaznamu
+	return storage.find((rec) => rec.id === id);
+}
+
+/**
+ * Pridani zaznamu do kolekce
+ *
+ * @param {IStorageKey} key Klic
+ * @param {T} record Zaznam
+ * @returns {Promise<T[]>} Kolekce
+ */
+async function arrayPush<T extends IStorageRecord>(key: IStorageKey, record: T): Promise<T[]> {
+	// nacteni uloziste
+	const storage = await arrayRead<T>(key);
+	// pridani zaznamu
+	storage.push(record);
+	// ulozeni date
+	await write(key, storage);
+	// vraceni kolekce
+	return storage;
+}
+
+/**
+ * Aktualizace zaznamu v kolekci
+ *
+ * @param {IStorageKey} key Klic
+ * @param {T} record Zaznam
+ * @returns {Promise<T[]>} Kolekce
+ */
+async function arrayUpdate<T extends IStorageRecord>(key: IStorageKey, record: T): Promise<T[]> {
+	// nacteni uloziste
+	const storage = await arrayRead<T>(key);
+	// nalezeni zaznamu
+	const index = storage.findIndex((rec) => rec.id === record.id);
+	// aktualizace dat
+	storage[index] = record;
+	// ulozeni date
+	await write(key, storage);
+	// vraceni kolekce
+	return storage;
 }
 
 /**
  * Kolekce
  */
-export const collection = {
-	/**
-	 * Nalezeni zaznamu v kolekci
-	 *
-	 * @param {ICollectionRecord["id"]} id ID
-	 * @returns {Promise<ICollectionRecord>} Zaznam z kolekce
-	 */
-	find: async (id: ICollectionRecord["id"]): Promise<ICollectionRecord> => {
-		// nacteni uloziste
-		const storage = await storageRead<ICollectionRecord[]>("collection");
-		// nazeleni zaznamu
-		return storage.find((record) => record.id === id);
-	},
-
-	/**
-	 * Pridani zaznamu do kolekce
-	 *
-	 * @param {ICollectionRecord} record Zaznam
-	 * @returns {Promise<ICollectionRecord[]>} Kompletni kolekce
-	 */
-	push: async (record: ICollectionRecord): Promise<ICollectionRecord[]> => {
-		// nacteni uloziste
-		const storage = (await storageRead<ICollectionRecord[]>("collection")) || [];
-		// pridani zaznamu
-		storage.push(record);
-		// ulozeni date
-		storageWrite("collection", storage);
-		// vraceni kolekce
-		return storage;
-	},
-
-	/**
-	 * Nacteni cele kolekce
-	 *
-	 * @returns {Promise<ICollectionRecord[]>} Kompletni kolekce
-	 */
-	read: async (): Promise<ICollectionRecord[]> => {
-		// nacteni uloziste
-		const storage = await storageRead<ICollectionRecord[]>("collection");
-		// vraceni kolekce
-		return storage || [];
-	},
-
-	/**
-	 * Odstraneni zaznamu z kolekce
-	 *
-	 * @param {ICollectionRecord["id"]} id ID
-	 * @returns {Promise<ICollectionRecord>} Kompletni kolekce
-	 */
-	remove: async (id: ICollectionRecord["id"]): Promise<ICollectionRecord[]> => {
-		// nacteni uloziste
-		const storage = await storageRead<ICollectionRecord[]>("collection");
-		// nazeleni zaznamu
-		const index = storage.findIndex((record) => record.id === id);
-		// odstraneni zaznamu
-		storage.splice(index, 1);
-		// ulozeni date
-		storageWrite("collection", storage);
-		// vraceni kolekce
-		return storage;
-	},
-
-	/**
-	 * Aktualizace zaznamu v kolekci
-	 *
-	 * @param {ICollectionRecord} record Zaznam
-	 * @returns {Promise<ICollectionRecord>} Kompletni kolekce
-	 */
-	update: async (record: ICollectionRecord): Promise<ICollectionRecord[]> => {
-		// nacteni uloziste
-		const storage = await storageRead<ICollectionRecord[]>("collection");
-		// nalezeni zaznamu
-		const index = storage.findIndex((rec) => rec.id === record.id);
-		// aktualizace dat
-		storage[index] = record;
-		// ulozeni date
-		storageWrite("collection", storage);
-		// vraceni kolekce
-		return storage;
-	}
+export const collection: IStorageCollection<ICollectionRecord, string> = {
+	find: async (id) => arrayFind("collection", id),
+	push: async (record) => arrayPush("collection", record),
+	read: async () => arrayRead("collection"),
+	remove: async (id) => arrayRemove("collection", id),
+	update: async (record) => arrayUpdate("collection", record)
 };
 
 // vychozi export

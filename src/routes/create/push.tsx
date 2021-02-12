@@ -19,9 +19,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
-import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
-import { Form, Input, Route } from "../../components";
+import { Form, Route } from "../../components";
 import { IInputState } from "../../components/input";
 import { ICollectionRecord } from "../../types/collection";
 import { IFileDocument } from "../../types/file";
@@ -95,8 +94,6 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 	 * @returns {IHeader} Vlastnosti
 	 */
 	public render(): JSX.Element {
-		// rozlozeni props
-		const { filled, highlight } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
@@ -114,110 +111,101 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 					title: strings("headerAdd")
 				}}
 			>
-				<Form>
-					{/* obrazek */}
-					<Input.Image
-						highlight={highlight && !filled.image}
-						icon={faImage}
-						placeholder={strings("createImage")}
-						onChange={this.handleChange.bind(this, "image")}
-					/>
-					{/* nazev */}
-					<Input.Text
-						highlight={highlight && !filled.name}
-						icon={faPencilAlt}
-						placeholder={strings("createName")}
-						onChange={this.handleChange.bind(this, "name")}
-					/>
-					{/* vyrobce */}
-					<Input.Text
-						highlight={highlight && !filled.manufacturer}
-						icon={faIndustry}
-						placeholder={strings("createManufacturer")}
-						onChange={this.handleChange.bind(this, "manufacturer")}
-					/>
-					{/* objem lahve */}
-					<Input.Number
-						highlight={highlight && !filled.volume}
-						icon={faWineBottle}
-						placeholder={strings("createVolume")}
-						onChange={this.handleChange.bind(this, "volume")}
-					/>
-					{/* obsah alkoholu */}
-					<Input.Number
-						highlight={highlight && !filled.alcohol}
-						icon={faPercentage}
-						placeholder={strings("createAlcohol")}
-						onChange={this.handleChange.bind(this, "alcohol")}
-					/>
-					{/* barva */}
-					<Input.Text
-						highlight={highlight && !filled.color}
-						icon={faPalette}
-						placeholder={strings("createCharacteristicsColor")}
-						onChange={this.handleChange.bind(this, "color")}
-					/>
-					{/* cichova charakteristika */}
-					<Input.Text
-						highlight={highlight && !filled.smell}
-						icon={faFlask}
-						placeholder={strings("createCharacteristicsSmell")}
-						onChange={this.handleChange.bind(this, "smell")}
-					/>
-					{/* chutova charakteristika */}
-					<Input.Text
-						highlight={highlight && !filled.taste}
-						icon={faGlassCheers}
-						placeholder={strings("createCharacteristicsTaste")}
-						onChange={this.handleChange.bind(this, "taste")}
-					/>
-					{/* poznamka */}
-					<Input.Multiline
-						highlight={highlight && !filled.notes}
-						icon={faComments}
-						placeholder={strings("createNotes")}
-						lines={5}
-						onChange={this.handleChange.bind(this, "notes")}
-					/>
-					{/* zeme puvodu */}
-					<Input.Picker
-						highlight={highlight && !filled.origin}
-						icon={faGlobeAmericas}
-						placeholder={strings("createOrigin")}
-						items={Object.entries(country).map((entry) => ({
-							label: entry[1].name,
-							value: entry[0]
-						}))}
-						onChange={this.handleChange.bind(this, "origin")}
-					/>
-					{/* cena */}
-					<Input.Number
-						highlight={highlight && !filled.price}
-						icon={faEuroSign}
-						placeholder={strings("createPrice")}
-						onChange={this.handleChange.bind(this, "price")}
-					/>
-					{/* zakoupeno */}
-					<Input.Date
-						highlight={highlight && !filled.purchased}
-						placeholder={strings("createPurchased")}
-						onChange={this.handleChange.bind(this, "purchased")}
-					/>
-					{/* hodnoceni */}
-					<Input.Rating
-						highlight={highlight && !filled.rating}
-						icon={faSmile}
-						placeholder={strings("createRating")}
-						onChange={this.handleChange.bind(this, "rating")}
-					/>
-					{/* delka zrani */}
-					<Input.Range
-						highlight={highlight && !filled.ripening}
-						icon={[faLongArrowAltDown, faLongArrowAltUp]}
-						placeholder={[strings("createRipeningLowest"), strings("createRipeningHighest")]}
-						onChange={this.handleChange.bind(this, "ripening")}
-					/>
-				</Form>
+				<Form<ICollectionRecord>
+					fields={[
+						{
+							icon: faImage,
+							name: "image",
+							placeholder: strings("createImage"),
+							type: "image"
+						},
+						{
+							icon: faPencilAlt,
+							name: "name",
+							placeholder: strings("createName"),
+							type: "text"
+						},
+						{
+							icon: faIndustry,
+							name: "manufacturer",
+							placeholder: strings("createManufacturer"),
+							type: "text"
+						},
+						{
+							icon: faWineBottle,
+							name: "volume",
+							placeholder: strings("createVolume"),
+							type: "number"
+						},
+						{
+							icon: faPercentage,
+							name: "alcohol",
+							placeholder: strings("createAlcohol"),
+							type: "number"
+						},
+						{
+							icon: faPalette,
+							name: "color",
+							placeholder: strings("createCharacteristicsColor"),
+							type: "text"
+						},
+						{
+							icon: faFlask,
+							name: "smell",
+							placeholder: strings("createCharacteristicsSmell"),
+							type: "text"
+						},
+						{
+							icon: faGlassCheers,
+							name: "taste",
+							placeholder: strings("createCharacteristicsTaste"),
+							type: "text"
+						},
+						{
+							icon: faComments,
+							lines: 5,
+							name: "notes",
+							placeholder: strings("createNotes"),
+							type: "multiline"
+						},
+						{
+							icon: faGlobeAmericas,
+							items: Object.entries(country).map((entry) => ({
+								label: entry[1].name,
+								value: entry[0]
+							})),
+							name: "origin",
+							placeholder: strings("createOrigin"),
+							type: "picker"
+						},
+						{
+							icon: faEuroSign,
+							name: "price",
+							placeholder: strings("createPrice"),
+							type: "number"
+						},
+						{
+							name: "purchased",
+							placeholder: strings("createPurchased"),
+							type: "date"
+						},
+						{
+							icon: faSmile,
+							name: "rating",
+							placeholder: strings("createRating"),
+							type: "rating"
+						},
+						{
+							icon: [faLongArrowAltDown, faLongArrowAltUp],
+							name: "ripening",
+							placeholder: [strings("createRipeningLowest"), strings("createRipeningHighest")],
+							type: "range"
+						}
+					]}
+					onChange={(values) => {
+						console.log(values);
+					}}
+				/>
 			</Route.Wrapper>
 		);
 	}

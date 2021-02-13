@@ -1,6 +1,6 @@
 import React from "react";
 import { TextInput, TextInputProps, View } from "react-native";
-import { IInput } from "..";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
@@ -19,7 +19,7 @@ export type IInputText = IInput<string, TextInputProps>;
 /**
  * Textovy vstup
  */
-export default class InputText extends React.PureComponent<IInputText, IInputTextState> {
+export default class InputText extends React.PureComponent<IInputText, IInputTextState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
@@ -41,6 +41,11 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	};
 
 	/**
+	 * Reference
+	 */
+	private ref: React.RefObject<TextInput> = React.createRef();
+
+	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element
@@ -55,6 +60,7 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<TextInput
 					{...field}
+					ref={this.ref}
 					style={styles.fieldBasic}
 					value={value}
 					placeholder={placeholder}
@@ -68,6 +74,13 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 				)}
 			</View>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		this.ref.current.focus();
 	}
 
 	/**

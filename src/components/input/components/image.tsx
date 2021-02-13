@@ -2,7 +2,7 @@ import React from "react";
 import { Image, Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import FetchBlob from "react-native-fetch-blob";
-import { IInput } from "..";
+import { IInput, IInputCore } from "..";
 import { Color, Measurement } from "../../../styles";
 import { IFileDocument } from "../../../types/file";
 import Icon from "../../icon";
@@ -25,7 +25,7 @@ export type IInputImage = IInput<IFileDocument>;
  * @param {InputImage} props Vlastnosti
  * @returns {JSX.Element} Element
  */
-export default class InputImage extends React.PureComponent<IInputImage, IInputImageState> {
+export default class InputImage extends React.PureComponent<IInputImage, IInputImageState> implements IInputCore {
 	/**
 	 * Vychozi vlastnosti
 	 */
@@ -73,6 +73,13 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 				{path && <Image source={{ uri: path }} resizeMode="contain" style={styles.image} />}
 			</Pressable>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		this.handleClick();
 	}
 
 	/**

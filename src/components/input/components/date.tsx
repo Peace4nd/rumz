@@ -3,7 +3,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import React from "react";
 import { TouchableWithoutFeedback, View } from "react-native";
-import { IInput } from "..";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
@@ -25,7 +25,7 @@ export type IInputDate = IInput<Date>;
  * @param {IInputDate} props Vlastnosti
  * @returns {JSX.Element} Element
  */
-export default class InputDate extends React.PureComponent<IInputDate, IInputDateState> {
+export default class InputDate extends React.PureComponent<IInputDate, IInputDateState> implements IInputCore {
 	/**
 	 * Vychozi vlastnosti
 	 */
@@ -53,7 +53,7 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { focus, highlight, icon, placeholder } = this.props;
+		const { highlight, icon, placeholder } = this.props;
 		const { value, visible } = this.state;
 		// sestaveni a vraceni
 		return (
@@ -63,10 +63,19 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
 					</Typography>
-					{(focus || visible) && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}
+					{visible && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}
 				</View>
 			</TouchableWithoutFeedback>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		this.setState({
+			visible: true
+		});
 	}
 
 	/**

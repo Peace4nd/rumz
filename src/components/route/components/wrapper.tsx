@@ -11,7 +11,7 @@ import styles from "../styles";
 /**
  * Dostupne vlastnosti
  */
-export interface IRoute {
+export interface IRoute<I> {
 	/**
 	 * Zaneprazdneno
 	 */
@@ -20,7 +20,7 @@ export interface IRoute {
 	/**
 	 * Hlavicka
 	 */
-	header: IHeader;
+	header: IHeader<I>;
 
 	/**
 	 * Navigace
@@ -31,11 +31,11 @@ export interface IRoute {
 /**
  * Obecna routa
  */
-export default class Route extends React.PureComponent<IRoute> {
+export default class Route<I extends Record<string, string>> extends React.PureComponent<IRoute<I>> {
 	/**
 	 * Vychozi vlastnosti
 	 */
-	public static defaultProps: IRoute = {
+	public static defaultProps: IRoute<unknown> = {
 		busy: false,
 		header: null,
 		navigation: [

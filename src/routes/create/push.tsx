@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
 	faCheck,
 	faComments,
@@ -21,7 +20,6 @@ import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { Form, Route } from "../../components";
-import { IInputState } from "../../components/input";
 import { ICollectionRecord } from "../../types/collection";
 import { IFileDocument } from "../../types/file";
 import country from "../../utils/country";
@@ -31,9 +29,7 @@ import strings from "../../utils/strings";
 
 interface ICreateState {
 	record: ICollectionRecord & { image: IFileDocument };
-	filled: Record<keyof ICollectionRecord, boolean>;
 	working: boolean;
-	highlight: boolean;
 }
 
 interface ICreateParams {
@@ -48,43 +44,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 	 * Vychozi stav
 	 */
 	public state: ICreateState = {
-		filled: {
-			alcohol: false,
-			color: false,
-			drunk: false,
-			id: true,
-			image: false,
-			manufacturer: false,
-			name: false,
-			notes: false,
-			origin: false,
-			price: false,
-			purchased: false,
-			rating: false,
-			ripening: false,
-			smell: false,
-			taste: false,
-			volume: false
-		},
-		highlight: false,
-		record: {
-			alcohol: null,
-			color: null,
-			drunk: null,
-			id: uuidv4(),
-			image: null,
-			manufacturer: null,
-			name: null,
-			notes: null,
-			origin: null,
-			price: null,
-			purchased: null,
-			rating: null,
-			ripening: null,
-			smell: null,
-			taste: null,
-			volume: null
-		},
+		record: null,
 		working: false
 	};
 
@@ -162,11 +122,16 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 							type: "text"
 						},
 						{
-							icon: faComments,
-							lines: 5,
-							name: "notes",
-							placeholder: strings("createNotes"),
-							type: "multiline"
+							icon: faEuroSign,
+							name: "price",
+							placeholder: strings("createPrice"),
+							type: "number"
+						},
+						{
+							icon: [faLongArrowAltDown, faLongArrowAltUp],
+							name: "ripening",
+							placeholder: [strings("createRipeningLowest"), strings("createRipeningHighest")],
+							type: "range"
 						},
 						{
 							icon: faGlobeAmericas,
@@ -177,12 +142,6 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 							name: "origin",
 							placeholder: strings("createOrigin"),
 							type: "picker"
-						},
-						{
-							icon: faEuroSign,
-							name: "price",
-							placeholder: strings("createPrice"),
-							type: "number"
 						},
 						{
 							name: "purchased",
@@ -196,14 +155,27 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 							type: "rating"
 						},
 						{
-							icon: [faLongArrowAltDown, faLongArrowAltUp],
-							name: "ripening",
-							placeholder: [strings("createRipeningLowest"), strings("createRipeningHighest")],
-							type: "range"
+							icon: faComments,
+							lines: 5,
+							name: "notes",
+							placeholder: strings("createNotes"),
+							type: "multiline"
+						},
+						{
+							name: "id",
+							type: "hidden",
+							value: uuidv4()
+						},
+						{
+							name: "drunk",
+							type: "hidden",
+							value: 0
 						}
 					]}
 					onChange={(values) => {
-						console.log(values);
+						this.setState({
+							record: values
+						});
 					}}
 				/>
 			</Route.Wrapper>
@@ -214,63 +186,26 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 	 * Ulozeni
 	 */
 	private handleSave = (): void => {
-		// kontrola validitz
-		const filled = Object.values(this.state.filled).reduce((prev, current) => prev && current, true);
-		// pokud je vse OK
-		if (filled) {
-			// schovani klavesnice
-			Keyboard.dismiss();
-			// zpracovani
-			this.setState(
-				{
-					highlight: false,
-					working: true
-				},
-				() => {
-					fs.collection.save(this.state.record.image, this.state.record.id).then((path) => {
-						storage.collection
-							.push({
-								...this.state.record,
-								image: {
-									path
-								}
-							})
-							.then(() => {
-								this.redirect("/overview");
-								ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
-							});
-					});
-				}
-			);
-		} else {
-			this.setState(
-				{
-					highlight: true
-				},
-				() => {
-					ToastAndroid.show(strings("createSaveError"), ToastAndroid.LONG);
-				}
-			);
-		}
-	};
-
-	/**
-	 * Zmena dat
-	 *
-	 * @param {keyof ICollectionRecord} field Pole
-	 * @param {unknown} value Hodnota
-	 * @param {IInputState} state Stav vstupniho pole
-	 */
-	private handleChange(field: keyof ICollectionRecord, value: unknown, state: IInputState): void {
-		this.setState({
-			filled: {
-				...this.state.filled,
-				[field]: state.filled && state.valid
-			},
-			record: {
-				...this.state.record,
-				[field]: value
-			}
+		// schovani klavesnice
+		Keyboard.dismiss();
+		// rozlozeni props
+		const { id, image, ...rest } = this.state.record;
+		// ulozeni
+		fs.collection.save(image, id).then((path) => {
+			storage.collection
+				.push({
+					...rest,
+					id,
+					image: {
+						path
+					}
+				})
+				.then(() => {
+					this.redirect("/overview");
+					ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
+				});
 		});
-	}
+
+		// ToastAndroid.show(strings("createSaveError"), ToastAndroid.LONG);
+	};
 }

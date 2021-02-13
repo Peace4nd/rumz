@@ -1,6 +1,6 @@
 import React from "react";
-import { TextInput, View } from "react-native";
-import { IInput } from "..";
+import { TextInput, TextInputProps, View } from "react-native";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
@@ -14,14 +14,14 @@ interface IInputMultilineState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputMultiline extends IInput<string> {
+export interface IInputMultiline extends IInput<string, TextInputProps> {
 	lines: number;
 }
 
 /**
  * Viceradkovy textovy vstup
  */
-export default class InputMultiline extends React.PureComponent<IInputMultiline, IInputMultilineState> {
+export default class InputMultiline extends React.PureComponent<IInputMultiline, IInputMultilineState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
@@ -44,19 +44,26 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 	};
 
 	/**
+	 * Reference
+	 */
+	private ref: React.RefObject<TextInput> = React.createRef();
+
+	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, lines, placeholder } = this.props;
+		const { field, highlight, icon, lines, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, styles.wrapperMultiline, highlight ? styles.wrapperHighlight : null]}>
 				<Icon style={[styles.iconBasic, styles.iconMultiline]} icon={icon} color={Color.Dark} />
 				<TextInput
+					{...field}
+					ref={this.ref}
 					style={[styles.fieldBasic, styles.fieldMultiline]}
 					value={value}
 					multiline={true}
@@ -72,6 +79,13 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 				)}
 			</View>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		this.ref.current.focus();
 	}
 
 	/**

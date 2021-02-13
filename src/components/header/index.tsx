@@ -10,30 +10,30 @@ import styles from "./styles";
 /**
  * Akce
  */
-export interface IHeaderAction {
+export interface IHeaderAction<I> {
 	icon: IconDefinition;
-	onPress: (item?: string) => void;
+	onPress: (item?: keyof I) => void;
 	disabled?: boolean;
-	items?: Record<string, string>;
+	items?: I;
 }
 
 /**
  * Dostupne vlastnosti
  */
-export interface IHeader {
+export interface IHeader<I> {
 	title: string;
-	actionLeft?: IHeaderAction;
-	actionRight?: IHeaderAction;
+	actionLeft?: IHeaderAction<I>;
+	actionRight?: IHeaderAction<I>;
 }
 
 /**
  * Hlavicka
  */
-export default class Header extends React.PureComponent<IHeader> {
+export default class Header<I extends Record<string, string>> extends React.PureComponent<IHeader<I>> {
 	/**
 	 * Vychozi vlastnosti
 	 */
-	public static defaultProps: IHeader = {
+	public static defaultProps: IHeader<unknown> = {
 		actionLeft: null,
 		actionRight: null,
 		title: null
@@ -67,7 +67,7 @@ export default class Header extends React.PureComponent<IHeader> {
 	 * @param {IHeaderAction} action Definice akce
 	 * @returns {JSX.Element} Element
 	 */
-	private renderAction(action: IHeaderAction): JSX.Element {
+	private renderAction(action: IHeaderAction<I>): JSX.Element {
 		if (action) {
 			// menu
 			if (action.items) {

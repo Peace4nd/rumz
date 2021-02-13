@@ -42,12 +42,11 @@ export interface IInput<V, F = never> {
 	 */
 	highlight?: boolean;
 
-	/**
-	 * Zamereni
-	 */
-	focus?: boolean;
-
 	field?: F;
+}
+
+export interface IInputCore {
+	focus(): void;
 }
 
 export default {

@@ -12,8 +12,24 @@ import styles from "./styles";
  * Dostupne vlastnosti
  */
 export interface ICollection {
+	/**
+	 * Zaznamy kolekce
+	 */
 	records: ICollectionRecord[];
+
+	/**
+	 * Panak
+	 */
+	dram: number;
+
+	/**
+	 * Stisknuti
+	 */
 	onPress: (record: ICollectionRecord) => void;
+
+	/**
+	 * Dlouhe stisknuti
+	 */
 	onLongPress: (record: ICollectionRecord) => void;
 }
 
@@ -27,6 +43,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: ICollection = {
+		dram: 0,
 		onLongPress: null,
 		onPress: null,
 		records: []
@@ -63,7 +80,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 */
 	private renderRecord = ({ index, item }: ListRenderItemInfo<ICollectionRecord>): JSX.Element => {
 		// rozlozeni props
-		const { onLongPress, onPress } = this.props;
+		const { dram, onLongPress, onPress } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Pressable
@@ -84,8 +101,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 						<CountryFlag code={item.origin} />
 						<View style={styles.infoPortions}>
 							<Icon icon={faGlassWhiskey} size={Measurement.Icon / 2} style={styles.infoPortionsIcon} />
-							{/* TODO: 40 je konfigurovatelna hodnota, ktera bude ulozena nekde ve storu */}
-							<Typography type="Body2">{Math.ceil((item.volume - item.drunk * 40) / 40)}x</Typography>
+							<Typography type="Body2">{Math.ceil((item.volume - item.drunk * dram) / dram)}x</Typography>
 						</View>
 					</View>
 				</View>

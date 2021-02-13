@@ -1,59 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import merge from "deepmerge";
 import { ICollectionRecord } from "../types/collection";
-import { IStorageKey } from "../types/storage";
-
-/**
- * Zakladni struktura zaznamu
- */
-export interface IStorageRecord {
-	/**
-	 * Unikatni identifikator
-	 */
-	id: string;
-}
-
-/**
- * Kolekce uloziste
- */
-export interface IStorageCollection<R, I> {
-	/**
-	 * Nalezeni zaznamu v kolekci
-	 *
-	 * @param {I} id ID
-	 * @returns {Promise<R>} Zaznam z kolekce
-	 */
-	find: (id: I) => Promise<R>;
-	/**
-	 * Pridani zaznamu do kolekce
-	 *
-	 * @param {R} record Zaznam
-	 * @returns {Promise<R[]>} Kompletni kolekce
-	 */
-	push: (record: R) => Promise<R[]>;
-
-	/**
-	 * Nacteni cele kolekce
-	 *
-	 * @returns {Promise<R[]>} Kompletni kolekce
-	 */
-	read: () => Promise<R[]>;
-
-	/**
-	 * Odstraneni zaznamu z kolekce
-	 *
-	 * @param {I} id ID
-	 * @returns {Promise<R>} Kompletni kolekce
-	 */
-	remove: (id: I) => Promise<R[]>;
-
-	/**
-	 * Aktualizace zaznamu v kolekci
-	 *
-	 * @param {R} record Zaznam
-	 * @returns {Promise<R>} Kompletni kolekce
-	 */
-	update: (record: R) => Promise<R[]>;
-}
+import { IOptions } from "../types/options";
+import { IStorageCollectionArray, IStorageCollectionObject, IStorageKey, IStorageRecord } from "../types/storage";
 
 /**
  * Ulozeni dat
@@ -71,32 +20,13 @@ async function write(key: IStorageKey, value: unknown): Promise<void> {
 }
 
 /**
- * Nacteni objektu dat
- *
- * @param {IStorageKey} key Klic
- * @returns {Promise<T>} Data
- */
-async function objectRead<T extends IStorageRecord>(key: IStorageKey): Promise<T> {
-	// nacteni dat
-	try {
-		const raw = await AsyncStorage.getItem(key);
-		if (raw != null) {
-			return JSON.parse(raw) as T;
-		}
-	} catch (e) {
-		// chyba se neresi
-	}
-	// failsafe
-	return {} as T;
-}
-
-/**
  * Nacteni kolekce
  *
  * @param {IStorageKey} key Klic
+ * @param {T[]} defaults Vychozi hodnota
  * @returns {Promise<T[]>} Kolekce
  */
-async function arrayRead<T extends IStorageRecord>(key: IStorageKey): Promise<T[]> {
+async function arrayRead<T extends IStorageRecord>(key: IStorageKey, defaults: T[] = []): Promise<T[]> {
 	// nacteni dat
 	try {
 		const raw = await AsyncStorage.getItem(key);
@@ -107,7 +37,7 @@ async function arrayRead<T extends IStorageRecord>(key: IStorageKey): Promise<T[
 		// chyba se neresi
 	}
 	// failsafe
-	return [] as T[];
+	return defaults;
 }
 
 /**
@@ -183,9 +113,48 @@ async function arrayUpdate<T extends IStorageRecord>(key: IStorageKey, record: T
 }
 
 /**
+ * Nacteni objektu dat
+ *
+ * @param {IStorageKey} key Klic
+ * @param {T} defaults Vychozi hodnota
+ * @returns {Promise<T>} Data
+ */
+async function objectRead<T>(key: IStorageKey, defaults: T = {} as T): Promise<T> {
+	// nacteni dat
+	try {
+		const raw = await AsyncStorage.getItem(key);
+		if (raw != null) {
+			return JSON.parse(raw) as T;
+		}
+	} catch (e) {
+		// chyba se neresi
+	}
+	// failsafe
+	return defaults;
+}
+
+/**
+ * Aktualizace zaznamu v kolekci
+ *
+ * @param {IStorageKey} key Klic
+ * @param {T} record Zaznam
+ * @returns {Promise<T>} Kolekce
+ */
+async function objectUpdate<T>(key: IStorageKey, record: T): Promise<T> {
+	// nacteni uloziste
+	const storage = await objectRead<T>(key);
+	// aktualizace dat
+	const updated: T = merge(storage, record);
+	// ulozeni date
+	await write(key, updated);
+	// vraceni kolekce
+	return updated;
+}
+
+/**
  * Kolekce
  */
-export const collection: IStorageCollection<ICollectionRecord, string> = {
+export const collection: IStorageCollectionArray<ICollectionRecord, string> = {
 	find: async (id) => arrayFind("collection", id),
 	push: async (record) => arrayPush("collection", record),
 	read: async () => arrayRead("collection"),
@@ -193,7 +162,16 @@ export const collection: IStorageCollection<ICollectionRecord, string> = {
 	update: async (record) => arrayUpdate("collection", record)
 };
 
+/**
+ * Nastaveni
+ */
+export const options: IStorageCollectionObject<IOptions> = {
+	read: async () => objectRead("options", { dram: 40 }),
+	update: async (record) => objectUpdate("options", record)
+};
+
 // vychozi export
 export default {
-	collection
+	collection,
+	options
 };

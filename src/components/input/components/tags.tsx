@@ -1,11 +1,9 @@
-import { Picker } from "@react-native-picker/picker";
 import { PickerItemProps } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
 import { View } from "react-native";
-import { IInput } from "..";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
-import Typography from "../../typography";
 import styles from "../styles";
 
 interface IInputPickerState {
@@ -22,7 +20,7 @@ export interface IInputPicker extends IInput<string> {
 /**
  * Vyberovy vstup
  */
-export default class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> {
+export default class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
@@ -56,33 +54,14 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
 				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
-				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
-					{items.map((item) => (
-						<Picker.Item key={item.value} {...item} />
-					))}
-				</Picker>
-				{!value && (
-					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay, highlight ? styles.placeholderHighlight : null]}>
-						{placeholder}
-					</Typography>
-				)}
 			</View>
 		);
 	}
 
 	/**
-	 * Zmena
-	 *
-	 * @param {string} value Hodnota
+	 * Zamereni
 	 */
-	private handleChange = (value: string): void => {
-		this.setState(
-			{
-				value
-			},
-			() => {
-				this.props.onChange(value, { filled: true, valid: true });
-			}
-		);
-	};
+	public focus(): void {
+		return;
+	}
 }

@@ -1,5 +1,5 @@
-import { IStorageRecord } from "../utils/storage";
 import { IFileDocument } from "./file";
+import { IStorageRecord } from "./storage";
 
 /**
  * Datovy typ zaznamu kolekce

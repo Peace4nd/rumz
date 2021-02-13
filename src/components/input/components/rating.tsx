@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { IInput } from "..";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Rating from "../../rating";
@@ -18,7 +18,7 @@ export type IInputRating = IInput<number>;
 /**
  * Hodnotici vstup
  */
-export default class InputRating extends React.PureComponent<IInputRating, IInputRatingState> {
+export default class InputRating extends React.PureComponent<IInputRating, IInputRatingState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
@@ -54,6 +54,13 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 				<Rating value={value} onChange={this.handleChange} />
 			</View>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		return;
 	}
 
 	/**

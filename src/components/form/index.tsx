@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, View } from "react-native";
-import Input, { IInputState } from "../input";
+import Input, { IInputCore, IInputState } from "../input";
 import { IInputDate } from "../input/components/date";
 import { IInputImage } from "../input/components/image";
 import { IInputMultiline } from "../input/components/multiline";
@@ -10,8 +10,20 @@ import { IInputRange } from "../input/components/range";
 import { IInputRating } from "../input/components/rating";
 import { IInputText } from "../input/components/text";
 import styles from "./styles";
+/*
+type IFormState<V> = {
+	[key: keyof V]: {
+		value: unknown;
+		state: IInputState;
+	};
+};
+*/
 
-type IFormState = Record<string, { value: unknown; state: IInputState }>;
+type IFormStateValues<V> = Partial<Record<keyof V, { value: unknown; state: IInputState }>>;
+
+interface IFormState<V> {
+	fields: IFormStateValues<V>;
+}
 
 export interface IFormFieldShared<V> {
 	name: keyof V;
@@ -49,6 +61,11 @@ export interface IFormFieldText<V> extends IFormFieldShared<V>, Omit<IInputText,
 	type: "text";
 }
 
+export interface IFormFieldHidden<V> extends IFormFieldShared<V> {
+	type: "hidden";
+	value: unknown;
+}
+
 export type IFormField<V> =
 	| IFormFieldDate<V>
 	| IFormFieldImage<V>
@@ -57,11 +74,26 @@ export type IFormField<V> =
 	| IFormFieldPicker<V>
 	| IFormFieldRange<V>
 	| IFormFieldRating<V>
-	| IFormFieldText<V>;
+	| IFormFieldText<V>
+	| IFormFieldHidden<V>;
 
+/**
+ * Dostupne vlastnosti
+ */
 export interface IForm<V> {
+	/**
+	 * Definice poli
+	 */
 	fields: Array<IFormField<V>>;
+
+	/**
+	 * Zmenova udalost
+	 */
 	onChange: (values: V) => void;
+
+	/**
+	 * Vychozi hodnoty
+	 */
 	values?: V;
 }
 
@@ -70,13 +102,15 @@ export interface IForm<V> {
  *
  * @returns {JSX.Element} Element
  */
-export default class Form<V = unknown> extends React.PureComponent<IForm<V>, IFormState> {
+export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>> {
 	/**
 	 * Vychozi stav
 	 */
-	public state: IFormState = {};
+	public state: IFormState<V> = {
+		fields: this.createDefaultValues()
+	};
 
-	private fields: any[] = [];
+	private fields: IInputCore[] = [];
 
 	/**
 	 * Render
@@ -99,55 +133,219 @@ export default class Form<V = unknown> extends React.PureComponent<IForm<V>, IFo
 		);
 	}
 
+	/**
+	 * Sestaveni vstupniho pole
+	 *
+	 * @param {IFormField<V>} field Pole
+	 * @param {number} index Index
+	 * @returns {JSX.Element} Element
+	 */
 	private renderField(field: IFormField<V>, index: number): JSX.Element {
 		// rozlozeni props
 		const { name, type, ...rest } = field;
+
+		// ref={(ref) => { this.fields[index] = ref; }}
+
 		// sestaveni
 		switch (type) {
 			case "date":
 				return (
 					<Input.Date
 						{...(rest as IInputDate)}
-						ref={(ref) => (this.fields[index] = ref)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
 					/>
 				);
 			case "image":
-				return <Input.Image {...(rest as IInputImage)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Image
+						{...(rest as IInputImage)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+					/>
+				);
 			case "multiline":
-				return <Input.Multiline {...(rest as IInputMultiline)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Multiline
+						{...(rest as IInputMultiline)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+						field={{
+							onSubmitEditing: () => {
+								this.fields[index + 1].focus();
+							},
+							returnKeyType: "next"
+						}}
+					/>
+				);
 			case "number":
-				return <Input.Number {...(rest as IInputNumber)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Number
+						{...(rest as IInputNumber)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+						field={{
+							onSubmitEditing: () => {
+								this.fields[index + 1].focus();
+							},
+							returnKeyType: "next"
+						}}
+					/>
+				);
 			case "picker":
-				return <Input.Picker {...(rest as IInputPicker)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Picker
+						{...(rest as IInputPicker)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+					/>
+				);
 			case "rating":
-				return <Input.Rating {...(rest as IInputRating)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Rating
+						{...(rest as IInputRating)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+					/>
+				);
 			case "range":
-				return <Input.Range {...(rest as IInputRange)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Range
+						{...(rest as IInputRange)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+						field={{
+							onSubmitEditing: () => {
+								this.fields[index + 1].focus();
+							},
+							returnKeyType: "next"
+						}}
+					/>
+				);
 			case "text":
-				return <Input.Text {...(rest as IInputText)} onChange={(...input) => this.handleChange(name, ...input)} />;
+				return (
+					<Input.Text
+						{...(rest as IInputText)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+						field={{
+							onSubmitEditing: () => {
+								this.fields[index + 1].focus();
+							},
+							returnKeyType: "next"
+						}}
+					/>
+				);
 		}
 
 		/*
 		field: {
-									onSubmitEditing: () => console.log("koko"),
-									returnKeyType: "next"
-								}
+			onSubmitEditing: () => console.log("koko"),
+			returnKeyType: "next"
+		}
 		*/
 	}
 
+	/**
+	 * Priprava vychozich hodnot
+	 *
+	 * @returns {IFormStateValues<V>} Hodnoty
+	 */
+	private createDefaultValues(): IFormStateValues<V> {
+		// definice
+		const defaults: IFormStateValues<V> = {};
+		// prochazeni jednotlivych poli
+		for (const field of this.props.fields) {
+			// vychozi hodnota
+			let value: unknown = null;
+			switch (field.type) {
+				case "date":
+				case "image":
+				case "picker":
+					value = null;
+					break;
+				case "multiline":
+				case "text":
+					value = "";
+					break;
+				case "number":
+				case "rating":
+					value = 0;
+					break;
+				case "range":
+					value = [0, 0];
+					break;
+				case "hidden":
+					value = field.value;
+					break;
+			}
+			// naplneni
+			defaults[field.name] = {
+				state: {
+					filled: false,
+					valid: false
+				},
+				value
+			};
+		}
+		// vraceni
+		return defaults;
+	}
+
+	/**
+	 * Ziskani aktualnich hodnot
+	 *
+	 * @returns {V} Hodnoty
+	 */
+	private getCurrentValues(): V {
+		// rozlozeni props
+		const { fields } = this.state;
+		// definice
+		const values: Record<string, unknown> = {};
+		// naplneni
+		for (const name in fields) {
+			values[name] = fields[name].value;
+		}
+		// vraceni
+		return values as V;
+	}
+
+	/**
+	 * Zmenova udalost
+	 *
+	 * @param {keyof V} name Nazev pole
+	 * @param {unknown} value Hodnota
+	 * @param {IInputState} state Stav
+	 */
 	private handleChange(name: keyof V, value: unknown, state: IInputState): void {
 		this.setState(
 			{
-				[name]: {
-					state,
-					value
+				fields: {
+					...this.state.fields,
+					[name]: {
+						state,
+						value
+					}
 				}
 			},
 			() => {
-				console.log(this.state);
-
-				this.props.onChange(null); // tady bude premapovany vystup
+				this.props.onChange(this.getCurrentValues());
 			}
 		);
 	}

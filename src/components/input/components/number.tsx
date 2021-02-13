@@ -1,6 +1,6 @@
 import React from "react";
-import { TextInput, View } from "react-native";
-import { IInput } from "..";
+import { TextInput, TextInputProps, View } from "react-native";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
@@ -14,12 +14,12 @@ interface IInputNumberState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputNumber = IInput<number>;
+export type IInputNumber = IInput<number, TextInputProps>;
 
 /**
  * Ciselny vstup
  */
-export default class InputNumber extends React.PureComponent<IInputNumber, IInputNumberState> {
+export default class InputNumber extends React.PureComponent<IInputNumber, IInputNumberState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
@@ -41,19 +41,26 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 	};
 
 	/**
+	 * Reference
+	 */
+	private ref: React.RefObject<TextInput> = React.createRef();
+
+	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder } = this.props;
+		const { field, highlight, icon, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
 				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<TextInput
+					{...field}
+					ref={this.ref}
 					style={styles.fieldBasic}
 					value={value ? String(value) : ""}
 					placeholder={placeholder}
@@ -68,6 +75,13 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 				)}
 			</View>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		this.ref.current.focus();
 	}
 
 	/**

@@ -3,13 +3,16 @@ import React from "react";
 import { Text } from "react-native";
 import { Collection, Dialog, Route } from "../../components";
 import { ICollectionRecord } from "../../types/collection";
-import { collection } from "../../utils/storage";
+import { IOptions } from "../../types/options";
+import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOverviewCollectionState {
 	records: ICollectionRecord[];
-	current: ICollectionRecord;
+	selected: ICollectionRecord;
 	opened: boolean;
+	options: IOptions;
+	loaded: boolean;
 }
 
 /**
@@ -20,18 +23,22 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	 * Vychozi stav
 	 */
 	public state: IOverviewCollectionState = {
-		current: null,
+		loaded: false,
 		opened: false,
-		records: []
+		options: null,
+		records: [],
+		selected: null
 	};
 
 	/**
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
-		collection.read().then((records) => {
+		Promise.all([storage.collection.read(), storage.options.read()]).then((values) => {
 			this.setState({
-				records
+				loaded: true,
+				options: values[1],
+				records: values[0]
 			});
 		});
 	}
@@ -42,7 +49,9 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
-		const { current, opened, records } = this.state;
+		// rozlozeni props
+		const { loaded, opened, options, records, selected } = this.state;
+		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
 				header={{
@@ -51,22 +60,29 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 						items: {
 							options: "Nastavení"
 						},
-						onPress: (item) => console.log(item)
+						onPress: (item) => {
+							switch (item) {
+								case "options":
+									this.redirect("/options");
+									break;
+							}
+						}
 					},
 					title: strings("headerMain")
 				}}
-				busy={records === null}
+				busy={!loaded}
 			>
 				{/* kolekce */}
 				<Collection
+					dram={options?.dram}
 					records={records}
 					onPress={(record) => {
 						this.redirect("/overview/:id", { id: record.id });
 					}}
 					onLongPress={(record) => {
 						this.setState({
-							current: record,
-							opened: true
+							opened: true,
+							selected: record
 						});
 					}}
 				/>
@@ -79,7 +95,7 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 					}}
 				>
 					{/* TODO: tady doplnit "form" na zadavani poctu vypitych panaku */}
-					<Text>nejaky obsah</Text>
+					<Text>nejaky obsah pro zaznam: {selected?.id}</Text>
 				</Dialog>
 			</Route.Wrapper>
 		);

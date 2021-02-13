@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { TextInput, View } from "react-native";
+import { TextInput, TextInputProps, View } from "react-native";
 import { IInput } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
@@ -15,7 +15,7 @@ interface IInputRangeState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputRange extends Omit<IInput<[number, number]>, "placeholder" | "icon"> {
+export interface IInputRange extends Omit<IInput<[number, number], TextInputProps>, "placeholder" | "icon"> {
 	placeholder: [string, string];
 	icon: [IconDefinition, IconDefinition];
 }
@@ -45,28 +45,45 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	};
 
 	/**
+	 * Reference
+	 */
+	private ref1: React.RefObject<TextInput> = React.createRef();
+
+	/**
+	 * Reference
+	 */
+	private ref2: React.RefObject<TextInput> = React.createRef();
+
+	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder } = this.props;
+		const { field, highlight, icon, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
 				<Icon style={styles.iconBasic} icon={icon[0]} color={Color.Dark} />
 				<TextInput
+					{...field}
+					ref={this.ref1}
 					style={styles.fieldBasic}
 					value={value[0] ? String(value[0]) : ""}
 					placeholder={placeholder[0]}
 					placeholderTextColor={Color.Muted}
 					keyboardType="numeric"
 					onChangeText={(text) => this.handleChange(0, text)}
+					onSubmitEditing={() => {
+						this.ref2.current.focus();
+					}}
 				/>
 				<Icon style={styles.iconBasic} icon={icon[1]} color={Color.Dark} />
 				<TextInput
+					{...field}
+					ref={this.ref2}
 					style={styles.fieldBasic}
 					value={value[1] ? String(value[1]) : ""}
 					placeholder={placeholder[1]}
@@ -81,6 +98,13 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 				)}
 			</View>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		this.ref1.current.focus();
 	}
 
 	/**

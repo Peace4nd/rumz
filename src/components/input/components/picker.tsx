@@ -2,7 +2,7 @@ import { Picker } from "@react-native-picker/picker";
 import { PickerItemProps } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
 import { View } from "react-native";
-import { IInput } from "..";
+import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
@@ -22,7 +22,7 @@ export interface IInputPicker extends IInput<string> {
 /**
  * Vyberovy vstup
  */
-export default class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> {
+export default class InputPicker extends React.PureComponent<IInputPicker, IInputPickerState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
@@ -68,6 +68,13 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 				)}
 			</View>
 		);
+	}
+
+	/**
+	 * Zamereni
+	 */
+	public focus(): void {
+		return;
 	}
 
 	/**

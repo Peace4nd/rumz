@@ -10,4 +10,5 @@ export { default as Loading } from "./loading";
 export { default as Navigation } from "./navigation";
 export { default as Rating } from "./rating";
 export { default as Route } from "./route";
+export { default as Tags } from "./tags";
 export { default as Typography } from "./typography";

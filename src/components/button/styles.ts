@@ -1,15 +1,22 @@
 import { StyleSheet } from "react-native";
-import { Measurement } from "../../styles";
+import { Color, Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
-	base: {
-		alignItems: "center",
-		flex: 1,
-		justifyContent: "center"
+	icon: {
+		marginRight: Measurement.Padding
+	},
+	label: {
+		color: Color.Highlight
 	},
 	wrapper: {
-		height: Measurement.Components.Button.Height,
-		width: Measurement.Components.Button.Height
+		alignItems: "center",
+		backgroundColor: Color.Base,
+		borderRadius: Measurement.Radius / 2,
+		elevation: 2,
+		flexDirection: "row",
+		justifyContent: "center",
+		paddingHorizontal: 2 * Measurement.Padding,
+		paddingVertical: Measurement.Padding
 	}
 });
 

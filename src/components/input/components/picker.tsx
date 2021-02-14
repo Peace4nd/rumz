@@ -38,7 +38,9 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		icon: null,
 		items: [],
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: ""
 	};

@@ -176,11 +176,11 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						field={{
-							onSubmitEditing: () => {
+						returnKey="next"
+						onSubmit={{
+							handler: () => {
 								this.fields[index + 1].focus();
-							},
-							returnKeyType: "next"
+							}
 						}}
 					/>
 				);
@@ -192,11 +192,11 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						field={{
-							onSubmitEditing: () => {
+						returnKey="next"
+						onSubmit={{
+							handler: () => {
 								this.fields[index + 1].focus();
-							},
-							returnKeyType: "next"
+							}
 						}}
 					/>
 				);
@@ -228,11 +228,11 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						field={{
-							onSubmitEditing: () => {
+						returnKey="next"
+						onSubmit={{
+							handler: () => {
 								this.fields[index + 1].focus();
-							},
-							returnKeyType: "next"
+							}
 						}}
 					/>
 				);
@@ -244,22 +244,15 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						field={{
-							onSubmitEditing: () => {
+						returnKey="next"
+						onSubmit={{
+							handler: () => {
 								this.fields[index + 1].focus();
-							},
-							returnKeyType: "next"
+							}
 						}}
 					/>
 				);
 		}
-
-		/*
-		field: {
-			onSubmitEditing: () => console.log("koko"),
-			returnKeyType: "next"
-		}
-		*/
 	}
 
 	/**

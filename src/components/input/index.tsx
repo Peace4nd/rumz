@@ -1,4 +1,5 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { ReturnKeyTypeOptions } from "react-native";
 import Date from "./components/date";
 import Image from "./components/image";
 import Multiline from "./components/multiline";
@@ -11,7 +12,7 @@ export interface IInputState {
 	filled: boolean;
 	valid: boolean;
 }
-export interface IInput<V, F = never> {
+export interface IInput<V> {
 	/**
 	 * Placeholder
 	 */
@@ -28,6 +29,31 @@ export interface IInput<V, F = never> {
 	onChange: (value: V, state: IInputState) => void;
 
 	/**
+	 * Odeslani
+	 */
+	onSubmit?: {
+		/**
+		 * Resetovat hodnotu
+		 */
+		reset?: boolean;
+
+		/**
+		 * Zrusit zamereni
+		 */
+		blur?: boolean;
+
+		/**
+		 * Callback
+		 */
+		handler?: () => void;
+	};
+
+	/**
+	 * Klavesa odeslani
+	 */
+	returnKey?: ReturnKeyTypeOptions;
+
+	/**
 	 * Ikona
 	 */
 	icon?: IconDefinition;
@@ -41,8 +67,6 @@ export interface IInput<V, F = never> {
 	 * Zvyrazneni
 	 */
 	highlight?: boolean;
-
-	field?: F;
 }
 
 export interface IInputCore {

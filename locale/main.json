@@ -21,5 +21,6 @@
 	"createImage": "Obrázek",
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
-	"overviewEmpty": "Kolekce je prázdná"
+	"overviewEmpty": "Kolekce je prázdná",
+	"optionsTitle": "Nastavení"
 }

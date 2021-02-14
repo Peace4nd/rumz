@@ -33,7 +33,9 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 		highlight: false,
 		icon: null,
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: 0
 	};

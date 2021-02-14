@@ -39,7 +39,9 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 		highlight: false,
 		icon: null,
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: [0, 0]
 	};
@@ -61,14 +63,13 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { field, highlight, icon, placeholder } = this.props;
+		const { highlight, icon, onSubmit, placeholder, returnKey } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
 				<Icon style={styles.iconBasic} icon={icon[0]} color={Color.Dark} />
 				<TextInput
-					{...field}
 					ref={this.ref1}
 					style={styles.fieldBasic}
 					value={value[0] ? String(value[0]) : ""}
@@ -79,10 +80,11 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 					onSubmitEditing={() => {
 						this.ref2.current.focus();
 					}}
+					blurOnSubmit={onSubmit?.blur ?? true}
+					returnKeyType={returnKey}
 				/>
 				<Icon style={styles.iconBasic} icon={icon[1]} color={Color.Dark} />
 				<TextInput
-					{...field}
 					ref={this.ref2}
 					style={styles.fieldBasic}
 					value={value[1] ? String(value[1]) : ""}
@@ -90,6 +92,9 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 					placeholderTextColor={Color.Muted}
 					keyboardType="numeric"
 					onChangeText={(text) => this.handleChange(1, text)}
+					onSubmitEditing={this.handleSubmit}
+					blurOnSubmit={onSubmit?.blur ?? true}
+					returnKeyType={returnKey}
 				/>
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
@@ -106,6 +111,24 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	public focus(): void {
 		this.ref1.current.focus();
 	}
+
+	/**
+	 * Odeslani hodnoty
+	 */
+	private handleSubmit = (): void => {
+		// rozlozeni props
+		const { onSubmit } = this.props;
+		// reset hodnoty
+		if (onSubmit.reset) {
+			this.setState({
+				value: [0, 0]
+			});
+		}
+		// handler
+		if (typeof onSubmit?.handler === "function") {
+			onSubmit.handler();
+		}
+	};
 
 	/**
 	 * Zmenova udalost

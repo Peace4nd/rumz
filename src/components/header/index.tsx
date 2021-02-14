@@ -73,7 +73,7 @@ export default class Header<I extends Record<string, string>> extends React.Pure
 			if (action.items) {
 				return (
 					<Menu onSelect={(value) => action.onPress(value)}>
-						<MenuTrigger>
+						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity }}>
 							<Icon icon={action.icon} color={Color.Highlight} />
 						</MenuTrigger>
 						<MenuOptions>

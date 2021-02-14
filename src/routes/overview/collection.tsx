@@ -1,7 +1,7 @@
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Text } from "react-native";
-import { Collection, Dialog, Route } from "../../components";
+import { Button, Collection, Dialog, Route } from "../../components";
 import { ICollectionRecord } from "../../types/collection";
 import { IOptions } from "../../types/options";
 import storage from "../../utils/storage";
@@ -58,7 +58,7 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 					actionRight: {
 						icon: faEllipsisV,
 						items: {
-							options: "Nastavení"
+							options: strings("optionsTitle")
 						},
 						onPress: (item) => {
 							switch (item) {
@@ -96,6 +96,7 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 				>
 					{/* TODO: tady doplnit "form" na zadavani poctu vypitych panaku */}
 					<Text>nejaky obsah pro zaznam: {selected?.id}</Text>
+					<Button label="kokos" icon={faAddressBook} onPress={null} />
 				</Dialog>
 			</Route.Wrapper>
 		);

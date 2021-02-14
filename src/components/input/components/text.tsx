@@ -35,7 +35,9 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 		highlight: false,
 		icon: null,
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: ""
 	};
@@ -52,20 +54,22 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { field, highlight, icon, placeholder } = this.props;
+		const { highlight, icon, onSubmit, placeholder, returnKey } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
 				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
 				<TextInput
-					{...field}
 					ref={this.ref}
 					style={styles.fieldBasic}
 					value={value}
 					placeholder={placeholder}
 					placeholderTextColor={Color.Muted}
 					onChangeText={this.handleChange}
+					onSubmitEditing={this.handleSubmit}
+					blurOnSubmit={onSubmit?.blur ?? true}
+					returnKeyType={returnKey}
 				/>
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
@@ -82,6 +86,24 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	public focus(): void {
 		this.ref.current.focus();
 	}
+
+	/**
+	 * Odeslani hodnoty
+	 */
+	private handleSubmit = (): void => {
+		// rozlozeni props
+		const { onSubmit } = this.props;
+		// reset hodnoty
+		if (onSubmit.reset) {
+			this.setState({
+				value: ""
+			});
+		}
+		// handler
+		if (typeof onSubmit?.handler === "function") {
+			onSubmit.handler();
+		}
+	};
 
 	/**
 	 * Zmenova udalost

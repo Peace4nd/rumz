@@ -104,9 +104,6 @@ export const Typography = StyleSheet.create({
  */
 export const Measurement = {
 	Components: {
-		Button: {
-			Height: 48
-		},
 		Collection: {
 			Height: 144
 		},

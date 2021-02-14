@@ -51,10 +51,11 @@ export interface IStorageCollectionArray<R extends IStorageRecord, I> {
 	/**
 	 * Aktualizace zaznamu v kolekci
 	 *
-	 * @param {R} record Zaznam
+	 * @param {I} id ID
+	 * @param {Partial<R>} record Zaznam
 	 * @returns {Promise<R[]>} Kompletni kolekce
 	 */
-	update: (record: R) => Promise<R[]>;
+	update: (id: I, record: Partial<R>) => Promise<R[]>;
 }
 
 /**
@@ -71,8 +72,8 @@ export interface IStorageCollectionObject<R> {
 	/**
 	 * Aktualizace zaznamu v kolekci
 	 *
-	 * @param {R} record Zaznam
+	 * @param {Partial<R>} record Zaznam
 	 * @returns {Promise<R>} Kompletni kolekce
 	 */
-	update: (record: R) => Promise<R>;
+	update: (record: Partial<R>) => Promise<R>;
 }

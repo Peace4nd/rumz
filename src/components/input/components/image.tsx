@@ -33,7 +33,9 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 		highlight: false,
 		icon: null,
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: null
 	};

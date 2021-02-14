@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center"
 	},
+	contentPadding: {
+		padding: 2 * Measurement.Padding
+	},
 	wrapper: {
 		backgroundColor: Color.Highlight,
 		flex: 1

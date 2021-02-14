@@ -38,7 +38,9 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 		icon: null,
 		lines: 5,
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: ""
 	};
@@ -55,14 +57,13 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { field, highlight, icon, lines, placeholder } = this.props;
+		const { highlight, icon, lines, onSubmit, placeholder, returnKey } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, styles.wrapperMultiline, highlight ? styles.wrapperHighlight : null]}>
 				<Icon style={[styles.iconBasic, styles.iconMultiline]} icon={icon} color={Color.Dark} />
 				<TextInput
-					{...field}
 					ref={this.ref}
 					style={[styles.fieldBasic, styles.fieldMultiline]}
 					value={value}
@@ -71,6 +72,9 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 					placeholder={placeholder}
 					placeholderTextColor={Color.Muted}
 					onChangeText={this.handleChange}
+					onSubmitEditing={this.handleSubmit}
+					blurOnSubmit={onSubmit?.blur ?? true}
+					returnKeyType={returnKey}
 				/>
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
@@ -87,6 +91,24 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 	public focus(): void {
 		this.ref.current.focus();
 	}
+
+	/**
+	 * Odeslani hodnoty
+	 */
+	private handleSubmit = (): void => {
+		// rozlozeni props
+		const { onSubmit } = this.props;
+		// reset hodnoty
+		if (onSubmit.reset) {
+			this.setState({
+				value: ""
+			});
+		}
+		// handler
+		if (typeof onSubmit?.handler === "function") {
+			onSubmit.handler();
+		}
+	};
 
 	/**
 	 * Zmenova udalost

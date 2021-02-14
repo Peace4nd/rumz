@@ -33,7 +33,9 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 		highlight: false,
 		icon: faCalendarAlt,
 		onChange: null,
+		onSubmit: null,
 		placeholder: null,
+		returnKey: "default",
 		validator: null,
 		value: null
 	};

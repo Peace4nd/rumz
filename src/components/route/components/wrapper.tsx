@@ -26,6 +26,11 @@ export interface IRoute<I> {
 	 * Navigace
 	 */
 	navigation?: INavigationTab[];
+
+	/**
+	 * Pouzit plny padding
+	 */
+	padding?: boolean;
 }
 
 /**
@@ -64,14 +69,16 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { busy, header, children, navigation } = this.props;
+		const { busy, header, children, navigation, padding } = this.props;
 		// sestaveni a vraceni
 		return (
 			<React.Fragment>
 				<StatusBar barStyle="default" backgroundColor={Color.Dark} />
 				<SafeAreaView style={styles.wrapper}>
 					<Header {...header} />
-					<View style={[styles.content, busy ? styles.contentBusy : null]}>{busy ? <Loading /> : children}</View>
+					<View style={[styles.content, busy ? styles.contentBusy : null, padding ? styles.contentPadding : null]}>
+						{busy ? <Loading /> : children}
+					</View>
 					<Navigation tabs={navigation} />
 				</SafeAreaView>
 			</React.Fragment>

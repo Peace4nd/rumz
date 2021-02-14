@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 	infoPortions: {
 		alignItems: "center",
 		backgroundColor: Color.Light,
-		borderRadius: Measurement.Radius,
+		borderRadius: Measurement.Radius / 2,
 		bottom: 0,
 		flexDirection: "row",
 		justifyContent: "center",

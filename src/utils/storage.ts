@@ -1,8 +1,19 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import merge from "deepmerge";
+import deepmerge from "deepmerge";
 import { ICollectionRecord } from "../types/collection";
 import { IOptions } from "../types/options";
 import { IStorageCollectionArray, IStorageCollectionObject, IStorageKey, IStorageRecord } from "../types/storage";
+
+/**
+ * Slouceni objektu
+ *
+ * @param {Partial<T>} x X
+ * @param {Partial<T>} y Y
+ * @returns {T} Objekt
+ */
+function merge<T>(x: Partial<T>, y: Partial<T>): T {
+	return deepmerge(x, y, { arrayMerge: (_, source) => source as unknown[] });
+}
 
 /**
  * Ulozeni dat
@@ -96,16 +107,17 @@ async function arrayPush<T extends IStorageRecord>(key: IStorageKey, record: T):
  * Aktualizace zaznamu v kolekci
  *
  * @param {IStorageKey} key Klic
- * @param {T} record Zaznam
+ * @param {string} id Identifikator
+ * @param {Partial<T>} record Zaznam
  * @returns {Promise<T[]>} Kolekce
  */
-async function arrayUpdate<T extends IStorageRecord>(key: IStorageKey, record: T): Promise<T[]> {
+async function arrayUpdate<T extends IStorageRecord>(key: IStorageKey, id: string, record: Partial<T>): Promise<T[]> {
 	// nacteni uloziste
 	const storage = await arrayRead<T>(key);
 	// nalezeni zaznamu
-	const index = storage.findIndex((rec) => rec.id === record.id);
+	const index = storage.findIndex((rec) => rec.id === id);
 	// aktualizace dat
-	storage[index] = record;
+	storage[index] = merge(storage[index], record);
 	// ulozeni date
 	await write(key, storage);
 	// vraceni kolekce
@@ -137,10 +149,10 @@ async function objectRead<T>(key: IStorageKey, defaults: T = {} as T): Promise<T
  * Aktualizace zaznamu v kolekci
  *
  * @param {IStorageKey} key Klic
- * @param {T} record Zaznam
+ * @param {Partial<T>} record Zaznam
  * @returns {Promise<T>} Kolekce
  */
-async function objectUpdate<T>(key: IStorageKey, record: T): Promise<T> {
+async function objectUpdate<T>(key: IStorageKey, record: Partial<T>): Promise<T> {
 	// nacteni uloziste
 	const storage = await objectRead<T>(key);
 	// aktualizace dat
@@ -159,14 +171,14 @@ export const collection: IStorageCollectionArray<ICollectionRecord, string> = {
 	push: async (record) => arrayPush("collection", record),
 	read: async () => arrayRead("collection"),
 	remove: async (id) => arrayRemove("collection", id),
-	update: async (record) => arrayUpdate("collection", record)
+	update: async (id, record) => arrayUpdate("collection", id, record)
 };
 
 /**
  * Nastaveni
  */
 export const options: IStorageCollectionObject<IOptions> = {
-	read: async () => objectRead("options", { dram: 40 }),
+	read: async () => objectRead("options", { dram: 40, properties: [] }),
 	update: async (record) => objectUpdate("options", record)
 };
 

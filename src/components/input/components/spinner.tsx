@@ -1,6 +1,8 @@
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { TextInput, View } from "react-native";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { IInput, IInputCore } from "..";
+import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
@@ -37,8 +39,8 @@ export default class InputNumber extends React.PureComponent<IInputSpinner, IInp
 	public static defaultProps: IInputSpinner = {
 		highlight: false,
 		icon: null,
-		max: -Infinity,
-		min: Infinity,
+		max: Infinity,
+		min: -Infinity,
 		onChange: null,
 		onSubmit: null,
 		placeholder: null,
@@ -49,35 +51,34 @@ export default class InputNumber extends React.PureComponent<IInputSpinner, IInp
 	};
 
 	/**
-	 * Reference
-	 */
-	private ref: React.RefObject<TextInput> = React.createRef();
-
-	/**
 	 * Render
 	 *
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, onSubmit, placeholder, returnKey } = this.props;
+		const { highlight, icon, placeholder } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
+			<View style={[styles.wrapperBasic, styles.wrapperSpinner, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
 				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 				<TextInput
-					ref={this.ref}
 					style={styles.fieldBasic}
 					value={value ? String(value) : ""}
 					placeholder={placeholder}
-					placeholderTextColor="Muted"
-					keyboardType="numeric"
-					onChangeText={this.handleChange}
-					onSubmitEditing={this.handleSubmit}
-					blurOnSubmit={onSubmit?.blur ?? true}
-					returnKeyType={returnKey}
+					placeholderTextColor={Color.Muted}
+					editable={false}
 				/>
+				<View style={styles.buttonGroup}>
+					<TouchableOpacity onPress={this.handleDecrease} style={styles.buttonElement}>
+						<Icon definition={faChevronDown} color="Base" />
+					</TouchableOpacity>
+					<TouchableOpacity onPress={this.handleIncrease} style={styles.buttonElement}>
+						<Icon definition={faChevronUp} color="Base" />
+					</TouchableOpacity>
+				</View>
+
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
 						{error}
@@ -91,45 +92,49 @@ export default class InputNumber extends React.PureComponent<IInputSpinner, IInp
 	 * Zamereni
 	 */
 	public focus(): void {
-		this.ref.current.focus();
+		return;
 	}
 
 	/**
-	 * Odeslani hodnoty
+	 * Zvyseni hodnoty
 	 */
-	private handleSubmit = (): void => {
+	private handleIncrease = (): void => {
 		// rozlozeni props
-		const { onSubmit } = this.props;
-		// reset hodnoty
-		if (onSubmit.reset) {
-			this.setState({
-				value: 0
-			});
+		const { max, step } = this.props;
+		// vypocet
+		let value = this.state.value + step;
+		if (value > max) {
+			value = max;
 		}
-		// handler
-		if (typeof onSubmit?.handler === "function") {
-			onSubmit.handler();
-		}
-	};
-
-	/**
-	 * Zmenova udalost
-	 *
-	 * @param {string} value Hodnota
-	 */
-	private handleChange = (value: string): void => {
-		// rozlozeni props
-		const { validator } = this.props;
-		// parsovani hodnoty
-		const parsed = parseInt(value, 10) || 0;
 		// aktualizace
 		this.setState(
 			{
-				error: validator ? validator(parsed) : null,
-				value: parsed
+				value
 			},
 			() => {
-				this.props.onChange(parsed, { filled: parsed > 0, valid: this.state.error === null });
+				this.props.onChange(value, { filled: value > 0, valid: true });
+			}
+		);
+	};
+
+	/**
+	 * Snizeni hodnoty
+	 */
+	private handleDecrease = (): void => {
+		// rozlozeni props
+		const { min, step } = this.props;
+		// vypocet
+		let value = this.state.value - step;
+		if (value < min) {
+			value = min;
+		}
+		// aktualizace
+		this.setState(
+			{
+				value
+			},
+			() => {
+				this.props.onChange(value, { filled: value > 0, valid: true });
 			}
 		);
 	};

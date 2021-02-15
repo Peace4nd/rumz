@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 	},
 	wrapper: {
 		alignItems: "center",
-		backgroundColor: opacify(Color.Text, 0.5),
+		backgroundColor: opacify(Color.Text, 0.75),
 		flex: 1,
 		justifyContent: "center"
 	},

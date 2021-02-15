@@ -132,16 +132,16 @@ export const Measurement = {
 			Height: 144
 		},
 		Header: {
-			Height: 56
+			Height: Size["7x"]
 		},
 		Input: {
-			Error: 24,
-			Height: 48
+			Error: Size["3x"],
+			Height: Size["6x"]
 		},
 		Navigation: {
-			Height: 80
+			Height: Size["10x"]
 		}
 	},
-	Padding: 8,
-	Radius: 8
+	Padding: Size["1x"],
+	Radius: Size["1x"]
 };

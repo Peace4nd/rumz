@@ -7,7 +7,9 @@ import Number from "./components/number";
 import Picker from "./components/picker";
 import Range from "./components/range";
 import Rating from "./components/rating";
+import Spinner from "./components/spinner";
 import Text from "./components/text";
+
 export interface IInputState {
 	filled: boolean;
 	valid: boolean;
@@ -81,5 +83,6 @@ export default {
 	Picker,
 	Range,
 	Rating,
+	Spinner,
 	Text
 };

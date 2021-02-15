@@ -1,9 +1,22 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { Color, Measurement, Typography } from "../../styles";
+import { Color, Measurement, Size, Typography } from "../../styles";
 
 const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
+	buttonElement: {
+		alignItems: "center",
+		aspectRatio: 1,
+		height: Measurement.Components.Input.Height,
+		justifyContent: "center"
+	},
+	buttonGroup: {
+		bottom: 0,
+		flexDirection: "row",
+		position: "absolute",
+		right: 0,
+		top: 0
+	},
 	error: {
 		backgroundColor: "red",
 		borderTopLeftRadius: Measurement.Radius,
@@ -11,7 +24,7 @@ const styles = StyleSheet.create({
 		color: "white",
 		height: Measurement.Components.Input.Error,
 		left: -StyleSheet.hairlineWidth,
-		paddingHorizontal: (Measurement.Components.Input.Height - Measurement.Icon) / 2,
+		paddingHorizontal: Measurement.Padding,
 		position: "absolute",
 		right: -StyleSheet.hairlineWidth,
 		textAlignVertical: "center",
@@ -21,7 +34,6 @@ const styles = StyleSheet.create({
 		...Typography.Body1,
 		color: Color.Text,
 		flex: 1,
-		paddingVertical: (Measurement.Components.Input.Height - Measurement.Icon) / 2,
 		textAlignVertical: "center"
 	},
 	fieldMultiline: {
@@ -31,14 +43,14 @@ const styles = StyleSheet.create({
 		color: Color.Muted
 	},
 	iconBasic: {
-		marginRight: (Measurement.Components.Input.Height - Measurement.Icon) / 2
+		marginRight: Measurement.Padding * 2
 	},
 	iconBasicVertical: {
-		marginBottom: (Measurement.Components.Input.Height - Measurement.Icon) / 2,
+		marginBottom: Measurement.Padding,
 		marginRight: 0
 	},
 	iconMultiline: {
-		marginTop: (Measurement.Components.Input.Height - Measurement.Icon) / 2
+		marginTop: Measurement.Padding
 	},
 	image: {
 		height: width / 2 - 2 * Measurement.Padding,
@@ -55,8 +67,8 @@ const styles = StyleSheet.create({
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: Color.Highlight,
-		marginLeft: 48,
-		marginRight: 48
+		marginLeft: Size["6x"],
+		marginRight: Size["6x"]
 	},
 	wrapperBasic: {
 		alignItems: "center",
@@ -65,7 +77,7 @@ const styles = StyleSheet.create({
 		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: "row",
 		height: Measurement.Components.Input.Height,
-		paddingHorizontal: (Measurement.Components.Input.Height - Measurement.Icon) / 2
+		paddingHorizontal: Measurement.Padding * 2
 	},
 	wrapperError: {
 		borderColor: "red",
@@ -92,6 +104,9 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 		height: "auto",
 		minHeight: Measurement.Components.Input.Height
+	},
+	wrapperSpinner: {
+		paddingRight: Measurement.Components.Input.Height * 2
 	}
 });
 

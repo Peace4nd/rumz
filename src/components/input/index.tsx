@@ -8,6 +8,7 @@ import Picker from "./components/picker";
 import Range from "./components/range";
 import Rating from "./components/rating";
 import Spinner from "./components/spinner";
+import Tags from "./components/tags";
 import Text from "./components/text";
 
 export interface IInputState {
@@ -84,5 +85,6 @@ export default {
 	Range,
 	Rating,
 	Spinner,
+	Tags,
 	Text
 };

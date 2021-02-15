@@ -54,12 +54,12 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder } = this.props;
+		const { icon, placeholder } = this.props;
 		const { value, visible } = this.state;
 		// sestaveni a vraceni
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
-				<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
+				<View style={[styles.wrapperBasic]}>
 					{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}

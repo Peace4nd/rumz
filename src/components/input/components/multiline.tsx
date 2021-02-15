@@ -57,11 +57,11 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, lines, onSubmit, placeholder, returnKey } = this.props;
+		const { icon, lines, onSubmit, placeholder, returnKey } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, styles.wrapperMultiline, highlight ? styles.wrapperHighlight : null]}>
+			<View style={[styles.wrapperBasic, styles.wrapperSpring, { alignItems: "flex-start" }]}>
 				{icon && <Icon style={[styles.iconBasic, styles.iconMultiline]} definition={icon} color="Dark" />}
 				<TextInput
 					ref={this.ref}

@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ReturnKeyType, ScrollView, View } from "react-native";
 import Input, { IInputCore, IInputState } from "../input";
 import { IInputDate } from "../input/components/date";
 import { IInputImage } from "../input/components/image";
@@ -8,6 +8,7 @@ import { IInputNumber } from "../input/components/number";
 import { IInputPicker } from "../input/components/picker";
 import { IInputRange } from "../input/components/range";
 import { IInputRating } from "../input/components/rating";
+import { IInputTags } from "../input/components/tags";
 import { IInputText } from "../input/components/text";
 import styles from "./styles";
 /*
@@ -61,6 +62,10 @@ export interface IFormFieldText<V> extends IFormFieldShared<V>, Omit<IInputText,
 	type: "text";
 }
 
+export interface IFormFieldTags<V> extends IFormFieldShared<V>, Omit<IInputTags, "onChange" | "value"> {
+	type: "tags";
+}
+
 export interface IFormFieldHidden<V> extends IFormFieldShared<V> {
 	type: "hidden";
 	value: unknown;
@@ -75,6 +80,7 @@ export type IFormField<V> =
 	| IFormFieldRange<V>
 	| IFormFieldRating<V>
 	| IFormFieldText<V>
+	| IFormFieldTags<V>
 	| IFormFieldHidden<V>;
 
 /**
@@ -120,13 +126,16 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 	public render(): JSX.Element {
 		// rozlozeni props
 		const { fields } = this.props;
+		// definice
+		const visible = fields.filter((field) => field.type !== "hidden");
+		const count = visible.length;
 		// sestaveni a vraceni
 		return (
 			<ScrollView keyboardDismissMode="on-drag" style={styles.wrapper}>
-				{fields.map((field, index) => (
+				{visible.map((field, index) => (
 					<React.Fragment key={index}>
 						{index > 0 && <View style={styles.rowGap} />}
-						{this.renderField(field, index)}
+						{this.renderField(field, index, count - 1 === index)}
 					</React.Fragment>
 				))}
 			</ScrollView>
@@ -138,14 +147,14 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 	 *
 	 * @param {IFormField<V>} field Pole
 	 * @param {number} index Index
+	 * @param {boolean} last Posledni
 	 * @returns {JSX.Element} Element
 	 */
-	private renderField(field: IFormField<V>, index: number): JSX.Element {
+	private renderField(field: IFormField<V>, index: number, last: boolean): JSX.Element {
 		// rozlozeni props
 		const { name, type, ...rest } = field;
-
-		// ref={(ref) => { this.fields[index] = ref; }}
-
+		// definice
+		const returnKey: ReturnKeyType = last ? "done" : "next";
 		// sestaveni
 		switch (type) {
 			case "date":
@@ -176,10 +185,10 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						returnKey="next"
+						returnKey={returnKey}
 						onSubmit={{
 							handler: () => {
-								this.fields[index + 1].focus();
+								this.handleFocus(index);
 							}
 						}}
 					/>
@@ -192,10 +201,10 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						returnKey="next"
+						returnKey={returnKey}
 						onSubmit={{
 							handler: () => {
-								this.fields[index + 1].focus();
+								this.handleFocus(index);
 							}
 						}}
 					/>
@@ -228,10 +237,26 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						returnKey="next"
+						returnKey={returnKey}
 						onSubmit={{
 							handler: () => {
-								this.fields[index + 1].focus();
+								this.handleFocus(index);
+							}
+						}}
+					/>
+				);
+			case "tags":
+				return (
+					<Input.Tags
+						{...(rest as IInputTags)}
+						ref={(ref) => {
+							this.fields[index] = ref;
+						}}
+						onChange={(...input) => this.handleChange(name, ...input)}
+						returnKey={returnKey}
+						onSubmit={{
+							handler: () => {
+								this.handleFocus(index);
 							}
 						}}
 					/>
@@ -244,14 +269,25 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 							this.fields[index] = ref;
 						}}
 						onChange={(...input) => this.handleChange(name, ...input)}
-						returnKey="next"
+						returnKey={returnKey}
 						onSubmit={{
 							handler: () => {
-								this.fields[index + 1].focus();
+								this.handleFocus(index);
 							}
 						}}
 					/>
 				);
+		}
+	}
+
+	/**
+	 * Posun zamereni pole
+	 *
+	 * @param {number} index Index
+	 */
+	private handleFocus(index: number): void {
+		if (this.fields[index + 1]) {
+			this.fields[index + 1].focus();
 		}
 	}
 

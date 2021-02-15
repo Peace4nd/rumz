@@ -1,6 +1,5 @@
 import { faChevronLeft, faGlassWhiskey, faTags } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { Keyboard } from "react-native";
 import { Input, Route, Tags, Typography } from "../../components";
 import { IOptions } from "../../types/options";
 import storage from "../../utils/storage";
@@ -121,19 +120,5 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 				storage.options.update({ properties: this.state.values.properties });
 			}
 		);
-	};
-
-	/**
-	 * Ulozeni
-	 */
-	private handleSave = (): void => {
-		// schovani klavesnice
-		Keyboard.dismiss();
-
-		// rozlozeni props
-		const { dram, properties } = this.state.values;
-
-		console.log(dram);
-		console.log(properties);
 	};
 }

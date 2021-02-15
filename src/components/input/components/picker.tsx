@@ -51,11 +51,11 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, items, placeholder } = this.props;
+		const { icon, items, placeholder } = this.props;
 		const { value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
+			<View style={styles.wrapperBasic}>
 				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
 					{items.map((item) => (
@@ -63,7 +63,7 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 					))}
 				</Picker>
 				{!value && (
-					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay, highlight ? styles.placeholderHighlight : null]}>
+					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay]}>
 						{placeholder}
 					</Typography>
 				)}

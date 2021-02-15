@@ -63,11 +63,11 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, onSubmit, placeholder, returnKey } = this.props;
+		const { icon, onSubmit, placeholder, returnKey } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
+			<View style={[styles.wrapperBasic]}>
 				{icon && <Icon style={styles.iconBasic} definition={icon[0]} color="Dark" />}
 				<TextInput
 					ref={this.ref1}

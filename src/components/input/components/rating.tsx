@@ -46,11 +46,11 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon } = this.props;
+		const { icon } = this.props;
 		const { value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
+			<View style={[styles.wrapperBasic]}>
 				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 				<Rating value={value} onChange={this.handleChange} />
 			</View>

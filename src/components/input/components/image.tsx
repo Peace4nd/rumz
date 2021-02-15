@@ -54,13 +54,13 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { highlight, icon, placeholder, value } = this.props;
+		const { icon, placeholder, value } = this.props;
 		const { selected } = this.state;
 		// cesta k obrazku
 		const path = selected?.uri || value?.path;
 		// sestaveni a vraceni
 		return (
-			<Pressable style={[styles.wrapperBasic, styles.wrapperImage, highlight ? styles.wrapperHighlight : null]} onPress={this.handleClick}>
+			<Pressable style={[styles.wrapperBasic, styles.wrapperImage]} onPress={this.handleClick}>
 				{!path && (
 					<View style={styles.wrapperFill}>
 						{icon && <Icon style={[styles.iconBasic, styles.iconBasicVertical]} definition={icon} color="Dark" size="6x" />}

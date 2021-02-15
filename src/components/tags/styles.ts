@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
 	},
 	itemGap: {},
 	wrapper: {
+		backgroundColor: "orange",
 		flex: 1,
 		flexDirection: "row",
 		flexWrap: "wrap"

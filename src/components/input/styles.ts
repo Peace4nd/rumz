@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
 		...Typography.Body1,
 		color: Color.Text,
 		flex: 1,
+		height: "100%",
 		textAlignVertical: "center"
 	},
 	fieldMultiline: {
@@ -42,15 +43,19 @@ const styles = StyleSheet.create({
 	fieldPlaceholder: {
 		color: Color.Muted
 	},
+	fieldTags: {
+		alignItems: "flex-start",
+		flex: 1,
+		justifyContent: "center"
+	},
 	iconBasic: {
 		marginRight: Measurement.Padding * 2
 	},
 	iconBasicVertical: {
-		marginBottom: Measurement.Padding,
 		marginRight: 0
 	},
 	iconMultiline: {
-		marginTop: Measurement.Padding
+		marginTop: 1.5 * 8
 	},
 	image: {
 		height: width / 2 - 2 * Measurement.Padding,
@@ -60,9 +65,6 @@ const styles = StyleSheet.create({
 		color: Color.Muted,
 		textAlign: "left",
 		textAlignVertical: "center"
-	},
-	placeholderHighlight: {
-		backgroundColor: Color.Light
 	},
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
@@ -90,23 +92,20 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center"
 	},
-	wrapperHighlight: {
-		backgroundColor: Color.Light,
-		borderColor: Color.Base
-	},
 	wrapperImage: {
 		height: width / 2,
 		justifyContent: "center",
-		marginHorizontal: width / 6,
-		padding: Measurement.Padding
-	},
-	wrapperMultiline: {
-		alignItems: "flex-start",
-		height: "auto",
-		minHeight: Measurement.Components.Input.Height
+		marginHorizontal: width / 6
 	},
 	wrapperSpinner: {
 		paddingRight: Measurement.Components.Input.Height * 2
+	},
+	wrapperSpring: {
+		height: "auto",
+		minHeight: Measurement.Components.Input.Height
+	},
+	wrapperTags: {
+		paddingRight: Measurement.Components.Input.Height
 	}
 });
 

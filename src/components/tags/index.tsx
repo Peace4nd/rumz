@@ -1,8 +1,8 @@
 import React from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import confirm from "../../utils/confirm";
 import Typography from "../typography";
 import styles from "./styles";
-
 export interface ITagsItem {
 	value: string;
 	label: string;
@@ -12,6 +12,7 @@ export interface ITagsItem {
 export interface ITags {
 	items: string[];
 	onPress: (tag: string) => void;
+	onLongPress?: (tag: string) => void;
 }
 
 /**
@@ -20,33 +21,24 @@ export interface ITags {
  * @param {ITags} props Vlastnosti
  * @returns {JSX.Element} Element
  */
-const Icon = (props: ITags): JSX.Element => {
+const Tags = (props: ITags): JSX.Element => {
 	// rozlozeni props
-	const { items, onPress } = props;
+	const { items, onLongPress, onPress } = props;
 	// sestaveni a vraceni
-
 	return (
 		<View style={styles.wrapper}>
 			{items.map((item, index) => (
 				<TouchableOpacity
 					key={index}
-					onPress={() => {
-						Alert.alert(
-							"smazat jo?",
-							"lorem ipsum dolit sit amet",
-							[
-								{
-									onPress: () => {
-										onPress(item);
-									},
-									text: "jarp"
-								},
-								{ text: "narp" }
-							],
-							{
-								cancelable: false
-							}
-						);
+					onPress={confirm.delete({
+						onConfirm: () => {
+							onPress(item);
+						}
+					})}
+					onLongPress={() => {
+						if (typeof onLongPress === "function") {
+							onLongPress(item);
+						}
 					}}
 				>
 					<Typography type="Body1" style={styles.item}>
@@ -58,4 +50,4 @@ const Icon = (props: ITags): JSX.Element => {
 	);
 };
 
-export default Icon;
+export default Tags;

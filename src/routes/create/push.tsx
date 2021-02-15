@@ -30,6 +30,8 @@ import strings from "../../utils/strings";
 interface ICreateState {
 	record: ICollectionRecord & { image: IFileDocument };
 	working: boolean;
+	tags: string[];
+	loaded: boolean;
 }
 
 interface ICreateParams {
@@ -44,9 +46,20 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 	 * Vychozi stav
 	 */
 	public state: ICreateState = {
+		loaded: false,
 		record: null,
+		tags: [],
 		working: false
 	};
+
+	public componentDidMount(): void {
+		storage.options.read().then((options) => {
+			this.setState({
+				loaded: true,
+				tags: options.properties
+			});
+		});
+	}
 
 	/**
 	 * Vlastnosti hlavicky
@@ -57,7 +70,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={this.state.working}
+				busy={this.state.working || !this.state.loaded}
 				header={{
 					actionLeft: {
 						icon: faTimes,
@@ -105,9 +118,10 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 						},
 						{
 							icon: faPalette,
+							items: this.state.tags,
 							name: "color",
 							placeholder: strings("createCharacteristicsColor"),
-							type: "text"
+							type: "tags"
 						},
 						{
 							icon: faFlask,
@@ -173,6 +187,8 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 						}
 					]}
 					onChange={(values) => {
+						console.log(values);
+
 						this.setState({
 							record: values
 						});

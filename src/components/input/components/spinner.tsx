@@ -1,29 +1,32 @@
 import React from "react";
 import { TextInput, View } from "react-native";
 import { IInput, IInputCore } from "..";
-import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
 
-interface IInputTextState {
-	value: string;
+interface IInputSpinnerState {
+	value: number;
 	error: string;
 }
 
 /**
  * Dostupne vlastnosti
  */
-export type IInputText = IInput<string>;
+export interface IInputSpinner extends IInput<number> {
+	max: number;
+	min: number;
+	step: number;
+}
 
 /**
- * Textovy vstup
+ * Ciselny vstup
  */
-export default class InputText extends React.PureComponent<IInputText, IInputTextState> implements IInputCore {
+export default class InputNumber extends React.PureComponent<IInputSpinner, IInputSpinnerState> implements IInputCore {
 	/**
 	 * Vychozi stav
 	 */
-	public state: IInputTextState = {
+	public state: IInputSpinnerState = {
 		error: null,
 		value: this.props.value
 	};
@@ -31,15 +34,18 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	/**
 	 * Vychozi vlastnosti
 	 */
-	public static defaultProps: IInputText = {
+	public static defaultProps: IInputSpinner = {
 		highlight: false,
 		icon: null,
+		max: -Infinity,
+		min: Infinity,
 		onChange: null,
 		onSubmit: null,
 		placeholder: null,
 		returnKey: "default",
+		step: 1,
 		validator: null,
-		value: ""
+		value: 0
 	};
 
 	/**
@@ -63,9 +69,10 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 				<TextInput
 					ref={this.ref}
 					style={styles.fieldBasic}
-					value={value}
+					value={value ? String(value) : ""}
 					placeholder={placeholder}
-					placeholderTextColor={Color.Muted}
+					placeholderTextColor="Muted"
+					keyboardType="numeric"
 					onChangeText={this.handleChange}
 					onSubmitEditing={this.handleSubmit}
 					blurOnSubmit={onSubmit?.blur ?? true}
@@ -96,7 +103,7 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 		// reset hodnoty
 		if (onSubmit.reset) {
 			this.setState({
-				value: ""
+				value: 0
 			});
 		}
 		// handler
@@ -113,14 +120,16 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	private handleChange = (value: string): void => {
 		// rozlozeni props
 		const { validator } = this.props;
+		// parsovani hodnoty
+		const parsed = parseInt(value, 10) || 0;
 		// aktualizace
 		this.setState(
 			{
-				error: validator ? validator(value) : null,
-				value
+				error: validator ? validator(parsed) : null,
+				value: parsed
 			},
 			() => {
-				this.props.onChange(this.state.value, { filled: this.state.value !== "", valid: this.state.error === null });
+				this.props.onChange(parsed, { filled: parsed > 0, valid: this.state.error === null });
 			}
 		);
 	};

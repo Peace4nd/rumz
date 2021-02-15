@@ -4,14 +4,12 @@ import { Color, Measurement } from "../../styles";
 const styles = StyleSheet.create({
 	flagWrapper: {
 		alignItems: "center",
+		aspectRatio: 1.5,
 		backgroundColor: Color.Highlight,
-		borderColor: Color.Muted,
 		borderRadius: Measurement.Radius / 2,
-		borderWidth: StyleSheet.hairlineWidth,
-		height: (Measurement.Icon * 2) / 1.5,
+		height: "100%",
 		justifyContent: "center",
-		overflow: "hidden",
-		width: Measurement.Icon * 2
+		overflow: "hidden"
 	}
 });
 

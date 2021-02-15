@@ -4,7 +4,6 @@ import React from "react";
 import { View } from "react-native";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { IInput, IInputCore } from "..";
-import { Color } from "../../../styles";
 import Icon from "../../icon";
 import styles from "../styles";
 
@@ -57,11 +56,11 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
+				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 
 				<Menu onSelect={(value) => action.onPress(value)}>
 					<MenuTrigger>
-						<Icon icon={faTags} color={Color.Highlight} />
+						<Icon definition={faTags} color="Highlight" />
 					</MenuTrigger>
 					<MenuOptions>
 						{Object.entries(action.items).map((entry) => (

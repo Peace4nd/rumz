@@ -1,5 +1,5 @@
 import React from "react";
-import { TextInput, TextInputProps, View } from "react-native";
+import { TextInput, View } from "react-native";
 import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
@@ -14,7 +14,7 @@ interface IInputNumberState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputNumber = IInput<number, TextInputProps>;
+export type IInputNumber = IInput<number>;
 
 /**
  * Ciselny vstup
@@ -59,7 +59,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null, error ? styles.wrapperError : null]}>
-				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
+				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 				<TextInput
 					ref={this.ref}
 					style={styles.fieldBasic}

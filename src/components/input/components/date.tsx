@@ -4,7 +4,6 @@ import moment from "moment";
 import React from "react";
 import { TouchableWithoutFeedback, View } from "react-native";
 import { IInput, IInputCore } from "..";
-import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
@@ -61,7 +60,7 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
 				<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-					<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
+					{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
 					</Typography>

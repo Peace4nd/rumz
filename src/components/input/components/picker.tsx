@@ -3,7 +3,6 @@ import { PickerItemProps } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
 import { View } from "react-native";
 import { IInput, IInputCore } from "..";
-import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
@@ -57,7 +56,7 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
+				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
 					{items.map((item) => (
 						<Picker.Item key={item.value} {...item} />

@@ -1,5 +1,5 @@
 import React from "react";
-import { TextInput, TextInputProps, View } from "react-native";
+import { TextInput, View } from "react-native";
 import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
@@ -14,7 +14,7 @@ interface IInputMultilineState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputMultiline extends IInput<string, TextInputProps> {
+export interface IInputMultiline extends IInput<string> {
 	lines: number;
 }
 
@@ -62,7 +62,7 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, styles.wrapperMultiline, highlight ? styles.wrapperHighlight : null]}>
-				<Icon style={[styles.iconBasic, styles.iconMultiline]} icon={icon} color={Color.Dark} />
+				{icon && <Icon style={[styles.iconBasic, styles.iconMultiline]} definition={icon} color="Dark" />}
 				<TextInput
 					ref={this.ref}
 					style={[styles.fieldBasic, styles.fieldMultiline]}

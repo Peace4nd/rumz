@@ -4,6 +4,11 @@ import { StyleSheet } from "react-native";
 export * from "./utils";
 
 /**
+ * Zakladni rozmer
+ */
+export const Root: number = 8;
+
+/**
  * Barvy
  */
 export const Color = {
@@ -12,7 +17,26 @@ export const Color = {
 	Highlight: "#fafafa",
 	Light: "#aee571",
 	Muted: "#757575",
-	Text: "#212121"
+	Text: "#212121",
+	White: "#ffffff"
+};
+
+/**
+ * Definice velikosti
+ */
+export const Size = {
+	"10x": Root * 10,
+	"11x": Root * 11,
+	"12x": Root * 12,
+	"1x": Root * 1,
+	"2x": Root * 2,
+	"3x": Root * 3,
+	"4x": Root * 4,
+	"5x": Root * 5,
+	"6x": Root * 6,
+	"7x": Root * 7,
+	"8x": Root * 8,
+	"9x": Root * 9
 };
 
 /**
@@ -118,7 +142,6 @@ export const Measurement = {
 			Height: 80
 		}
 	},
-	Icon: 24,
 	Padding: 8,
 	Radius: 8
 };

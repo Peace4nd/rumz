@@ -2,7 +2,6 @@ import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { Color } from "../../styles";
 import Icon from "../icon";
 import styles from "./styles";
 
@@ -49,7 +48,7 @@ export default class Rating extends React.PureComponent<IRating> {
 		for (let i = 0; i < 10; i++) {
 			stars.push(
 				<TouchableOpacity key={i} onPress={() => onChange(i + 1)}>
-					<Icon icon={value > i ? faStarSolid : faStarRegular} color={value > i ? Color.Base : Color.Muted} />
+					<Icon definition={value > i ? faStarSolid : faStarRegular} color={value > i ? "Base" : "Muted"} />
 				</TouchableOpacity>
 			);
 		}

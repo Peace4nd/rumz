@@ -2,7 +2,6 @@ import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { FlatList, Image, ListRenderItemInfo, Pressable, View } from "react-native";
 import { CountryFlag, Icon } from "..";
-import { Color, Measurement } from "../../styles";
 import { ICollectionRecord } from "../../types/collection";
 import strings from "../../utils/strings";
 import Typography from "../typography";
@@ -61,7 +60,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 		if (records.length === 0) {
 			return (
 				<View style={styles.emptyWrapper}>
-					<Icon icon={faListUl} size={Measurement.Icon * 3} color={Color.Muted} />
+					<Icon definition={faListUl} size="9x" color="Muted" />
 					<Typography type="Headline4" style={styles.emptyText}>
 						{strings("overviewEmpty")}
 					</Typography>
@@ -99,8 +98,9 @@ export default class Collection extends React.PureComponent<ICollection> {
 					</Typography>
 					<View style={styles.infoAdditional}>
 						<CountryFlag code={item.origin} />
+						<View style={styles.infoRipening}>{this.renderRipening(item)}</View>
 						<View style={styles.infoPortions}>
-							<Icon icon={faGlassWhiskey} size={Measurement.Icon / 2} style={styles.infoPortionsIcon} />
+							<Icon definition={faGlassWhiskey} size="2x" style={styles.infoPortionsIcon} />
 							<Typography type="Body2">{Math.ceil((item.volume - item.drunk * dram) / dram)}x</Typography>
 						</View>
 					</View>
@@ -108,4 +108,34 @@ export default class Collection extends React.PureComponent<ICollection> {
 			</Pressable>
 		);
 	};
+
+	/**
+	 * Zrani
+	 *
+	 * @param {ICollectionRecord} item Polozka kolekce
+	 * @returns {JSX.Element} Element polozky
+	 */
+	private renderRipening(item: ICollectionRecord): JSX.Element {
+		if (item.ripening[0] && item.ripening[1]) {
+			return (
+				<Typography>
+					{item.ripening[0]} - {item.ripening[1]} {strings("overviewRipeningYears")}
+				</Typography>
+			);
+		} else {
+			if (item.ripening[0]) {
+				return (
+					<Typography>
+						&gt; {item.ripening[0]} {strings("overviewRipeningYears")}
+					</Typography>
+				);
+			} else {
+				return (
+					<Typography>
+						&lt; {item.ripening[1]} {strings("overviewRipeningYears")}
+					</Typography>
+				);
+			}
+		}
+	}
 }

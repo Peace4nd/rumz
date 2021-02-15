@@ -3,7 +3,6 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { Icon } from "..";
-import { Color } from "../../styles";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -74,7 +73,7 @@ export default class Header<I extends Record<string, string>> extends React.Pure
 				return (
 					<Menu onSelect={(value) => action.onPress(value)}>
 						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity }}>
-							<Icon icon={action.icon} color={Color.Highlight} />
+							<Icon definition={action.icon} color="Highlight" />
 						</MenuTrigger>
 						<MenuOptions>
 							{Object.entries(action.items).map((entry) => (
@@ -89,7 +88,7 @@ export default class Header<I extends Record<string, string>> extends React.Pure
 			// vychozi akce
 			return (
 				<TouchableOpacity onPress={() => action.onPress()} disabled={action.disabled || false}>
-					<Icon icon={action.icon} color={Color.Highlight} />
+					<Icon definition={action.icon} color="Highlight" />
 				</TouchableOpacity>
 			);
 		}

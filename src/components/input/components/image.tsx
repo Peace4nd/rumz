@@ -3,7 +3,6 @@ import { Image, Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import FetchBlob from "react-native-fetch-blob";
 import { IInput, IInputCore } from "..";
-import { Color, Measurement } from "../../../styles";
 import { IFileDocument } from "../../../types/file";
 import Icon from "../../icon";
 import Typography from "../../typography";
@@ -64,7 +63,7 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 			<Pressable style={[styles.wrapperBasic, styles.wrapperImage, highlight ? styles.wrapperHighlight : null]} onPress={this.handleClick}>
 				{!path && (
 					<View style={styles.wrapperFill}>
-						<Icon style={[styles.iconBasic, styles.iconBasicVertical]} icon={icon} color={Color.Dark} size={Measurement.Icon * 2} />
+						{icon && <Icon style={[styles.iconBasic, styles.iconBasicVertical]} definition={icon} color="Dark" size="6x" />}
 						{placeholder && (
 							<Typography type="Body1" style={styles.placeholder}>
 								{placeholder}

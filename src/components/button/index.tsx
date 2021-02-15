@@ -1,7 +1,6 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import { Color, Measurement } from "../../styles";
 import Icon from "../icon";
 import Typography from "../typography";
 import styles from "./styles";
@@ -38,7 +37,7 @@ const Button = (props: IButton): JSX.Element => {
 	// sestaveni a vraceni
 	return (
 		<TouchableOpacity style={styles.wrapper} onPress={onPress}>
-			{icon && <Icon icon={icon} style={styles.icon} color={Color.Highlight} size={Measurement.Icon * 0.75} />}
+			{icon && <Icon definition={icon} style={styles.icon} color="Highlight" size="2x" />}
 			{label && (
 				<Typography type="Button" style={styles.label}>
 					{label}

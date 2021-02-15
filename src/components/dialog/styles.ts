@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 import { Color, Measurement, opacify } from "../../styles";
 
 const styles = StyleSheet.create({
+	contentButton: {
+		flex: 0,
+		justifyContent: "center"
+	},
 	contentChildren: {
 		alignItems: "center",
 		flex: 1,
@@ -28,7 +32,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		margin: Measurement.Padding,
-		padding: Measurement.Padding,
+		padding: Measurement.Padding * 2,
 		width: "75%"
 	},
 	contentWrapperFullscreen: {

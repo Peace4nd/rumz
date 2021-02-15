@@ -1,16 +1,16 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement, opacify } from "../../styles";
+import { Color, opacify, Size } from "../../styles";
 
 const styles = StyleSheet.create({
 	indicator: {
 		borderBottomColor: Color.Base,
 		borderLeftColor: Color.Highlight,
-		borderRadius: Measurement.Icon,
+		borderRadius: Size["3x"],
 		borderRightColor: Color.Base,
 		borderTopColor: Color.Base,
 		borderWidth: 4,
-		height: Measurement.Icon * 2,
-		width: Measurement.Icon * 2
+		height: Size["6x"],
+		width: Size["6x"]
 	},
 	wrapper: {
 		...StyleSheet.absoluteFillObject,

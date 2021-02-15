@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement } from "../../styles";
+import { Color, Measurement, Size } from "../../styles";
 
 const styles = StyleSheet.create({
 	emptyText: {
@@ -12,11 +12,14 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	infoAdditional: {
-		flex: 1,
-		justifyContent: "flex-end"
+		alignItems: "center",
+		flex: 0,
+		flexDirection: "row",
+		height: Size["4x"],
+		justifyContent: "space-between"
 	},
 	infoManufacturer: {
-		flex: 0,
+		flex: 1,
 		marginBottom: Measurement.Padding / 2
 	},
 	infoName: {
@@ -28,15 +31,17 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: Color.Light,
 		borderRadius: Measurement.Radius / 2,
-		bottom: 0,
 		flexDirection: "row",
 		justifyContent: "center",
-		padding: Measurement.Padding,
-		position: "absolute",
-		right: 0
+		padding: Measurement.Padding
 	},
 	infoPortionsIcon: {
 		marginRight: Measurement.Padding
+	},
+	infoRipening: {
+		alignItems: "center",
+		flexDirection: "row",
+		justifyContent: "center"
 	},
 	itemImage: {
 		aspectRatio: 1,
@@ -49,7 +54,7 @@ const styles = StyleSheet.create({
 		padding: Measurement.Padding
 	},
 	itemWrapper: {
-		backgroundColor: Color.Highlight,
+		backgroundColor: Color.White,
 		borderColor: Color.Base,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,

@@ -1,7 +1,6 @@
 import React from "react";
 import { View } from "react-native";
 import { IInput, IInputCore } from "..";
-import { Color } from "../../../styles";
 import Icon from "../../icon";
 import Rating from "../../rating";
 import styles from "../styles";
@@ -52,7 +51,7 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-				<Icon style={styles.iconBasic} icon={icon} color={Color.Dark} />
+				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
 				<Rating value={value} onChange={this.handleChange} />
 			</View>
 		);

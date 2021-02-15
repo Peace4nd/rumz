@@ -1,9 +1,11 @@
 {
 	"headerMain": "Rumotéka",
 	"headerAdd": "Nový rum",
+
 	"navigationOverview": "Přehled",
 	"navigationStats": "Statistika",
 	"navigationCreate": "Přidat",
+
 	"createName": "Název",
 	"createPurchased": "Zakoupeno",
 	"createOrigin": "Země původu",
@@ -21,6 +23,12 @@
 	"createImage": "Obrázek",
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
+
 	"overviewEmpty": "Kolekce je prázdná",
+	"overviewRipeningYears": "let",
+	"overviewDramTitle": "Přidat vypitého panáka",
+	"overviewDramDrink": "Vypít",
+	"overviewDramCount": "Počet panáků",
+
 	"optionsTitle": "Nastavení"
 }

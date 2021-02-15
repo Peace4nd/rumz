@@ -2,7 +2,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Modal, TouchableOpacity, View } from "react-native";
 import { Header } from "..";
-import { Color } from "../../styles";
+import Button, { IButton } from "../button";
 import Icon from "../icon";
 import Typography from "../typography";
 import styles from "./styles";
@@ -30,6 +30,11 @@ export interface IDialog {
 	 * Cela obrazovka
 	 */
 	fullscreen?: boolean;
+
+	/**
+	 * Tlacitko
+	 */
+	button?: IButton;
 }
 
 /**
@@ -43,7 +48,7 @@ export default class Dialog extends React.PureComponent<IDialog> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { children, fullscreen, onToggle, opened, title } = this.props;
+		const { button, children, fullscreen, onToggle, opened, title } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Modal animationType="fade" transparent={true} visible={opened} onRequestClose={() => onToggle(false)}>
@@ -62,11 +67,16 @@ export default class Dialog extends React.PureComponent<IDialog> {
 							<View style={styles.contentTitle}>
 								<Typography type="Headline6">{title}</Typography>
 								<TouchableOpacity onPress={() => onToggle(false)}>
-									<Icon icon={faTimes} color={Color.Base} />
+									<Icon definition={faTimes} color="Base" />
 								</TouchableOpacity>
 							</View>
 						)}
 						<View style={styles.contentChildren}>{children}</View>
+						{button && (
+							<View style={styles.contentButton}>
+								<Button {...button} />
+							</View>
+						)}
 					</View>
 				</View>
 			</Modal>

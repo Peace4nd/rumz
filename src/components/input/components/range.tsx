@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { TextInput, TextInputProps, View } from "react-native";
+import { TextInput, View } from "react-native";
 import { IInput } from "..";
 import { Color } from "../../../styles";
 import Icon from "../../icon";
@@ -15,7 +15,7 @@ interface IInputRangeState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInputRange extends Omit<IInput<[number, number], TextInputProps>, "placeholder" | "icon"> {
+export interface IInputRange extends Omit<IInput<[number, number]>, "placeholder" | "icon"> {
 	placeholder: [string, string];
 	icon: [IconDefinition, IconDefinition];
 }
@@ -68,7 +68,7 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, highlight ? styles.wrapperHighlight : null]}>
-				<Icon style={styles.iconBasic} icon={icon[0]} color={Color.Dark} />
+				{icon && <Icon style={styles.iconBasic} definition={icon[0]} color="Dark" />}
 				<TextInput
 					ref={this.ref1}
 					style={styles.fieldBasic}
@@ -83,7 +83,7 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 					blurOnSubmit={onSubmit?.blur ?? true}
 					returnKeyType={returnKey}
 				/>
-				<Icon style={styles.iconBasic} icon={icon[1]} color={Color.Dark} />
+				<Icon style={styles.iconBasic} definition={icon[1]} color="Dark" />
 				<TextInput
 					ref={this.ref2}
 					style={styles.fieldBasic}

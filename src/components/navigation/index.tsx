@@ -2,7 +2,6 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Link, RouteComponentProps, withRouter } from "react-router-native";
-import { Color } from "../../styles";
 import { IRouterPath, matchRouterPath } from "../../utils/router";
 import Icon from "../icon";
 import Typography from "../typography";
@@ -52,7 +51,7 @@ class Navigation extends React.PureComponent<INavigation & RouteComponentProps> 
 					// sestaveni a vraceni
 					return (
 						<Link to={tab.path} key={tab.path} component={TouchableOpacity} style={styles.tab}>
-							<Icon icon={tab.icon} color={matched ? Color.Highlight : Color.Dark} />
+							<Icon definition={tab.icon} color={matched ? "Highlight" : "Dark"} />
 							<Typography type="Body1" style={[styles.tabText, matched ? styles.tabActive : null]}>
 								{tab.label}
 							</Typography>

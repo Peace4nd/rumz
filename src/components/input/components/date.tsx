@@ -59,9 +59,9 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 		// sestaveni a vraceni
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
-				<View style={[styles.wrapperBasic]}>
-					{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
-					<Typography type="Body2" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
+				<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
+					{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
+					<Typography type="Body1" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
 						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
 					</Typography>
 					{visible && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}

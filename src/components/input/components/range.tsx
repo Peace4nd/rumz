@@ -67,8 +67,8 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic]}>
-				{icon && <Icon style={styles.iconBasic} definition={icon[0]} color="Dark" />}
+			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
+				{icon && <Icon style={styles.icon} definition={icon[0]} color="Dark" />}
 				<TextInput
 					ref={this.ref1}
 					style={styles.fieldBasic}
@@ -83,7 +83,7 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 					blurOnSubmit={onSubmit?.blur ?? true}
 					returnKeyType={returnKey}
 				/>
-				<Icon style={styles.iconBasic} definition={icon[1]} color="Dark" />
+				<Icon style={styles.icon} definition={icon[1]} color="Dark" />
 				<TextInput
 					ref={this.ref2}
 					style={styles.fieldBasic}

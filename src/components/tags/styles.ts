@@ -7,16 +7,15 @@ const styles = StyleSheet.create({
 		borderColor: Color.Dark,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
-		color: Color.Dark,
-		elevation: 2,
+		elevation: 1,
 		marginBottom: Measurement.Padding,
 		marginRight: Measurement.Padding,
 		padding: Measurement.Padding / 2
 	},
-	itemGap: {},
+	label: {
+		color: Color.Dark
+	},
 	wrapper: {
-		backgroundColor: "orange",
-		flex: 1,
 		flexDirection: "row",
 		flexWrap: "wrap"
 	}

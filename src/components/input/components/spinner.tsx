@@ -61,8 +61,8 @@ export default class InputNumber extends React.PureComponent<IInputSpinner, IInp
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, styles.wrapperSpinner, error ? styles.wrapperError : null]}>
-				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
+			<View style={[styles.wrapperBasic, styles.wrapperSpinner, icon ? styles.wrapperIcon : null, error ? styles.wrapperError : null]}>
+				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
 				<TextInput
 					style={styles.fieldBasic}
 					value={value ? String(value) : ""}

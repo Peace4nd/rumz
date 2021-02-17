@@ -56,32 +56,20 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 		const { value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic, styles.wrapperTags, styles.wrapperSpring]}>
-				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
-
-				<View style={styles.fieldTags}>
-					{value.length === 0 && (
-						<Typography type="Body2" style={styles.fieldPlaceholder}>
-							{placeholder}
-						</Typography>
-					)}
-
-					{value.length > 0 && <Tags items={value} onPress={null} />}
-				</View>
-
+			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null, styles.wrapperButton, styles.wrapperSpring]}>
+				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
+				{value.length === 0 && (
+					<Typography type="Body1" style={[styles.fieldBasic, styles.fieldPlaceholder]}>
+						{placeholder}
+					</Typography>
+				)}
+				{value.length > 0 && (
+					<View style={styles.fieldTags}>
+						<Tags items={value} onPress={this.handleRemove} />
+					</View>
+				)}
 				<View style={styles.buttonGroup}>
-					<Menu
-						onSelect={(selected: string) => {
-							this.setState(
-								{
-									value: [...this.state.value, selected]
-								},
-								() => {
-									this.props.onChange(this.state.value, { filled: true, valid: true });
-								}
-							);
-						}}
-					>
+					<Menu onSelect={this.handleAdd}>
 						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity, triggerWrapper: styles.buttonElement }}>
 							<Icon definition={faPlus} color="Base" />
 						</MenuTrigger>
@@ -106,4 +94,45 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 	public focus(): void {
 		return;
 	}
+
+	/**
+	 * Obecne zpracovani zmeny
+	 *
+	 * @param {string[]} value Hodnota
+	 */
+	private handleChange(value: string[]): void {
+		this.setState(
+			{
+				value
+			},
+			() => {
+				this.props.onChange(value, { filled: true, valid: true });
+			}
+		);
+	}
+
+	/**
+	 * Pridani
+	 *
+	 * @param {string} value Hodnota
+	 */
+	private handleAdd = (value: string): void => {
+		this.handleChange([...this.state.value, value]);
+	};
+
+	/**
+	 * Odebrani
+	 *
+	 * @param {string} value Hodnota
+	 */
+	private handleRemove = (value: string): void => {
+		// definice
+		const current = this.state.value.slice(0);
+		const index = current.indexOf(value);
+		// index existuje
+		if (index > -1) {
+			current.splice(index, 1);
+			this.handleChange(current);
+		}
+	};
 }

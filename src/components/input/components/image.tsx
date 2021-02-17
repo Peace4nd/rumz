@@ -62,8 +62,8 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 		return (
 			<Pressable style={[styles.wrapperBasic, styles.wrapperImage]} onPress={this.handleClick}>
 				{!path && (
-					<View style={styles.wrapperFill}>
-						{icon && <Icon style={[styles.iconBasic, styles.iconBasicVertical]} definition={icon} color="Dark" size="6x" />}
+					<View style={[styles.fieldBasic, styles.fieldCenter]}>
+						{icon && <Icon style={styles.icon} definition={icon} color="Dark" size="6x" />}
 						{placeholder && (
 							<Typography type="Body1" style={styles.placeholder}>
 								{placeholder}

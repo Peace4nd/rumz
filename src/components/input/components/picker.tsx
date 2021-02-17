@@ -55,8 +55,8 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		const { value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={styles.wrapperBasic}>
-				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
+			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
+				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
 				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
 					{items.map((item) => (
 						<Picker.Item key={item.value} {...item} />

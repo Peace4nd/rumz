@@ -50,9 +50,11 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 		const { value } = this.state;
 		// sestaveni a vraceni
 		return (
-			<View style={[styles.wrapperBasic]}>
-				{icon && <Icon style={styles.iconBasic} definition={icon} color="Dark" />}
-				<Rating value={value} onChange={this.handleChange} />
+			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
+				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
+				<View style={styles.fieldBasic}>
+					<Rating value={value} onChange={this.handleChange} />
+				</View>
 			</View>
 		);
 	}

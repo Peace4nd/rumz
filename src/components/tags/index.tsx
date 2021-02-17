@@ -9,9 +9,23 @@ export interface ITagsItem {
 	color: string;
 }
 
+/**
+ * Dostupne vlastnosti
+ */
 export interface ITags {
+	/**
+	 * Polozky
+	 */
 	items: string[];
+
+	/**
+	 * Stistnuti
+	 */
 	onPress: (tag: string) => void;
+
+	/**
+	 * Dlouhe stisknuti
+	 */
 	onLongPress?: (tag: string) => void;
 }
 
@@ -30,6 +44,7 @@ const Tags = (props: ITags): JSX.Element => {
 			{items.map((item, index) => (
 				<TouchableOpacity
 					key={index}
+					style={styles.item}
 					onPress={confirm.delete({
 						onConfirm: () => {
 							onPress(item);
@@ -41,7 +56,7 @@ const Tags = (props: ITags): JSX.Element => {
 						}
 					}}
 				>
-					<Typography type="Body1" style={styles.item}>
+					<Typography type="Body1" style={styles.label}>
 						{item}
 					</Typography>
 				</TouchableOpacity>

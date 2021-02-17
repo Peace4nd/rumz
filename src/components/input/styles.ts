@@ -4,6 +4,7 @@ import { Color, Measurement, Size, Typography } from "../../styles";
 const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
+	// tlacitko
 	buttonElement: {
 		alignItems: "center",
 		aspectRatio: 1,
@@ -17,6 +18,8 @@ const styles = StyleSheet.create({
 		right: 0,
 		top: 0
 	},
+
+	// chyba
 	error: {
 		backgroundColor: "red",
 		borderTopLeftRadius: Measurement.Radius,
@@ -30,37 +33,46 @@ const styles = StyleSheet.create({
 		textAlignVertical: "center",
 		top: -Measurement.Components.Input.Error
 	},
+
+	// pole
 	fieldBasic: {
 		...Typography.Body1,
 		color: Color.Text,
 		flex: 1,
 		height: "100%",
+		padding: 0,
 		textAlignVertical: "center"
 	},
+	fieldCenter: {
+		alignItems: "center",
+		justifyContent: "center"
+	},
 	fieldMultiline: {
+		paddingVertical: Measurement.Padding * 1.5,
 		textAlignVertical: "top"
 	},
 	fieldPlaceholder: {
 		color: Color.Muted
 	},
 	fieldTags: {
-		alignItems: "flex-start",
 		flex: 1,
-		justifyContent: "center"
+		paddingBottom: Measurement.Padding * 0.5,
+		paddingTop: Measurement.Padding * 1.5
 	},
-	iconBasic: {
-		marginRight: Measurement.Padding * 2
+
+	// ikona
+	icon: {
+		marginHorizontal: Measurement.Padding * 2,
+		marginVertical: Measurement.Padding * 1.5
 	},
-	iconBasicVertical: {
-		marginRight: 0
-	},
-	iconMultiline: {
-		marginTop: 1.5 * 8
-	},
+
+	// obrazek
 	image: {
 		height: width / 2 - 2 * Measurement.Padding,
 		width: width / 2 - 2 * Measurement.Padding
 	},
+
+	// placeholder
 	placeholder: {
 		color: Color.Muted,
 		textAlign: "left",
@@ -69,11 +81,13 @@ const styles = StyleSheet.create({
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: Color.Highlight,
-		marginLeft: Size["6x"],
+		marginLeft: Size["7x"],
 		marginRight: Size["6x"]
 	},
+
+	// wrapper
 	wrapperBasic: {
-		alignItems: "center",
+		alignItems: "flex-start",
 		borderColor: Color.Base,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
@@ -81,21 +95,28 @@ const styles = StyleSheet.create({
 		height: Measurement.Components.Input.Height,
 		paddingHorizontal: Measurement.Padding * 2
 	},
+	wrapperButton: {
+		paddingRight: Measurement.Components.Input.Height
+	},
+	wrapperCenter: {
+		alignItems: "center"
+	},
 	wrapperError: {
 		borderColor: "red",
 		borderTopLeftRadius: 0,
 		borderTopRightRadius: 0,
 		marginTop: Measurement.Components.Input.Error
 	},
-	wrapperFill: {
-		alignItems: "center",
-		flex: 1,
-		justifyContent: "center"
+	wrapperIcon: {
+		paddingLeft: 0
 	},
 	wrapperImage: {
 		height: width / 2,
 		justifyContent: "center",
 		marginHorizontal: width / 6
+	},
+	wrapperMultiline: {
+		alignItems: "flex-start"
 	},
 	wrapperSpinner: {
 		paddingRight: Measurement.Components.Input.Height * 2
@@ -103,9 +124,6 @@ const styles = StyleSheet.create({
 	wrapperSpring: {
 		height: "auto",
 		minHeight: Measurement.Components.Input.Height
-	},
-	wrapperTags: {
-		paddingRight: Measurement.Components.Input.Height
 	}
 });
 

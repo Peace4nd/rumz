@@ -65,7 +65,7 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 				)}
 				{value.length > 0 && (
 					<View style={styles.fieldTags}>
-						<Tags items={value} onPress={this.handleRemove} />
+						<Tags items={value} onDelete={this.handleRemove} />
 					</View>
 				)}
 				<View style={styles.buttonGroup}>

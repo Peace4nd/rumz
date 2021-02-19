@@ -1,6 +1,8 @@
+import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import confirm from "../../utils/confirm";
+import Icon from "../icon";
 import Typography from "../typography";
 import styles from "./styles";
 export interface ITagsItem {
@@ -19,14 +21,14 @@ export interface ITags {
 	items: string[];
 
 	/**
-	 * Stistnuti
+	 * Smazani
 	 */
-	onPress: (tag: string) => void;
+	onDelete?: (tag: string) => void;
 
 	/**
-	 * Dlouhe stisknuti
+	 * Editace
 	 */
-	onLongPress?: (tag: string) => void;
+	onModify?: (tag: string) => void;
 }
 
 /**
@@ -37,29 +39,32 @@ export interface ITags {
  */
 const Tags = (props: ITags): JSX.Element => {
 	// rozlozeni props
-	const { items, onLongPress, onPress } = props;
+	const { items, onDelete, onModify } = props;
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
 			{items.map((item, index) => (
-				<TouchableOpacity
-					key={index}
-					style={styles.item}
-					onPress={confirm.delete({
-						onConfirm: () => {
-							onPress(item);
-						}
-					})}
-					onLongPress={() => {
-						if (typeof onLongPress === "function") {
-							onLongPress(item);
-						}
-					}}
-				>
+				<View key={index} style={styles.item}>
 					<Typography type="Body1" style={styles.label}>
 						{item}
 					</Typography>
-				</TouchableOpacity>
+					{onDelete && (
+						<TouchableOpacity
+							onPress={confirm.delete({
+								onConfirm: () => {
+									onDelete(item);
+								}
+							})}
+						>
+							<Icon definition={faTrash} />
+						</TouchableOpacity>
+					)}
+					{onModify && (
+						<TouchableOpacity onPress={() => onModify(item)}>
+							<Icon definition={faPencilAlt} />
+						</TouchableOpacity>
+					)}
+				</View>
 			))}
 		</View>
 	);

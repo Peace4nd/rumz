@@ -3,7 +3,9 @@ import React from "react";
 import { Permission, PermissionsAndroid } from "react-native";
 import "react-native-get-random-values";
 import { MenuProvider } from "react-native-popup-menu";
+import { Provider } from "react-redux";
 import { BackButton, NativeRouter, Redirect, Route, Switch } from "react-router-native";
+import store from "./redux/store";
 import { Push, Update } from "./routes/create";
 import Options from "./routes/options";
 import { Collection, Detail } from "./routes/overview";
@@ -33,20 +35,22 @@ class App extends React.PureComponent {
 	 */
 	public render(): JSX.Element {
 		return (
-			<MenuProvider>
-				<NativeRouter>
-					<BackButton />
-					<Switch>
-						<Redirect exact={true} strict={true} from="/" to={"/overview"} />
-						<Route exact={true} strict={true} path={"/overview"} component={Collection} />
-						<Route exact={true} strict={true} path={"/overview/:id"} component={Detail} />
-						<Route exact={true} strict={true} path={"/create"} component={Push} />
-						<Route exact={true} strict={true} path={"/create/:id"} component={Update} />
-						<Route exact={true} strict={true} path={"/stats"} component={Stats} />
-						<Route exact={true} strict={true} path={"/options"} component={Options} />
-					</Switch>
-				</NativeRouter>
-			</MenuProvider>
+			<Provider store={store}>
+				<MenuProvider>
+					<NativeRouter>
+						<BackButton />
+						<Switch>
+							<Redirect exact={true} strict={true} from="/" to={"/overview"} />
+							<Route exact={true} strict={true} path={"/overview"} component={Collection} />
+							<Route exact={true} strict={true} path={"/overview/:id"} component={Detail} />
+							<Route exact={true} strict={true} path={"/create"} component={Push} />
+							<Route exact={true} strict={true} path={"/create/:id"} component={Update} />
+							<Route exact={true} strict={true} path={"/stats"} component={Stats} />
+							<Route exact={true} strict={true} path={"/options"} component={Options} />
+						</Switch>
+					</NativeRouter>
+				</MenuProvider>
+			</Provider>
 		);
 	}
 

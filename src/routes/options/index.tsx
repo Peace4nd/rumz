@@ -1,18 +1,19 @@
 import { faChevronLeft, faGlassWhiskey, faTags } from "@fortawesome/free-solid-svg-icons";
-import { GoogleSignin, GoogleSigninButton } from "@react-native-community/google-signin";
+import { GoogleSignin, GoogleSigninButton, User } from "@react-native-community/google-signin";
 import React from "react";
 import { Input, Route, Tags, Typography } from "../../components";
 import { IOptions } from "../../types/options";
-import { download, files, setToken } from "../../utils/google-drive";
+import google from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOptionsState {
 	values: IOptions;
 	tag: string;
+	loaded: boolean;
 	google: {
 		signed: boolean;
-		token: string;
+		user: User;
 	};
 }
 
@@ -26,10 +27,14 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 	public state: IOptionsState = {
 		google: {
 			signed: false,
-			token: null
+			user: null
 		},
+		loaded: false,
 		tag: null,
-		values: null
+		values: {
+			dram: 0,
+			properties: []
+		}
 	};
 
 	/**
@@ -39,6 +44,7 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 		// nacteni dat
 		storage.options.read().then((values) => {
 			this.setState({
+				loaded: true,
 				values
 			});
 		});
@@ -46,45 +52,42 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 		// pridat do state ze je pihlaseno, pak nezobrazovat button pro prihlaseni ale jen nejakou statistiku zalohy
 		// vymyslet jak to udelat s obrazkama
 
-		GoogleSignin.isSignedIn().then((signed) => {
-			if (signed) {
-				GoogleSignin.getTokens().then((tokens) => {
-					this.setState(
-						{
-							google: {
-								signed: true,
-								token: tokens.accessToken
-							}
-						},
-						() => {
-							setToken(this.state.google.token);
+		this.getGoogleState().then(() => {
+			google.drive.list().then((metadata) => {
+				console.log("LIST", metadata);
+			});
 
-							files().then((metadata) => {
-								console.log("LIST", metadata);
+			/*
+			storage.stringify().then((stringified) => {
+				console.log("STRING", stringified);
 
-								download(metadata.files[0].id).then((data) => {
-									console.log("DOWNLOAD", data);
-								});
-							});
-
-							/*
-							storage.stringify().then((stringified) => {
-								
-								upload("records.json", stringified).then((metadata) => {
-									console.log("CREATE", metadata);
-								});
-								
-			
-								files().then((metadata) => {
-									console.log("LIST", metadata);
-								});
-							});
-							*/
-						}
-					);
+				drive.update("185k-JFCJomVoBiCVh9PDOKOjfWazrZ4cuKqJDI6RHRr0CIuE", stringified, { name: "records.json" }).then((metadata) => {
+					console.log("UPDATE", metadata);
 				});
-			}
+			});
+*/
+			google.drive.download("185k-JFCJomVoBiCVh9PDOKOjfWazrZ4cuKqJDI6RHRr0CIuE").then((data) => {
+				console.log("DOWNLOAD", data);
+			});
 		});
+	}
+
+	private async getGoogleState(): Promise<void> {
+		// overeni prihlaseni
+		const signedIn = await google.auth.isSignedIn();
+		// pokud je OK
+		if (signedIn) {
+			// nacteni dat
+			await google.auth.getToken();
+			const user = await google.auth.getCurrentUser();
+			// aktualizace stavu
+			this.setState({
+				google: {
+					signed: true,
+					user
+				}
+			});
+		}
 	}
 
 	/**
@@ -93,12 +96,12 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
-		// rozlozeni props
-		const { google, values } = this.state;
+		// rozlozeni propts
+		const { loaded, values } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={values === null}
+				busy={!loaded}
 				header={{
 					actionLeft: {
 						icon: faChevronLeft,
@@ -107,20 +110,29 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 					title: strings("optionsTitle")
 				}}
 			>
-				{!google.signed && (
-					<GoogleSigninButton
-						size={GoogleSigninButton.Size.Standard}
-						color={GoogleSigninButton.Color.Light}
-						onPress={() => {
-							GoogleSignin.signIn().then((user) => {
-								console.log(user);
+				{/* google */}
+				<Typography type="Headline5">prihlaseni google</Typography>
+				<GoogleSigninButton
+					size={GoogleSigninButton.Size.Standard}
+					color={GoogleSigninButton.Color.Light}
+					disabled={this.state.google.signed}
+					onPress={() => {
+						GoogleSignin.signIn().then((user) => {
+							this.setState({
+								google: {
+									signed: true,
+									user
+								}
 							});
-						}}
-					/>
-				)}
+						});
+					}}
+				/>
 
+				{/* velikost panaku */}
 				<Typography type="Headline5">velikost frtanu</Typography>
-				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={values?.dram} onChange={this.handleDram} />
+				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={values.dram} onChange={this.handleDram} />
+
+				{/* senzoricke tagy */}
 				<Typography type="Headline5">senzoricke tagy</Typography>
 				<Input.Text
 					icon={faTags}
@@ -131,7 +143,7 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 						reset: true
 					}}
 				/>
-				<Tags items={values?.properties} onPress={this.handleTagRemove} />
+				<Tags items={values.properties} onDelete={this.handleTagRemove} />
 			</Route.Wrapper>
 		);
 	}

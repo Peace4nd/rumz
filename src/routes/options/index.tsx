@@ -1,13 +1,19 @@
 import { faChevronLeft, faGlassWhiskey, faTags } from "@fortawesome/free-solid-svg-icons";
+import { GoogleSignin, GoogleSigninButton } from "@react-native-community/google-signin";
 import React from "react";
 import { Input, Route, Tags, Typography } from "../../components";
 import { IOptions } from "../../types/options";
+import { download, files, setToken } from "../../utils/google-drive";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOptionsState {
 	values: IOptions;
 	tag: string;
+	google: {
+		signed: boolean;
+		token: string;
+	};
 }
 
 /**
@@ -18,6 +24,10 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 	 * Vychozi stav
 	 */
 	public state: IOptionsState = {
+		google: {
+			signed: false,
+			token: null
+		},
 		tag: null,
 		values: null
 	};
@@ -26,10 +36,54 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
+		// nacteni dat
 		storage.options.read().then((values) => {
 			this.setState({
 				values
 			});
+		});
+
+		// pridat do state ze je pihlaseno, pak nezobrazovat button pro prihlaseni ale jen nejakou statistiku zalohy
+		// vymyslet jak to udelat s obrazkama
+
+		GoogleSignin.isSignedIn().then((signed) => {
+			if (signed) {
+				GoogleSignin.getTokens().then((tokens) => {
+					this.setState(
+						{
+							google: {
+								signed: true,
+								token: tokens.accessToken
+							}
+						},
+						() => {
+							setToken(this.state.google.token);
+
+							files().then((metadata) => {
+								console.log("LIST", metadata);
+
+								download(metadata.files[0].id).then((data) => {
+									console.log("DOWNLOAD", data);
+								});
+							});
+
+							/*
+							storage.stringify().then((stringified) => {
+								
+								upload("records.json", stringified).then((metadata) => {
+									console.log("CREATE", metadata);
+								});
+								
+			
+								files().then((metadata) => {
+									console.log("LIST", metadata);
+								});
+							});
+							*/
+						}
+					);
+				});
+			}
 		});
 	}
 
@@ -40,7 +94,7 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { values } = this.state;
+		const { google, values } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
@@ -53,6 +107,18 @@ export default class Options extends Route.Content<unknown, IOptionsState> {
 					title: strings("optionsTitle")
 				}}
 			>
+				{!google.signed && (
+					<GoogleSigninButton
+						size={GoogleSigninButton.Size.Standard}
+						color={GoogleSigninButton.Color.Light}
+						onPress={() => {
+							GoogleSignin.signIn().then((user) => {
+								console.log(user);
+							});
+						}}
+					/>
+				)}
+
 				<Typography type="Headline5">velikost frtanu</Typography>
 				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={values?.dram} onChange={this.handleDram} />
 				<Typography type="Headline5">senzoricke tagy</Typography>

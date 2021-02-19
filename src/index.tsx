@@ -1,3 +1,4 @@
+import { GoogleSignin } from "@react-native-community/google-signin";
 import React from "react";
 import { Permission, PermissionsAndroid } from "react-native";
 import "react-native-get-random-values";
@@ -16,7 +17,13 @@ class App extends React.PureComponent {
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
+		// pozadavek na prava
 		this.requestPermissions();
+		// inicializace google API
+		GoogleSignin.configure({
+			forceCodeForRefreshToken: true,
+			scopes: ["https://www.googleapis.com/auth/drive.appdata"]
+		});
 	}
 
 	/**

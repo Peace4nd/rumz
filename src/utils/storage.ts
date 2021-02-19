@@ -182,8 +182,24 @@ export const options: IStorageCollectionObject<IOptions> = {
 	update: async (record) => objectUpdate("options", record)
 };
 
+/**
+ * Serializace storu
+ *
+ * @returns {Promise<string>} Data
+ */
+export async function stringify(): Promise<string> {
+	// sestaveni dat
+	const data: Record<IStorageKey, unknown> = {
+		collection: await collection.read(),
+		options: await options.read()
+	};
+	// vraceni
+	return JSON.stringify(data);
+}
+
 // vychozi export
 export default {
 	collection,
-	options
+	options,
+	stringify
 };

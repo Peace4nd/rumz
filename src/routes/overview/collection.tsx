@@ -1,5 +1,6 @@
 import { faEllipsisV, faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import SplashScreen from "react-native-splash-screen";
 import { Collection, Dialog, Input, Route } from "../../components";
 import { ICollectionRecord } from "../../types/collection";
 import { IOptions } from "../../types/options";
@@ -36,11 +37,16 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	 */
 	public componentDidMount(): void {
 		Promise.all([storage.collection.read(), storage.options.read()]).then((values) => {
-			this.setState({
-				loaded: true,
-				options: values[1],
-				records: values[0]
-			});
+			this.setState(
+				{
+					loaded: true,
+					options: values[1],
+					records: values[0]
+				},
+				() => {
+					SplashScreen.hide();
+				}
+			);
 		});
 	}
 

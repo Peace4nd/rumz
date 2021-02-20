@@ -1,25 +1,32 @@
 import { faEllipsisV, faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import SplashScreen from "react-native-splash-screen";
+import { connect, DispatchProp } from "react-redux";
 import { Collection, Dialog, Input, Route } from "../../components";
-import { ICollectionRecord } from "../../types/collection";
-import { IOptions } from "../../types/options";
+import { signResolved } from "../../redux/actions/google";
+import { IReduxGoogle, IReduxStore } from "../../types/redux";
+import { IStorageCollection, IStorageOptions } from "../../types/storage";
+import ga from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOverviewCollectionState {
-	records: ICollectionRecord[];
-	selected: ICollectionRecord;
+	records: IStorageCollection[];
+	selected: IStorageCollection;
 	opened: boolean;
-	options: IOptions;
+	options: IStorageOptions;
 	loaded: boolean;
 	dram: number;
+}
+
+interface IOverviewCollectionProps {
+	google: IReduxGoogle;
 }
 
 /**
  * Prehled
  */
-export default class OverviewCollection extends Route.Content<unknown, IOverviewCollectionState> {
+class OverviewCollection extends Route.Content<IOverviewCollectionProps & DispatchProp, IOverviewCollectionState> {
 	/**
 	 * Vychozi stav
 	 */
@@ -36,6 +43,9 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
+		// rozlozeni props
+		const { google } = this.props;
+		// overeni googlu
 		Promise.all([storage.collection.read(), storage.options.read()]).then((values) => {
 			this.setState(
 				{
@@ -44,7 +54,19 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 					records: values[0]
 				},
 				() => {
+					// ukonceni splash screen
 					SplashScreen.hide();
+					// overeni pristupu ke google sluzbam
+					if (!google.resolved) {
+						ga.auth
+							.signInSilently()
+							.then((user) => {
+								this.props.dispatch(signResolved(user));
+							})
+							.catch(() => {
+								this.props.dispatch(signResolved());
+							});
+					}
 				}
 			);
 		});
@@ -110,9 +132,9 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 	/**
 	 * Otevreni okna pro zadani panaku
 	 *
-	 * @param {ICollectionRecord} record Aktualni zaznam
+	 * @param {IStorageCollection} record Aktualni zaznam
 	 */
-	private handleDramOpen = (record: ICollectionRecord): void => {
+	private handleDramOpen = (record: IStorageCollection): void => {
 		this.setState({
 			opened: true,
 			selected: record
@@ -146,3 +168,7 @@ export default class OverviewCollection extends Route.Content<unknown, IOverview
 		});
 	};
 }
+
+export default connect((store: IReduxStore) => ({
+	google: store.google
+}))(OverviewCollection);

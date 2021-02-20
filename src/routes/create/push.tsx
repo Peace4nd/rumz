@@ -20,15 +20,15 @@ import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { Form, Route } from "../../components";
-import { ICollectionRecord } from "../../types/collection";
 import { IFileDocument } from "../../types/file";
+import { IStorageCollection } from "../../types/storage";
 import country from "../../utils/country";
 import fs from "../../utils/file-system";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface ICreateState {
-	record: ICollectionRecord & { image: IFileDocument };
+	record: IStorageCollection & { image: IFileDocument };
 	working: boolean;
 	tags: string[];
 	loaded: boolean;
@@ -84,7 +84,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 					title: strings("headerAdd")
 				}}
 			>
-				<Form<ICollectionRecord>
+				<Form<IStorageCollection>
 					fields={[
 						{
 							icon: faImage,

@@ -5,15 +5,16 @@ import { Action } from "redux";
  * Google
  */
 export interface IReduxGoogle {
-	user: User;
-	token: string;
+	user: User["user"];
 	signed: boolean;
+	resolved: boolean;
+	token: string;
 }
 
 /**
  * Typy
  */
-export type IReduxType = "google-signin";
+export type IReduxType = "google-resolved" | "google-token";
 
 /**
  * Akce

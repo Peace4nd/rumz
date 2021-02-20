@@ -20,6 +20,11 @@ export interface IButton {
 	label?: string;
 
 	/**
+	 * Zakazane
+	 */
+	disabled?: boolean;
+
+	/**
 	 * Akce po stisknuti
 	 */
 	onPress?: () => void;
@@ -33,10 +38,10 @@ export interface IButton {
  */
 const Button = (props: IButton): JSX.Element => {
 	// rozlozeni props
-	const { icon, label, onPress } = props;
+	const { disabled, icon, label, onPress } = props;
 	// sestaveni a vraceni
 	return (
-		<TouchableOpacity style={styles.wrapper} onPress={onPress}>
+		<TouchableOpacity style={[styles.wrapper, disabled ? styles.wrapperDisabled : null]} onPress={onPress}>
 			{icon && <Icon definition={icon} style={styles.icon} color="Highlight" size="2x" />}
 			{label && (
 				<Typography type="Button" style={styles.label}>

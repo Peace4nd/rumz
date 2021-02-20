@@ -1,19 +1,28 @@
 import { User } from "@react-native-community/google-signin";
-import { IReduxAction, IReduxGoogle } from "../../types/redux";
+import { IReduxAction } from "../../types/redux";
 
 /**
- * Nastaveni uzivatele a tokenu
+ * Overeni prihlaseni
  *
- * @param {User} user Data uzivatele
- * @param {string} token token Token
- * @returns {IReduxAction<IReduxGoogle>} Akce
+ * @param {User["user"]} user Data uzivatele
+ * @returns {IReduxAction} Akce
  */
-export function signIn(user: User, token: string): IReduxAction<Partial<IReduxGoogle>> {
+export function signResolved(user?: User["user"]): IReduxAction {
 	return {
-		payload: {
-			token,
-			user
-		},
-		type: "google-signin"
+		payload: user,
+		type: "google-resolved"
+	};
+}
+
+/**
+ * Nastaveni bezpecnostniho tokenu
+ *
+ * @param {string} token Token
+ * @returns {IReduxAction} Akce
+ */
+export function setToken(token: string): IReduxAction {
+	return {
+		payload: token,
+		type: "google-token"
 	};
 }

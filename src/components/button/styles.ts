@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		paddingHorizontal: 2 * Measurement.Padding,
 		paddingVertical: Measurement.Padding
+	},
+	wrapperDisabled: {
+		backgroundColor: Color.Muted
 	}
 });
 

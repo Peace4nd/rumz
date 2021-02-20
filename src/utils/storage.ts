@@ -1,8 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepmerge from "deepmerge";
-import { ICollectionRecord } from "../types/collection";
-import { IOptions } from "../types/options";
-import { IStorageCollectionArray, IStorageCollectionObject, IStorageKey, IStorageRecord } from "../types/storage";
+import { IStorageArray, IStorageCollection, IStorageKey, IStorageMeta, IStorageObject, IStorageOptions, IStorageRecord } from "../types/storage";
 
 /**
  * Slouceni objektu
@@ -166,7 +164,7 @@ async function objectUpdate<T>(key: IStorageKey, record: Partial<T>): Promise<T>
 /**
  * Kolekce
  */
-export const collection: IStorageCollectionArray<ICollectionRecord, string> = {
+export const collection: IStorageArray<IStorageCollection, string> = {
 	find: async (id) => arrayFind("collection", id),
 	push: async (record) => arrayPush("collection", record),
 	read: async () => arrayRead("collection"),
@@ -177,9 +175,17 @@ export const collection: IStorageCollectionArray<ICollectionRecord, string> = {
 /**
  * Nastaveni
  */
-export const options: IStorageCollectionObject<IOptions> = {
+export const options: IStorageObject<IStorageOptions> = {
 	read: async () => objectRead("options", { dram: 40, properties: [] }),
 	update: async (record) => objectUpdate("options", record)
+};
+
+/**
+ * Metadata
+ */
+export const meta: IStorageObject<IStorageMeta> = {
+	read: async () => objectRead("meta", { updated: 0 }),
+	update: async (record) => objectUpdate("meta", record)
 };
 
 /**
@@ -191,6 +197,7 @@ export async function stringify(): Promise<string> {
 	// sestaveni dat
 	const data: Record<IStorageKey, unknown> = {
 		collection: await collection.read(),
+		meta: await meta.read(),
 		options: await options.read()
 	};
 	// vraceni

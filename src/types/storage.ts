@@ -1,7 +1,9 @@
+import { IFileDocument } from "./file";
+
 /**
  * Typ uloziste
  */
-export type IStorageKey = "collection" | "options";
+export type IStorageKey = "collection" | "options" | "meta";
 
 /**
  * Zakladni struktura zaznamu
@@ -16,7 +18,7 @@ export interface IStorageRecord {
 /**
  * Definice metod pro pole
  */
-export interface IStorageCollectionArray<R extends IStorageRecord, I> {
+export interface IStorageArray<R extends IStorageRecord, I> {
 	/**
 	 * Nalezeni zaznamu v kolekci
 	 *
@@ -61,7 +63,7 @@ export interface IStorageCollectionArray<R extends IStorageRecord, I> {
 /**
  * Definice metod pro objekt
  */
-export interface IStorageCollectionObject<R> {
+export interface IStorageObject<R> {
 	/**
 	 * Nacteni cele kolekce
 	 *
@@ -76,4 +78,119 @@ export interface IStorageCollectionObject<R> {
 	 * @returns {Promise<R>} Kompletni kolekce
 	 */
 	update: (record: Partial<R>) => Promise<R>;
+}
+
+/**
+ * Datovy typ zaznamu kolekce
+ */
+export interface IStorageCollection extends IStorageRecord {
+	/**
+	 * Nazev
+	 */
+	name: string;
+
+	/**
+	 * Datum zakoupeni
+	 */
+	purchased: Date;
+
+	/**
+	 * Obrazky
+	 */
+	image: IFileDocument;
+
+	/**
+	 * Zeme puvodu (ISO kod zeme)
+	 */
+	origin: string;
+
+	/**
+	 * Vyrobce
+	 */
+	manufacturer: string;
+
+	/**
+	 * Objem alkoholu (v %)
+	 */
+	alcohol: number;
+
+	/**
+	 * Cena (v Kc)
+	 */
+	price: number;
+
+	/**
+	 * Objem lahve (v ml)
+	 */
+	volume: number;
+
+	/**
+	 * Poznamky
+	 */
+	notes: string;
+
+	/**
+	 * Hodnoceni (0 - 10)
+	 */
+	rating: number;
+
+	/**
+	 * Delka zrani
+	 */
+	ripening: [
+		/**
+		 * Nejnizsi delka zrani
+		 */
+		lowest: number,
+
+		/**
+		 * Nejvyssi delka zrani
+		 */
+		highest: number
+	];
+
+	/**
+	 * Barva (zlata, hneda, tmava zlata, ...)
+	 */
+	color: string;
+
+	/**
+	 * Cichove vlastnosti (tony kavy, vanilky, ...)
+	 */
+	smell: string;
+
+	/**
+	 * Chutove vlastnosti (pomerance, vanilka, ...)
+	 */
+	taste: string;
+
+	/**
+	 * Pocet vypitych panaku (a 40ml)
+	 */
+	drunk: number;
+}
+
+/**
+ * Datovy typ pro metadata
+ */
+export interface IStorageMeta {
+	/**
+	 * Posledni aktualizace
+	 */
+	updated: number;
+}
+
+/**
+ * Datovy typ nastaveni
+ */
+export interface IStorageOptions {
+	/**
+	 * Objen jednoho panaku
+	 */
+	dram: number;
+
+	/**
+	 * Senzoricke vlastnosti
+	 */
+	properties: string[];
 }

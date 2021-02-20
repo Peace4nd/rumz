@@ -2,11 +2,11 @@ import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Text } from "react-native";
 import { Route } from "../../components";
-import { ICollectionRecord } from "../../types/collection";
+import { IStorageCollection } from "../../types/storage";
 import { collection } from "../../utils/storage";
 
 interface IOverviewDetailState {
-	record: ICollectionRecord;
+	record: IStorageCollection;
 }
 
 interface IOverviewDetailParams {

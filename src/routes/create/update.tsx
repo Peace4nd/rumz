@@ -1,11 +1,11 @@
 import React from "react";
 import { Text } from "react-native";
 import { Route } from "../../components";
-import { ICollectionRecord } from "../../types/collection";
+import { IStorageCollection } from "../../types/storage";
 import storage from "../../utils/storage";
 
 interface ICreateState {
-	record: ICollectionRecord;
+	record: IStorageCollection;
 }
 
 interface ICreateParams {

@@ -111,6 +111,8 @@ const styles = StyleSheet.create({
 		paddingLeft: 0
 	},
 	wrapperImage: {
+		alignItems: "center",
+		backgroundColor: Color.White,
 		height: width / 2,
 		justifyContent: "center",
 		marginHorizontal: width / 6

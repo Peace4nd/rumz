@@ -1,17 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import deepmerge from "deepmerge";
-import { IStorageArray, IStorageCollection, IStorageKey, IStorageMeta, IStorageObject, IStorageOptions, IStorageRecord } from "../types/storage";
-
-/**
- * Slouceni objektu
- *
- * @param {Partial<T>} x X
- * @param {Partial<T>} y Y
- * @returns {T} Objekt
- */
-function merge<T>(x: Partial<T>, y: Partial<T>): T {
-	return deepmerge(x, y, { arrayMerge: (_, source) => source as unknown[] });
-}
+import { IReduxCollection, IReduxOptions } from "../types/redux";
+import { IStorageKey, IStorageSection } from "../types/storage";
 
 /**
  * Ulozeni dat
@@ -20,172 +9,41 @@ function merge<T>(x: Partial<T>, y: Partial<T>): T {
  * @param {unknown} value Data
  */
 async function write(key: IStorageKey, value: unknown): Promise<void> {
-	try {
-		const raw = JSON.stringify(value);
-		await AsyncStorage.setItem(key, raw);
-	} catch (e) {
-		// error
-	}
-}
-
-/**
- * Nacteni kolekce
- *
- * @param {IStorageKey} key Klic
- * @param {T[]} defaults Vychozi hodnota
- * @returns {Promise<T[]>} Kolekce
- */
-async function arrayRead<T extends IStorageRecord>(key: IStorageKey, defaults: T[] = []): Promise<T[]> {
-	// nacteni dat
-	try {
-		const raw = await AsyncStorage.getItem(key);
-		if (raw != null) {
-			return JSON.parse(raw) as T[];
-		}
-	} catch (e) {
-		// chyba se neresi
-	}
-	// failsafe
-	return defaults;
-}
-
-/**
- * Odstraneni zaznamu z kolekce
- *
- * @param {IStorageKey} key Klic
- * @param {string} id Identifikator
- * @returns {Promise<T[]>} Kolekce
- */
-async function arrayRemove<T extends IStorageRecord>(key: IStorageKey, id: string): Promise<T[]> {
-	// nacteni uloziste
-	const storage = await arrayRead<T>(key);
-	// nazeleni zaznamu
-	const index = storage.findIndex((rec) => rec.id === id);
-	// odstraneni zaznamu
-	storage.splice(index, 1);
-	// ulozeni date
-	await write(key, storage);
-	// vraceni kolekce
-	return storage;
-}
-
-/**
- * Nalezeni zaznamu v kolekci
- *
- * @param {IStorageKey} key Klic
- * @param {string} id Identifikator
- * @returns {Promise<T[]>} Kolekce
- */
-async function arrayFind<T extends IStorageRecord>(key: IStorageKey, id: string): Promise<T> {
-	// nacteni uloziste
-	const storage = await arrayRead<T>(key);
-	// nazeleni zaznamu
-	return storage.find((rec) => rec.id === id);
-}
-
-/**
- * Pridani zaznamu do kolekce
- *
- * @param {IStorageKey} key Klic
- * @param {T} record Zaznam
- * @returns {Promise<T[]>} Kolekce
- */
-async function arrayPush<T extends IStorageRecord>(key: IStorageKey, record: T): Promise<T[]> {
-	// nacteni uloziste
-	const storage = await arrayRead<T>(key);
-	// pridani zaznamu
-	storage.push(record);
-	// ulozeni date
-	await write(key, storage);
-	// vraceni kolekce
-	return storage;
-}
-
-/**
- * Aktualizace zaznamu v kolekci
- *
- * @param {IStorageKey} key Klic
- * @param {string} id Identifikator
- * @param {Partial<T>} record Zaznam
- * @returns {Promise<T[]>} Kolekce
- */
-async function arrayUpdate<T extends IStorageRecord>(key: IStorageKey, id: string, record: Partial<T>): Promise<T[]> {
-	// nacteni uloziste
-	const storage = await arrayRead<T>(key);
-	// nalezeni zaznamu
-	const index = storage.findIndex((rec) => rec.id === id);
-	// aktualizace dat
-	storage[index] = merge(storage[index], record);
-	// ulozeni date
-	await write(key, storage);
-	// vraceni kolekce
-	return storage;
+	const raw = JSON.stringify(value);
+	await AsyncStorage.setItem(key, raw);
 }
 
 /**
  * Nacteni objektu dat
  *
  * @param {IStorageKey} key Klic
- * @param {T} defaults Vychozi hodnota
  * @returns {Promise<T>} Data
  */
-async function objectRead<T>(key: IStorageKey, defaults: T = {} as T): Promise<T> {
+async function read<T>(key: IStorageKey): Promise<T> {
 	// nacteni dat
-	try {
-		const raw = await AsyncStorage.getItem(key);
-		if (raw != null) {
-			return JSON.parse(raw) as T;
-		}
-	} catch (e) {
-		// chyba se neresi
+	const raw = await AsyncStorage.getItem(key);
+	if (raw != null) {
+		return JSON.parse(raw) as T;
 	}
-	// failsafe
-	return defaults;
-}
 
-/**
- * Aktualizace zaznamu v kolekci
- *
- * @param {IStorageKey} key Klic
- * @param {Partial<T>} record Zaznam
- * @returns {Promise<T>} Kolekce
- */
-async function objectUpdate<T>(key: IStorageKey, record: Partial<T>): Promise<T> {
-	// nacteni uloziste
-	const storage = await objectRead<T>(key);
-	// aktualizace dat
-	const updated: T = merge(storage, record);
-	// ulozeni date
-	await write(key, updated);
-	// vraceni kolekce
-	return updated;
+	// failsafe
+	return null;
 }
 
 /**
  * Kolekce
  */
-export const collection: IStorageArray<IStorageCollection, string> = {
-	find: async (id) => arrayFind("collection", id),
-	push: async (record) => arrayPush("collection", record),
-	read: async () => arrayRead("collection"),
-	remove: async (id) => arrayRemove("collection", id),
-	update: async (id, record) => arrayUpdate("collection", id, record)
+const collection: IStorageSection<IReduxCollection> = {
+	read: async () => read("collection"),
+	write: async (data) => write("collection", data)
 };
 
 /**
  * Nastaveni
  */
-export const options: IStorageObject<IStorageOptions> = {
-	read: async () => objectRead("options", { dram: 40, properties: [] }),
-	update: async (record) => objectUpdate("options", record)
-};
-
-/**
- * Metadata
- */
-export const meta: IStorageObject<IStorageMeta> = {
-	read: async () => objectRead("meta", { updated: 0 }),
-	update: async (record) => objectUpdate("meta", record)
+const options: IStorageSection<IReduxOptions> = {
+	read: async () => read("options"),
+	write: async (data) => write("options", data)
 };
 
 /**
@@ -193,20 +51,35 @@ export const meta: IStorageObject<IStorageMeta> = {
  *
  * @returns {Promise<string>} Data
  */
-export async function stringify(): Promise<string> {
+async function stringify(): Promise<string> {
 	// sestaveni dat
 	const data: Record<IStorageKey, unknown> = {
 		collection: await collection.read(),
-		meta: await meta.read(),
 		options: await options.read()
 	};
 	// vraceni
 	return JSON.stringify(data);
 }
 
+/**
+ * Ziskani kompletnich dat
+ *
+ * @returns {Promise<Record<IStorageKey, unknown>>} Data
+ */
+async function readAll(): Promise<Record<IStorageKey, unknown>> {
+	// sestaveni dat
+	const data = {
+		collection: await collection.read(),
+		options: await options.read()
+	};
+	// vraceni
+	return data;
+}
+
 // vychozi export
 export default {
 	collection,
 	options,
+	readAll,
 	stringify
 };

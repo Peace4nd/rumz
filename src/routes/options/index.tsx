@@ -4,22 +4,25 @@ import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
 import { Button, Input, Route, Tags, Typography } from "../../components";
+import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
+import { updateOptions } from "../../redux/actions/options";
+import { IDataOptions } from "../../types/data";
 import { IReduxGoogle, IReduxStore } from "../../types/redux";
-import { IStorageOptions } from "../../types/storage";
 import ga, { IGoogleDriveFile } from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 interface IOptionsState {
-	values: IStorageOptions;
 	tag: string;
-	loaded: boolean;
 	backupFiles: IGoogleDriveFile[];
-	backupBusy: boolean;
+	backupWorking: boolean;
+	backupDownload: boolean;
+	backupUpload: boolean;
 }
 
-interface IOptionsProps {
+interface IOptionsProps extends DispatchProp {
 	google: IReduxGoogle;
+	options: IDataOptions;
 }
 
 /**
@@ -35,52 +38,28 @@ const styles = StyleSheet.create({
 /**
  * Nastaveni
  */
-class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState> {
+class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	/**
 	 * Vychozi stav
 	 */
 	public state: IOptionsState = {
-		backupBusy: false,
-		backupFiles: null,
-		loaded: false,
-		tag: null,
-		values: {
-			dram: 0,
-			properties: []
-		}
+		backupDownload: false,
+		backupFiles: [],
+		backupUpload: false,
+		backupWorking: true,
+		tag: null
 	};
 
 	/**
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
-		Promise.all([storage.options.read(), ga.drive.list()]).then((data) => {
+		ga.drive.list().then((files) => {
 			this.setState({
-				backupFiles: data[1],
-				loaded: true,
-				values: data[0]
+				backupFiles: files,
+				backupWorking: false
 			});
 		});
-
-		// console.log(this.props.google);
-
-		// pridat do state ze je pihlaseno, pak nezobrazovat button pro prihlaseni ale jen nejakou statistiku zalohy
-		// vymyslet jak to udelat s obrazkama
-
-		/*
-			
-			storage.stringify().then((stringified) => {
-				console.log("STRING", stringified);
-
-				drive.update("185k-JFCJomVoBiCVh9PDOKOjfWazrZ4cuKqJDI6RHRr0CIuE", stringified, { name: "data.json" }).then((metadata) => {
-					console.log("UPDATE", metadata);
-				});
-			});
-
-			google.drive.download("185k-JFCJomVoBiCVh9PDOKOjfWazrZ4cuKqJDI6RHRr0CIuE").then((data) => {
-				console.log("DOWNLOAD", data);
-			});
-			*/
 	}
 
 	/**
@@ -90,15 +69,12 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { dispatch, google } = this.props;
-		const { backupBusy, backupFiles, loaded, values } = this.state;
-
-		console.log(backupFiles);
-
+		const { dispatch, google, options } = this.props;
+		const { backupDownload, backupFiles, backupUpload, backupWorking } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={!loaded}
+				busy={backupWorking}
 				header={{
 					actionLeft: {
 						icon: faChevronLeft,
@@ -110,12 +86,16 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 				{/* google */}
 				<Typography type="Headline6">prihlaseni google</Typography>
 
-				<Image source={{ uri: google.user.photo }} style={styles.googleAvatar} />
-				<Typography type="Subtitle1">{google.user.name}</Typography>
-				<Typography type="Subtitle2">{google.user.email}</Typography>
+				{google.signed && (
+					<React.Fragment>
+						<Image source={{ uri: google.user.photo }} style={styles.googleAvatar} />
+						<Typography type="Subtitle1">{google.user.name}</Typography>
+						<Typography type="Subtitle2">{google.user.email}</Typography>
 
-				<Button label="zalohovat" busy={backupBusy} onPress={this.handleBackup} />
-				<Button label="obnovit" busy={backupBusy} onPress={this.handleRestore} />
+						<Button label="zalohovat" disabled={backupWorking} busy={backupUpload} onPress={this.backupUpload} />
+						<Button label="obnovit" disabled={backupWorking || backupFiles.length === 0} busy={backupDownload} onPress={this.backupDownload} />
+					</React.Fragment>
+				)}
 
 				<GoogleSigninButton
 					size={GoogleSigninButton.Size.Standard}
@@ -130,7 +110,7 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 
 				{/* velikost panaku */}
 				<Typography type="Headline6">velikost frtanu</Typography>
-				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={values.dram} onChange={this.handleDram} />
+				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={options.dram} onChange={this.handleDram} />
 
 				{/* senzoricke tagy */}
 				<Typography type="Headline6">senzoricke tagy</Typography>
@@ -143,15 +123,15 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 						reset: true
 					}}
 				/>
-				<Tags items={values.properties} onDelete={this.handleTagRemove} />
+				<Tags items={options.properties} onDelete={this.handleTagRemove} />
 			</Route.Wrapper>
 		);
 	}
 
-	private handleRestore = (): void => {
+	private backupDownload = (): void => {
 		this.setState(
 			{
-				backupBusy: true
+				backupDownload: true
 			},
 			() => {
 				const records = this.state.backupFiles.find((file) => file.name === "data.json");
@@ -159,12 +139,14 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 				ga.drive.download(records.id).then((data) => {
 					this.setState(
 						{
-							backupBusy: false
+							backupDownload: false
 						},
 						() => {
-							const ccc = JSON.parse(data);
+							const store = JSON.parse(data) as IReduxStore;
 
-							console.log(ccc);
+							this.props.dispatch(loadRecords(store.collection.records));
+
+							this.props.dispatch(updateOptions(store.options.values));
 						}
 					);
 				});
@@ -172,10 +154,10 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 		);
 	};
 
-	private handleBackup = (): void => {
+	private backupUpload = (): void => {
 		this.setState(
 			{
-				backupBusy: true
+				backupUpload: true
 			},
 			() => {
 				storage.stringify().then((stringified) => {
@@ -190,16 +172,16 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 							files[recordsIndex] = file;
 							// aktualizace stavu
 							this.setState({
-								backupBusy: false,
-								backupFiles: files
+								backupFiles: files,
+								backupUpload: false
 							});
 						});
 					} else {
 						ga.drive.create({ name: "data.json" }, stringified).then((file) => {
 							// aktualizace stavu
 							this.setState({
-								backupBusy: false,
-								backupFiles: [...this.state.backupFiles, file]
+								backupFiles: [...this.state.backupFiles, file],
+								backupUpload: false
 							});
 						});
 					}
@@ -209,16 +191,10 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 	};
 
 	private handleDram = (value: number): void => {
-		this.setState(
-			{
-				values: {
-					...this.state.values,
-					dram: value
-				}
-			},
-			() => {
-				storage.options.update({ dram: this.state.values.dram });
-			}
+		this.props.dispatch(
+			updateOptions({
+				dram: value
+			})
 		);
 	};
 
@@ -229,38 +205,27 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 	};
 
 	private handleTagAdd = (): void => {
-		this.setState(
-			{
-				values: {
-					...this.state.values,
-					properties: [...this.state.values.properties, this.state.tag]
-				}
-			},
-			() => {
-				storage.options.update({ properties: this.state.values.properties });
-			}
+		this.props.dispatch(
+			updateOptions({
+				properties: [...this.props.options.properties, this.state.tag]
+			})
 		);
 	};
 
 	private handleTagRemove = (value: string): void => {
-		const current = this.state.values.properties.slice(0);
+		const current = this.props.options.properties.slice(0);
 		const index = current.findIndex((item) => value === item);
 		current.splice(index, 1);
 
-		this.setState(
-			{
-				values: {
-					...this.state.values,
-					properties: current
-				}
-			},
-			() => {
-				storage.options.update({ properties: this.state.values.properties });
-			}
+		this.props.dispatch(
+			updateOptions({
+				properties: current
+			})
 		);
 	};
 }
 
 export default connect((store: IReduxStore) => ({
-	google: store.google
+	google: store.google,
+	options: store.options.values
 }))(Options);

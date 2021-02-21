@@ -2,7 +2,7 @@ import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { FlatList, Image, ListRenderItemInfo, Pressable, View } from "react-native";
 import { CountryFlag, Icon } from "..";
-import { IStorageCollection } from "../../types/storage";
+import { IDataCollection } from "../../types/data";
 import strings from "../../utils/strings";
 import Typography from "../typography";
 import styles from "./styles";
@@ -14,7 +14,7 @@ export interface ICollection {
 	/**
 	 * Zaznamy kolekce
 	 */
-	records: IStorageCollection[];
+	records: IDataCollection[];
 
 	/**
 	 * Panak
@@ -24,12 +24,12 @@ export interface ICollection {
 	/**
 	 * Stisknuti
 	 */
-	onPress: (record: IStorageCollection) => void;
+	onPress: (record: IDataCollection) => void;
 
 	/**
 	 * Dlouhe stisknuti
 	 */
-	onLongPress: (record: IStorageCollection) => void;
+	onLongPress: (record: IDataCollection) => void;
 }
 
 /**
@@ -74,10 +74,10 @@ export default class Collection extends React.PureComponent<ICollection> {
 	/**
 	 * Sestaveni polozky seznamu
 	 *
-	 * @param {ListRenderItemInfo<IStorageCollection>} params Parametry
+	 * @param {ListRenderItemInfo<IDataCollection>} params Parametry
 	 * @returns {JSX.Element} Element polozky
 	 */
-	private renderRecord = ({ index, item }: ListRenderItemInfo<IStorageCollection>): JSX.Element => {
+	private renderRecord = ({ index, item }: ListRenderItemInfo<IDataCollection>): JSX.Element => {
 		// rozlozeni props
 		const { dram, onLongPress, onPress } = this.props;
 		// sestaveni a vraceni
@@ -112,10 +112,10 @@ export default class Collection extends React.PureComponent<ICollection> {
 	/**
 	 * Zrani
 	 *
-	 * @param {IStorageCollection} item Polozka kolekce
+	 * @param {IDataCollection} item Polozka kolekce
 	 * @returns {JSX.Element} Element polozky
 	 */
-	private renderRipening(item: IStorageCollection): JSX.Element {
+	private renderRipening(item: IDataCollection): JSX.Element {
 		if (item.ripening[0] && item.ripening[1]) {
 			return (
 				<Typography>

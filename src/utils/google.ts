@@ -174,7 +174,7 @@ export async function list(): Promise<IGoogleDriveFile[]> {
 		return parsed.files;
 	}
 	// vychozi navratova hodnota
-	return null;
+	return [];
 }
 
 /**

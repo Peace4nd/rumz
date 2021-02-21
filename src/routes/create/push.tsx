@@ -18,48 +18,41 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
+import { connect, DispatchProp } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { Form, Route } from "../../components";
+import { pushRecord } from "../../redux/actions/collection";
+import { IDataCollection, IDataOptions } from "../../types/data";
 import { IFileDocument } from "../../types/file";
-import { IStorageCollection } from "../../types/storage";
+import { IReduxStore } from "../../types/redux";
 import country from "../../utils/country";
 import fs from "../../utils/file-system";
-import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
-interface ICreateState {
-	record: IStorageCollection & { image: IFileDocument };
+interface ICreatePushState {
+	record: IDataCollection & { image: IFileDocument };
 	working: boolean;
-	tags: string[];
-	loaded: boolean;
 }
 
-interface ICreateParams {
+interface ICreatePushProps extends DispatchProp {
+	options: IDataOptions;
+}
+
+interface ICreatePushParams {
 	id: string;
 }
 
 /**
  * Pridani
  */
-export default class Create extends Route.Content<unknown, ICreateState, ICreateParams> {
+class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICreatePushParams> {
 	/**
 	 * Vychozi stav
 	 */
-	public state: ICreateState = {
-		loaded: false,
+	public state: ICreatePushState = {
 		record: null,
-		tags: [],
 		working: false
 	};
-
-	public componentDidMount(): void {
-		storage.options.read().then((options) => {
-			this.setState({
-				loaded: true,
-				tags: options.properties
-			});
-		});
-	}
 
 	/**
 	 * Vlastnosti hlavicky
@@ -67,10 +60,12 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 	 * @returns {IHeader} Vlastnosti
 	 */
 	public render(): JSX.Element {
+		// rozlozeni props
+		const { options } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={this.state.working || !this.state.loaded}
+				busy={this.state.working}
 				header={{
 					actionLeft: {
 						icon: faTimes,
@@ -84,7 +79,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 					title: strings("headerAdd")
 				}}
 			>
-				<Form<IStorageCollection>
+				<Form<IDataCollection>
 					fields={[
 						{
 							icon: faImage,
@@ -118,7 +113,7 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 						},
 						{
 							icon: faPalette,
-							items: this.state.tags,
+							items: options.properties,
 							name: "color",
 							placeholder: strings("createCharacteristicsColor"),
 							type: "tags"
@@ -187,8 +182,6 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 						}
 					]}
 					onChange={(values) => {
-						console.log(values);
-
 						this.setState({
 							record: values
 						});
@@ -208,20 +201,24 @@ export default class Create extends Route.Content<unknown, ICreateState, ICreate
 		const { id, image, ...rest } = this.state.record;
 		// ulozeni
 		fs.collection.save(image, id).then((path) => {
-			storage.collection
-				.push({
+			// redux
+			this.props.dispatch(
+				pushRecord({
 					...rest,
 					id,
 					image: {
 						path
 					}
 				})
-				.then(() => {
-					this.redirect("/overview");
-					ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
-				});
+			);
+			// presmerovani
+			this.redirect("/overview");
+			// notifikace
+			ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
 		});
-
-		// ToastAndroid.show(strings("createSaveError"), ToastAndroid.LONG);
 	};
 }
+
+export default connect((store: IReduxStore) => ({
+	options: store.options.values
+}))(CreatePush);

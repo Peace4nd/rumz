@@ -1,49 +1,43 @@
 import React from "react";
 import { Text } from "react-native";
+import { connect } from "react-redux";
 import { Route } from "../../components";
-import { IStorageCollection } from "../../types/storage";
-import storage from "../../utils/storage";
+import { IDataCollection, IDataOptions } from "../../types/data";
+import { IReduxStore } from "../../types/redux";
 
-interface ICreateState {
-	record: IStorageCollection;
+interface ICreateUpdateProps {
+	collection: IDataCollection[];
+	options: IDataOptions;
 }
 
-interface ICreateParams {
+interface ICreateUpdateParams {
 	id: string;
 }
 
 /**
- * Pridani
+ * Editace
  */
-export default class Create extends Route.Content<unknown, ICreateState, ICreateParams> {
-	/**
-	 * Vychozi stav
-	 */
-	public state: ICreateState = {
-		record: null
-	};
-
-	/**
-	 * Pripojeni komponenty
-	 */
-	public componentDidMount(): void {
-		const id = this.getParamValue("id");
-		if (id) {
-			storage.collection.find(id).then((record) => {
-				this.setState({
-					record
-				});
-			});
-		}
-	}
-
+class CreateUpdate extends Route.Content<ICreateUpdateProps, unknown, ICreateUpdateParams> {
 	/**
 	 * Vlastnosti hlavicky
 	 *
 	 * @returns {IHeader} Vlastnosti
 	 */
 	public render(): JSX.Element {
-		const { record } = this.state;
-		return <Route.Wrapper busy={record === null}>{record !== null && <Text>{JSON.stringify(record)}</Text>}</Route.Wrapper>;
+		// rozlozeni props
+		const { collection } = this.props;
+		// nalezeni zaznamu
+		const record = collection.find((col) => col.id === this.getParamValue("id"));
+		// sestaveni a vraceni
+		return (
+			<Route.Wrapper>
+				<Text>{JSON.stringify(record)}</Text>
+			</Route.Wrapper>
+		);
 	}
 }
+
+export default connect((store: IReduxStore) => ({
+	collection: store.collection.records,
+	options: store.options.values
+}))(CreateUpdate);

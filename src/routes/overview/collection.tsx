@@ -1,41 +1,40 @@
 import { faEllipsisV, faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import SplashScreen from "react-native-splash-screen";
-import { connect, DispatchProp } from "react-redux";
+import { batch, connect, DispatchProp } from "react-redux";
 import { Collection, Dialog, Input, Route } from "../../components";
+import { loadRecords, updateRecord } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
+import { loadOptions } from "../../redux/actions/options";
+import { IDataCollection, IDataOptions } from "../../types/data";
 import { IReduxGoogle, IReduxStore } from "../../types/redux";
-import { IStorageCollection, IStorageOptions } from "../../types/storage";
 import ga from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOverviewCollectionState {
-	records: IStorageCollection[];
-	selected: IStorageCollection;
+	selected: IDataCollection;
 	opened: boolean;
-	options: IStorageOptions;
-	loaded: boolean;
 	dram: number;
 }
 
-interface IOverviewCollectionProps {
+interface IOverviewCollectionProps extends DispatchProp {
+	collection: IDataCollection[];
 	google: IReduxGoogle;
+	options: IDataOptions;
+	init: boolean;
 }
 
 /**
  * Prehled
  */
-class OverviewCollection extends Route.Content<IOverviewCollectionProps & DispatchProp, IOverviewCollectionState> {
+class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOverviewCollectionState> {
 	/**
 	 * Vychozi stav
 	 */
 	public state: IOverviewCollectionState = {
 		dram: 0,
-		loaded: false,
 		opened: false,
-		options: null,
-		records: [],
 		selected: null
 	};
 
@@ -44,32 +43,29 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps & Dispat
 	 */
 	public componentDidMount(): void {
 		// rozlozeni props
-		const { google } = this.props;
-		// overeni googlu
-		Promise.all([storage.collection.read(), storage.options.read()]).then((values) => {
-			this.setState(
-				{
-					loaded: true,
-					options: values[1],
-					records: values[0]
-				},
-				() => {
-					// ukonceni splash screen
-					SplashScreen.hide();
-					// overeni pristupu ke google sluzbam
-					if (!google.resolved) {
-						ga.auth
-							.signInSilently()
-							.then((user) => {
-								this.props.dispatch(signResolved(user));
-							})
-							.catch(() => {
-								this.props.dispatch(signResolved());
-							});
-					}
-				}
-			);
-		});
+		const { google, init } = this.props;
+		// splash screen
+		SplashScreen.hide();
+		// nacteni databaze
+		if (!init) {
+			storage.readAll().then((data: IReduxStore) => {
+				batch(() => {
+					this.props.dispatch(loadRecords(data.collection.records));
+					this.props.dispatch(loadOptions(data.options.values));
+				});
+			});
+		}
+		// overeni pristupu ke google sluzbam
+		if (!google.resolved) {
+			ga.auth
+				.signInSilently()
+				.then((user) => {
+					this.props.dispatch(signResolved(user));
+				})
+				.catch(() => {
+					this.props.dispatch(signResolved());
+				});
+		}
 	}
 
 	/**
@@ -79,10 +75,12 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps & Dispat
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { loaded, opened, options, records } = this.state;
+		const { opened } = this.state;
+		const { collection, init, options } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
+				busy={!init}
 				header={{
 					actionRight: {
 						icon: faEllipsisV,
@@ -99,12 +97,11 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps & Dispat
 					},
 					title: strings("headerMain")
 				}}
-				busy={!loaded}
 			>
 				{/* kolekce */}
 				<Collection
 					dram={options?.dram}
-					records={records}
+					records={collection}
 					onPress={(record) => {
 						this.redirect("/overview/:id", { id: record.id });
 					}}
@@ -132,9 +129,9 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps & Dispat
 	/**
 	 * Otevreni okna pro zadani panaku
 	 *
-	 * @param {IStorageCollection} record Aktualni zaznam
+	 * @param {IDataCollection} record Aktualni zaznam
 	 */
-	private handleDramOpen = (record: IStorageCollection): void => {
+	private handleDramOpen = (record: IDataCollection): void => {
 		this.setState({
 			opened: true,
 			selected: record
@@ -159,16 +156,26 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps & Dispat
 		// rozlozeni props
 		const { dram, selected } = this.state;
 		// aktualizace zaznamu
-		storage.collection.update(selected.id, { drunk: selected.drunk + dram }).then((updated) => {
-			this.setState({
+
+		this.setState(
+			{
 				opened: false,
-				records: updated,
 				selected: null
-			});
-		});
+			},
+			() => {
+				this.props.dispatch(
+					updateRecord(selected.id, {
+						drunk: selected.drunk + dram
+					})
+				);
+			}
+		);
 	};
 }
 
 export default connect((store: IReduxStore) => ({
-	google: store.google
+	collection: store.collection.records,
+	google: store.google,
+	init: store.collection.init && store.options.init,
+	options: store.options.values
 }))(OverviewCollection);

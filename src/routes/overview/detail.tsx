@@ -1,12 +1,14 @@
 import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Text } from "react-native";
+import { connect } from "react-redux";
 import { Route } from "../../components";
-import { IStorageCollection } from "../../types/storage";
-import { collection } from "../../utils/storage";
+import { IDataCollection, IDataOptions } from "../../types/data";
+import { IReduxStore } from "../../types/redux";
 
-interface IOverviewDetailState {
-	record: IStorageCollection;
+interface IOverviewDetailProps {
+	collection: IDataCollection[];
+	options: IDataOptions;
 }
 
 interface IOverviewDetailParams {
@@ -16,37 +18,20 @@ interface IOverviewDetailParams {
 /**
  * Detail
  */
-export default class OverviewDetail extends Route.Content<unknown, IOverviewDetailState, IOverviewDetailParams> {
+class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverviewDetailParams> {
 	/**
-	 * Vychozi stav
-	 */
-	public state: IOverviewDetailState = {
-		record: null
-	};
-
-	/**
-	 * Pripojeni komponenty
-	 */
-	public componentDidMount(): void {
-		collection.find(this.getParamValue("id")).then((record) => {
-			this.setState({
-				record
-			});
-		});
-	}
-
-	/**
-	 * Render
+	 * Vlastnosti hlavicky
 	 *
-	 * @returns {JSX.Element} Element
+	 * @returns {IHeader} Vlastnosti
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { record } = this.state;
-		// sestaveni  vraceni
+		const { collection } = this.props;
+		// nalezeni zaznamu
+		const record = collection.find((col) => col.id === this.getParamValue("id"));
+		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={record === null}
 				header={{
 					actionLeft: {
 						icon: faTimes,
@@ -64,3 +49,8 @@ export default class OverviewDetail extends Route.Content<unknown, IOverviewDeta
 		);
 	}
 }
+
+export default connect((store: IReduxStore) => ({
+	collection: store.collection.records,
+	options: store.options.values
+}))(OverviewDetail);

@@ -72,7 +72,7 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 			storage.stringify().then((stringified) => {
 				console.log("STRING", stringified);
 
-				drive.update("185k-JFCJomVoBiCVh9PDOKOjfWazrZ4cuKqJDI6RHRr0CIuE", stringified, { name: "records.json" }).then((metadata) => {
+				drive.update("185k-JFCJomVoBiCVh9PDOKOjfWazrZ4cuKqJDI6RHRr0CIuE", stringified, { name: "data.json" }).then((metadata) => {
 					console.log("UPDATE", metadata);
 				});
 			});
@@ -114,7 +114,8 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 				<Typography type="Subtitle1">{google.user.name}</Typography>
 				<Typography type="Subtitle2">{google.user.email}</Typography>
 
-				<Button label="zalohovat" disabled={backupBusy} onPress={this.handleBackup} />
+				<Button label="zalohovat" busy={backupBusy} onPress={this.handleBackup} />
+				<Button label="obnovit" busy={backupBusy} onPress={this.handleRestore} />
 
 				<GoogleSigninButton
 					size={GoogleSigninButton.Size.Standard}
@@ -147,6 +148,30 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 		);
 	}
 
+	private handleRestore = (): void => {
+		this.setState(
+			{
+				backupBusy: true
+			},
+			() => {
+				const records = this.state.backupFiles.find((file) => file.name === "data.json");
+
+				ga.drive.download(records.id).then((data) => {
+					this.setState(
+						{
+							backupBusy: false
+						},
+						() => {
+							const ccc = JSON.parse(data);
+
+							console.log(ccc);
+						}
+					);
+				});
+			}
+		);
+	};
+
 	private handleBackup = (): void => {
 		this.setState(
 			{
@@ -155,7 +180,7 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 			() => {
 				storage.stringify().then((stringified) => {
 					// nalezeni zaznamu
-					const recordsIndex = this.state.backupFiles.findIndex((file) => file.name === "records.json");
+					const recordsIndex = this.state.backupFiles.findIndex((file) => file.name === "data.json");
 					const recordsData = this.state.backupFiles[recordsIndex];
 					// zpracovani
 					if (recordsIndex > -1) {
@@ -170,7 +195,7 @@ class Options extends Route.Content<IOptionsProps & DispatchProp, IOptionsState>
 							});
 						});
 					} else {
-						ga.drive.create({ name: "records.json" }, stringified).then((file) => {
+						ga.drive.create({ name: "data.json" }, stringified).then((file) => {
 							// aktualizace stavu
 							this.setState({
 								backupBusy: false,

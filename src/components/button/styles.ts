@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement } from "../../styles";
+import { Color, Measurement, Size } from "../../styles";
 
 const styles = StyleSheet.create({
 	icon: {
@@ -14,9 +14,9 @@ const styles = StyleSheet.create({
 		borderRadius: Measurement.Radius / 2,
 		elevation: 2,
 		flexDirection: "row",
+		height: Size["4x"],
 		justifyContent: "center",
-		paddingHorizontal: 2 * Measurement.Padding,
-		paddingVertical: Measurement.Padding
+		paddingHorizontal: 2 * Measurement.Padding
 	},
 	wrapperDisabled: {
 		backgroundColor: Color.Muted

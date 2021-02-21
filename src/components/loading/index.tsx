@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, StyleProp, ViewStyle } from "react-native";
 import { Color } from "../../styles";
 
 /**
@@ -10,6 +10,16 @@ interface ILoading {
 	 * Velikost
 	 */
 	size?: "small" | "large";
+
+	/**
+	 * Barva
+	 */
+	color?: keyof typeof Color;
+
+	/**
+	 * Styly
+	 */
+	style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -20,9 +30,9 @@ interface ILoading {
  */
 const Loading = (props: ILoading): JSX.Element => {
 	// rozlozeni props
-	const { size } = props;
+	const { color, size, style } = props;
 	// sestaveni a vraceni
-	return <ActivityIndicator size={size || "large"} color={Color.Base} />;
+	return <ActivityIndicator size={size || "large"} color={Color[color || "Base"]} style={style} />;
 };
 
 export default Loading;

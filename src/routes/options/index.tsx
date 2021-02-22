@@ -3,7 +3,7 @@ import { GoogleSigninButton } from "@react-native-community/google-signin";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
-import { Button, Input, Route, Tags, Typography } from "../../components";
+import { Button, Heading, Input, Route, Tags, Typography } from "../../components";
 import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { updateOptions } from "../../redux/actions/options";
@@ -82,15 +82,20 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					},
 					title: strings("optionsTitle")
 				}}
+				padding={true}
 			>
 				{/* google */}
-				<Typography type="Headline6">prihlaseni google</Typography>
+				<Heading size="Headline6">{strings("optionsGoogleTitle")}</Heading>
 
 				{google.signed && (
 					<React.Fragment>
 						<Image source={{ uri: google.user.photo }} style={styles.googleAvatar} />
 						<Typography type="Subtitle1">{google.user.name}</Typography>
 						<Typography type="Subtitle2">{google.user.email}</Typography>
+
+						<Heading size="Headline6">{strings("optionsDriveTitle")}</Heading>
+
+						{/* buttonky vedle sebe, nejaka statistika: pocet zaznamu, posledni aktualizace */}
 
 						<Button label="zalohovat" disabled={backupWorking} busy={backupUpload} onPress={this.backupUpload} />
 						<Button label="obnovit" disabled={backupWorking || backupFiles.length === 0} busy={backupDownload} onPress={this.backupDownload} />
@@ -109,11 +114,14 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 				/>
 
 				{/* velikost panaku */}
-				<Typography type="Headline6">velikost frtanu</Typography>
+				<Heading size="Headline6">{strings("optionsDramTitle")}</Heading>
 				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={options.dram} onChange={this.handleDram} />
 
 				{/* senzoricke tagy */}
-				<Typography type="Headline6">senzoricke tagy</Typography>
+
+				{/* rozdelit na cich, barvu  a chut */}
+
+				<Heading size="Headline6">{strings("optionsPropertiesTitle")}</Heading>
 				<Input.Text
 					icon={faTags}
 					onChange={this.handleTagChange}

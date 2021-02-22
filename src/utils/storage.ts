@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DEFAULT_STATE as collectionDefaul } from "../redux/reducers/collection";
+import { DEFAULT_STATE as optionsDefault } from "../redux/reducers/options";
 import { IReduxCollection, IReduxOptions } from "../types/redux";
 import { IStorageKey, IStorageSection } from "../types/storage";
 
@@ -17,24 +19,24 @@ async function write(key: IStorageKey, value: unknown): Promise<void> {
  * Nacteni objektu dat
  *
  * @param {IStorageKey} key Klic
+ * @param {T} defaults Vychozi hodnota
  * @returns {Promise<T>} Data
  */
-async function read<T>(key: IStorageKey): Promise<T> {
+async function read<T>(key: IStorageKey, defaults: T): Promise<T> {
 	// nacteni dat
 	const raw = await AsyncStorage.getItem(key);
 	if (raw != null) {
 		return JSON.parse(raw) as T;
 	}
-
 	// failsafe
-	return null;
+	return defaults;
 }
 
 /**
  * Kolekce
  */
 const collection: IStorageSection<IReduxCollection> = {
-	read: async () => read("collection"),
+	read: async () => read("collection", collectionDefaul),
 	write: async (data) => write("collection", data)
 };
 
@@ -42,7 +44,7 @@ const collection: IStorageSection<IReduxCollection> = {
  * Nastaveni
  */
 const options: IStorageSection<IReduxOptions> = {
-	read: async () => read("options"),
+	read: async () => read("options", optionsDefault),
 	write: async (data) => write("options", data)
 };
 

@@ -31,6 +31,10 @@
 	"overviewDramCount": "Počet panáků",
 
 	"optionsTitle": "Nastavení",
+	"optionsGoogleTitle": "Přihlášení Google",
+	"optionsDriveTitle": "Záloha na Google Drive",
+	"optionsDramTitle": "Velikost frtanu (ml)",
+	"optionsPropertiesTitle": "Vlastnosti",
 
 	"confirmTitleDelete": "Opravdu smazat?",
 	"confirmCancel": "Zrušit",

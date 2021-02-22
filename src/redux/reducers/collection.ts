@@ -3,7 +3,7 @@ import { IDataCollection } from "../../types/data";
 import { IReduxAction, IReduxCollection } from "../../types/redux";
 
 // vychozi state
-const DEFAULT_STATE: IReduxCollection = {
+export const DEFAULT_STATE: IReduxCollection = {
 	changed: new Date(),
 	init: false,
 	records: []
@@ -27,7 +27,7 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 					$set: true
 				},
 				records: {
-					$set: action.payload
+					$set: action.payload || DEFAULT_STATE.records
 				}
 			});
 		}
@@ -42,12 +42,18 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 			});
 		}
 		case "collection-update": {
+			// priprava
+			const payload = action.payload as { id: string; record: Partial<IDataCollection> };
+			const index = state.records.findIndex((record) => record.id === payload.id);
+			// aktualizace
 			return update(state, {
 				changed: {
 					$set: new Date()
 				},
 				records: {
-					$push: [action.payload as IDataCollection]
+					[index]: {
+						$merge: payload.record
+					}
 				}
 			});
 		}

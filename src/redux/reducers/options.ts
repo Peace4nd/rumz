@@ -3,7 +3,7 @@ import { IDataOptions } from "../../types/data";
 import { IReduxAction, IReduxOptions } from "../../types/redux";
 
 // vychozi state
-const DEFAULT_STATE: IReduxOptions = {
+export const DEFAULT_STATE: IReduxOptions = {
 	changed: new Date(),
 	init: false,
 	values: {
@@ -30,7 +30,7 @@ export default (state: IReduxOptions = DEFAULT_STATE, action: IReduxAction): IRe
 					$set: true
 				},
 				values: {
-					$set: action.payload as IDataOptions
+					$set: (action.payload as IDataOptions) || DEFAULT_STATE.values
 				}
 			});
 		}

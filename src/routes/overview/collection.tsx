@@ -156,7 +156,6 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 		// rozlozeni props
 		const { dram, selected } = this.state;
 		// aktualizace zaznamu
-
 		this.setState(
 			{
 				opened: false,

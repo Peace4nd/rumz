@@ -4,6 +4,7 @@ export { default as CountryFlag } from "./country-flag";
 export { default as Dialog } from "./dialog";
 export { default as Form } from "./form";
 export { default as Header } from "./header";
+export { default as Heading } from "./heading";
 export { default as Icon } from "./icon";
 export { default as Input } from "./input";
 export { default as Loading } from "./loading";

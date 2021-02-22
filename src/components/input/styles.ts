@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
 	// pole
 	fieldBasic: {
 		...Typography.Body1,
+		backgroundColor: Color.White,
 		color: Color.Text,
 		flex: 1,
 		height: "100%",
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
 	},
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
-		backgroundColor: Color.Highlight,
+		backgroundColor: Color.White,
 		marginLeft: Size["7x"],
 		marginRight: Size["6x"]
 	},

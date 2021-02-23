@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import Icon from "../icon";
 import Loading from "../loading";
 import Typography from "../typography";
@@ -34,6 +34,11 @@ export interface IButton {
 	 * Akce po stisknuti
 	 */
 	onPress?: () => void;
+
+	/**
+	 * Styly
+	 */
+	style?: TouchableOpacityProps["style"];
 }
 
 /**
@@ -44,10 +49,10 @@ export interface IButton {
  */
 const Button = (props: IButton): JSX.Element => {
 	// rozlozeni props
-	const { busy, disabled, icon, label, onPress } = props;
+	const { busy, disabled, icon, label, onPress, style } = props;
 	// sestaveni a vraceni
 	return (
-		<TouchableOpacity style={[styles.wrapper, disabled || busy ? styles.wrapperDisabled : null]} onPress={onPress}>
+		<TouchableOpacity style={[styles.wrapper, disabled || busy ? styles.wrapperDisabled : null, style]} onPress={onPress}>
 			{icon && !busy && <Icon definition={icon} style={styles.icon} color="Highlight" size="2x" />}
 			{busy && <Loading size="small" color="Highlight" style={styles.icon} />}
 			{label && (

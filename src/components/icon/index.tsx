@@ -1,7 +1,6 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { FontAwesomeIcon, FontAwesomeIconStyle } from "@fortawesome/react-native-fontawesome";
 import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
 import { Color, Size } from "../../styles";
 
 /**
@@ -26,7 +25,7 @@ export interface IIcon {
 	/**
 	 * Doplnkove styly
 	 */
-	style?: StyleProp<ViewStyle>;
+	style?: FontAwesomeIconStyle;
 }
 
 /**

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
 		flex: 0,
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginBottom: Measurement.Padding,
+		marginBottom: Measurement.Padding * 2,
 		paddingBottom: Measurement.Padding,
 		width: "100%"
 	}

@@ -3,7 +3,7 @@ import { GoogleSigninButton } from "@react-native-community/google-signin";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
-import { Button, Heading, Input, Route, Tags, Typography } from "../../components";
+import { Button, ButtonGroup, Grid, Heading, Input, Route, Tags, Typography } from "../../components";
 import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { updateOptions } from "../../redux/actions/options";
@@ -88,18 +88,17 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 				<Heading size="Headline6">{strings("optionsGoogleTitle")}</Heading>
 
 				{google.signed && (
-					<React.Fragment>
-						<Image source={{ uri: google.user.photo }} style={styles.googleAvatar} />
-						<Typography type="Subtitle1">{google.user.name}</Typography>
-						<Typography type="Subtitle2">{google.user.email}</Typography>
-
-						<Heading size="Headline6">{strings("optionsDriveTitle")}</Heading>
-
-						{/* buttonky vedle sebe, nejaka statistika: pocet zaznamu, posledni aktualizace */}
-
-						<Button label="zalohovat" disabled={backupWorking} busy={backupUpload} onPress={this.backupUpload} />
-						<Button label="obnovit" disabled={backupWorking || backupFiles.length === 0} busy={backupDownload} onPress={this.backupDownload} />
-					</React.Fragment>
+					<Grid.Wrapper>
+						<Grid.Row>
+							<Grid.Column evenly={false}>
+								<Image source={{ uri: google.user.photo }} style={styles.googleAvatar} />
+							</Grid.Column>
+							<Grid.Column>
+								<Typography type="Subtitle1">{google.user.name}</Typography>
+								<Typography type="Subtitle2">{google.user.email}</Typography>
+							</Grid.Column>
+						</Grid.Row>
+					</Grid.Wrapper>
 				)}
 
 				<GoogleSigninButton
@@ -113,13 +112,21 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					}}
 				/>
 
+				{/* buttonky vedle sebe, nejaka statistika: pocet zaznamu, posledni aktualizace */}
+
+				<Heading size="Headline6">{strings("optionsDriveTitle")}</Heading>
+				<ButtonGroup>
+					<Button label="zalohovat" disabled={backupWorking} busy={backupUpload} onPress={this.backupUpload} />
+					<Button label="obnovit" disabled={backupWorking || backupFiles.length === 0} busy={backupDownload} onPress={this.backupDownload} />
+				</ButtonGroup>
+
 				{/* velikost panaku */}
 				<Heading size="Headline6">{strings("optionsDramTitle")}</Heading>
-				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={options.dram} onChange={this.handleDram} />
+				<Input.Number icon={faGlassWhiskey} placeholder="dram" value={options.dram} unit="ml" onChange={this.handleDram} />
 
 				{/* senzoricke tagy */}
 
-				{/* rozdelit na cich, barvu  a chut */}
+				{/* rozdelit na cich, barvu  a chut, dodelat tagy (mazani a editace) */}
 
 				<Heading size="Headline6">{strings("optionsPropertiesTitle")}</Heading>
 				<Input.Text

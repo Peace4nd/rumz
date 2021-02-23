@@ -14,7 +14,12 @@ interface IInputNumberState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputNumber = IInput<number>;
+export interface IInputNumber extends IInput<number> {
+	/**
+	 * Jednotka
+	 */
+	unit?: string;
+}
 
 /**
  * Ciselny vstup
@@ -54,7 +59,7 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, onSubmit, placeholder, returnKey } = this.props;
+		const { icon, onSubmit, placeholder, returnKey, unit } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
@@ -72,6 +77,11 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 					blurOnSubmit={onSubmit?.blur ?? true}
 					returnKeyType={returnKey}
 				/>
+				{unit && (
+					<Typography type="Body1" style={styles.unit}>
+						{unit}
+					</Typography>
+				)}
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
 						{error}

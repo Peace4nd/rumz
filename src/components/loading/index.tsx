@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, StyleProp, ViewStyle } from "react-native";
+import { ActivityIndicator, ActivityIndicatorProps } from "react-native";
 import { Color } from "../../styles";
 
 /**
@@ -19,7 +19,7 @@ interface ILoading {
 	/**
 	 * Styly
 	 */
-	style?: StyleProp<ViewStyle>;
+	style?: ActivityIndicatorProps["style"];
 }
 
 /**

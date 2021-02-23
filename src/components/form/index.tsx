@@ -11,14 +11,6 @@ import { IInputRating } from "../input/components/rating";
 import { IInputTags } from "../input/components/tags";
 import { IInputText } from "../input/components/text";
 import styles from "./styles";
-/*
-type IFormState<V> = {
-	[key: keyof V]: {
-		value: unknown;
-		state: IInputState;
-	};
-};
-*/
 
 type IFormStateValues<V> = Partial<Record<keyof V, { value: unknown; state: IInputState }>>;
 

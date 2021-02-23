@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
 	// pole
 	fieldBasic: {
 		...Typography.Body1,
-		backgroundColor: Color.White,
 		color: Color.Text,
 		flex: 1,
 		height: "100%",
@@ -86,9 +85,21 @@ const styles = StyleSheet.create({
 		marginRight: Size["6x"]
 	},
 
+	// jednotka
+	unit: {
+		color: Color.Muted,
+		flex: 0,
+		height: Measurement.Components.Input.Height,
+		lineHeight: Measurement.Components.Input.Height,
+		textAlign: "right",
+		textAlignVertical: "center",
+		width: Measurement.Components.Input.Height
+	},
+
 	// wrapper
 	wrapperBasic: {
 		alignItems: "flex-start",
+		backgroundColor: Color.White,
 		borderColor: Color.Base,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
@@ -113,7 +124,6 @@ const styles = StyleSheet.create({
 	},
 	wrapperImage: {
 		alignItems: "center",
-		backgroundColor: Color.White,
 		height: width / 2,
 		justifyContent: "center",
 		marginHorizontal: width / 6

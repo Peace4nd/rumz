@@ -15,6 +15,10 @@ export interface IInputState {
 	filled: boolean;
 	valid: boolean;
 }
+
+/**
+ * Dostupne vlastnosti
+ */
 export interface IInput<V> {
 	/**
 	 * Placeholder
@@ -72,6 +76,9 @@ export interface IInput<V> {
 	highlight?: boolean;
 }
 
+/**
+ * Zakladni interface vstupniho pole
+ */
 export interface IInputCore {
 	focus(): void;
 }

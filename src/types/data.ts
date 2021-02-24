@@ -106,5 +106,25 @@ export interface IDataOptions {
 	/**
 	 * Senzoricke vlastnosti
 	 */
-	properties: string[];
+	properties: {
+		/**
+		 * Barva
+		 */
+		color: string[];
+
+		/**
+		 * Cichove vlastnosti
+		 */
+		smell: string[];
+
+		/**
+		 * Chutove vlastnosti
+		 */
+		taste: string[];
+	};
 }
+
+/**
+ * Dostupne senzoricke vlastnosti
+ */
+export type IDataOptionsProperties = keyof IDataOptions["properties"];

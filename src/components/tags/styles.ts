@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
 	item: {
 		backgroundColor: Color.Light,
 		borderColor: Color.Dark,
-		borderRadius: Measurement.Radius,
+		borderRadius: Measurement.Radius / 2,
 		borderWidth: StyleSheet.hairlineWidth,
 		elevation: 1,
 		marginBottom: Measurement.Padding,
@@ -16,8 +16,10 @@ const styles = StyleSheet.create({
 		color: Color.Dark
 	},
 	wrapper: {
+		backgroundColor: "pink",
 		flexDirection: "row",
-		flexWrap: "wrap"
+		flexWrap: "wrap",
+		marginBottom: -Measurement.Padding
 	}
 });
 

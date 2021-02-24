@@ -1,31 +1,38 @@
 import { StyleSheet } from "react-native";
-import { Size } from "../../styles";
+import { Color, Size } from "../../styles";
 
 const styles = StyleSheet.create({
 	columnBase: {
-		backgroundColor: "orange",
-		flex: 0,
 		flexDirection: "column"
-	},
-	columnEvenly: {
-		flex: 1
 	},
 	columnGap: {
 		marginLeft: Size["2x"]
 	},
 	rowBase: {
-		backgroundColor: "yellow",
 		flex: 0,
 		flexDirection: "row",
 		width: "100%"
 	},
 	rowGap: {
-		marginBottom: Size["2x"]
+		marginTop: Size["2x"]
+	},
+	titleBase: {
+		alignItems: "center",
+		borderBottomColor: Color.Base,
+		borderBottomWidth: StyleSheet.hairlineWidth,
+		flex: 0,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginBottom: Size["2x"],
+		paddingBottom: Size["1x"],
+		width: "100%"
 	},
 	wrapper: {
-		backgroundColor: "pink",
 		flex: 0,
 		flexDirection: "column"
+	},
+	wrapperMargin: {
+		marginBottom: Size["2x"]
 	}
 });
 

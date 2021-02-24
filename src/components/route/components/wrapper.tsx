@@ -59,7 +59,8 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 				label: strings("navigationCreate"),
 				path: "/create"
 			}
-		]
+		],
+		padding: true
 	};
 
 	/**

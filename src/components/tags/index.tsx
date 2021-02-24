@@ -1,8 +1,6 @@
-import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import confirm from "../../utils/confirm";
-import Icon from "../icon";
 import Typography from "../typography";
 import styles from "./styles";
 export interface ITagsItem {
@@ -44,27 +42,24 @@ const Tags = (props: ITags): JSX.Element => {
 	return (
 		<View style={styles.wrapper}>
 			{items.map((item, index) => (
-				<View key={index} style={styles.item}>
+				<TouchableOpacity
+					key={index}
+					style={styles.item}
+					onPress={
+						onDelete
+							? confirm.delete({
+									onConfirm: () => {
+										onDelete(item);
+									}
+							  })
+							: null
+					}
+					onLongPress={onModify ? () => onModify(item) : null}
+				>
 					<Typography type="Body1" style={styles.label}>
 						{item}
 					</Typography>
-					{onDelete && (
-						<TouchableOpacity
-							onPress={confirm.delete({
-								onConfirm: () => {
-									onDelete(item);
-								}
-							})}
-						>
-							<Icon definition={faTrash} />
-						</TouchableOpacity>
-					)}
-					{onModify && (
-						<TouchableOpacity onPress={() => onModify(item)}>
-							<Icon definition={faPencilAlt} />
-						</TouchableOpacity>
-					)}
-				</View>
+				</TouchableOpacity>
 			))}
 		</View>
 	);

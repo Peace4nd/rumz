@@ -1,5 +1,6 @@
 import { IDataOptions } from "../../types/data";
 import { IReduxAction } from "../../types/redux";
+import { IUtilityRecursivePartial } from "../../types/utility";
 
 /**
  * Nacteni nastaveni
@@ -20,7 +21,7 @@ export function loadOptions(values: IDataOptions): IReduxAction {
  * @param {Partial<IDataOptions>} values Hodnoty
  * @returns {IReduxAction} Akce
  */
-export function updateOptions(values: Partial<IDataOptions>): IReduxAction {
+export function updateOptions(values: IUtilityRecursivePartial<IDataOptions>): IReduxAction {
 	return {
 		payload: values,
 		type: "options-update"

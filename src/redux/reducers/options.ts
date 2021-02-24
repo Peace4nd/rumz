@@ -1,3 +1,4 @@
+import merge from "deepmerge";
 import update from "immutability-helper";
 import { IDataOptions } from "../../types/data";
 import { IReduxAction, IReduxOptions } from "../../types/redux";
@@ -8,7 +9,11 @@ export const DEFAULT_STATE: IReduxOptions = {
 	init: false,
 	values: {
 		dram: 40,
-		properties: []
+		properties: {
+			color: [],
+			smell: [],
+			taste: []
+		}
 	}
 };
 
@@ -40,7 +45,7 @@ export default (state: IReduxOptions = DEFAULT_STATE, action: IReduxAction): IRe
 					$set: new Date()
 				},
 				values: {
-					$merge: action.payload as Partial<IDataOptions>
+					$merge: merge(state.values, action.payload) as Partial<IDataOptions>
 				}
 			});
 		}

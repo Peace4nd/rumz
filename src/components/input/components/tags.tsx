@@ -1,6 +1,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { IInput, IInputCore } from "..";
 import Icon from "../../icon";
@@ -74,13 +74,15 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 							<Icon definition={faPlus} color="Base" />
 						</MenuTrigger>
 						<MenuOptions>
-							{items
-								.filter((item) => !this.state.value.includes(item))
-								.map((item, index) => (
-									<MenuOption key={index} value={item}>
-										<Typography type="Body1">{item}</Typography>
-									</MenuOption>
-								))}
+							<ScrollView style={styles.menuScroll}>
+								{items
+									.filter((item) => !this.state.value.includes(item))
+									.map((item, index) => (
+										<MenuOption key={index} value={item} style={styles.menuItem}>
+											<Typography type="Body1">{item}</Typography>
+										</MenuOption>
+									))}
+							</ScrollView>
 						</MenuOptions>
 					</Menu>
 				</View>

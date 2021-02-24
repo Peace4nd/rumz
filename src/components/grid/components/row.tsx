@@ -33,9 +33,11 @@ export default class GridRow extends React.PureComponent<IGridRow> {
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.rowBase, gap && index > 0 ? styles.rowGap : null]}>
-				{React.Children.map(children, (child, columnIndex) => {
-					return React.cloneElement(child, { gap, index: columnIndex } as IGridColumn & IGridHidden);
-				})}
+				{React.Children.toArray(children)
+					.filter((child) => !!child)
+					.map((child, columnIndex) => {
+						return React.cloneElement(child as any, { gap, index: columnIndex } as IGridColumn & IGridHidden);
+					})}
 			</View>
 		);
 	}

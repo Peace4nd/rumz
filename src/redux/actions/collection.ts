@@ -1,5 +1,6 @@
 import { IDataCollection } from "../../types/data";
 import { IReduxAction } from "../../types/redux";
+import { IUtilityRecursivePartial } from "../../types/utility";
 
 /**
  * Nacteni kompletni kolekce zaznamu do kolekce
@@ -34,7 +35,7 @@ export function pushRecord(record: IDataCollection): IReduxAction {
  * @param {Partial<IDataCollection>} record Zaznam
  * @returns {IReduxAction} Akce
  */
-export function updateRecord(id: string, record: Partial<IDataCollection>): IReduxAction {
+export function updateRecord(id: string, record: IUtilityRecursivePartial<IDataCollection>): IReduxAction {
 	return {
 		payload: {
 			id,

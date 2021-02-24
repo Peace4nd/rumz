@@ -8,6 +8,7 @@ import styles from "./styles";
  */
 export interface IHeading extends TextProps {
 	size: Extract<keyof typeof Typography, "Headline1" | "Headline2" | "Headline3" | "Headline4" | "Headline5" | "Headline6" | "Subtitle1" | "Subtitle2">;
+	margin?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ export default class Heading extends React.PureComponent<IHeading> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IHeading = {
+		margin: true,
 		size: "Headline6"
 	};
 
@@ -28,10 +30,10 @@ export default class Heading extends React.PureComponent<IHeading> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { children, size, style, ...rest } = this.props;
+		const { children, margin, size, style, ...rest } = this.props;
 		// sestaveni a vraceni
 		return (
-			<Text style={[Typography[size], styles.wrapper, style]} {...rest}>
+			<Text style={[Typography[size], styles.wrapper, margin ? styles.wrapperMargin : null, style]} {...rest}>
 				{children}
 			</Text>
 		);

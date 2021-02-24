@@ -97,6 +97,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 					},
 					title: strings("headerMain")
 				}}
+				padding={false}
 			>
 				{/* kolekce */}
 				<Collection

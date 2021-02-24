@@ -32,9 +32,13 @@
 
 	"optionsTitle": "Nastavení",
 	"optionsGoogleTitle": "Přihlášení Google",
+	"optionsGoogleSignin": "Přihlásit se",
 	"optionsDriveTitle": "Záloha na Google Drive",
+	"optionsDriveBackup": "Zálohovat",
+	"optionsDriveRestore": "Obnovit",
+	"optionsDriveEmpty": "Zatím neexistuje žádná záloha",
 	"optionsDramTitle": "Objem frťanu",
-	"optionsPropertiesTitle": "Vlastnosti",
+	"optionsPropertiesTitle": "Senzorické vlastnosti",
 
 	"confirmTitleDelete": "Opravdu smazat?",
 	"confirmCancel": "Zrušit",

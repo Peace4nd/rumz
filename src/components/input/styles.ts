@@ -72,6 +72,14 @@ const styles = StyleSheet.create({
 		width: width / 2 - 2 * Measurement.Padding
 	},
 
+	// menu
+	menuItem: {
+		padding: 2 * Measurement.Padding
+	},
+	menuScroll: {
+		maxHeight: Size["12x"]
+	},
+
 	// placeholder
 	placeholder: {
 		color: Color.Muted,

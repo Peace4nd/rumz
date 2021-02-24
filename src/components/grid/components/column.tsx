@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactNodeArray } from "react";
-import { View } from "react-native";
-import { IGridHidden } from "..";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { IGridAlign, IGridHidden } from "..";
 import styles from "../styles";
 
 /**
@@ -8,8 +8,9 @@ import styles from "../styles";
  */
 export interface IGridColumn {
 	children: ReactNode | ReactNodeArray;
-	evenly?: boolean;
-	// misto evenly mozan ddat flex:number
+	flex?: number;
+	vertical?: IGridAlign;
+	horizontal?: IGridAlign;
 }
 
 /**
@@ -21,7 +22,9 @@ export default class GridColumn extends React.PureComponent<IGridColumn> {
 	 */
 	public static defaultProps: IGridColumn = {
 		children: null,
-		evenly: true
+		flex: 1,
+		horizontal: "flex-start",
+		vertical: "flex-start"
 	};
 
 	/**
@@ -31,8 +34,20 @@ export default class GridColumn extends React.PureComponent<IGridColumn> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { evenly, children, gap, index } = this.props as IGridColumn & IGridHidden;
+		const { flex, children, gap, index, horizontal, vertical } = this.props as IGridColumn & IGridHidden;
+		// definice
+		const style: StyleProp<ViewStyle> = [styles.columnBase];
+		// styly
+		if (gap && index > 0) {
+			style.push(styles.columnGap);
+		}
+		// flex
+		style.push({
+			alignItems: horizontal,
+			flex,
+			justifyContent: vertical
+		});
 		// sestaveni a vraceni
-		return <View style={[styles.columnBase, gap && index > 0 ? styles.columnGap : null, evenly ? styles.columnEvenly : null]}>{children}</View>;
+		return <View style={StyleSheet.flatten(style)}>{children}</View>;
 	}
 }

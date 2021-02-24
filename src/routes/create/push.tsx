@@ -30,7 +30,7 @@ import fs from "../../utils/file-system";
 import strings from "../../utils/strings";
 
 interface ICreatePushState {
-	record: IDataCollection & { image: IFileDocument };
+	record: Omit<IDataCollection, "image"> & { image: IFileDocument };
 	working: boolean;
 }
 
@@ -78,6 +78,7 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 					},
 					title: strings("headerAdd")
 				}}
+				scrollable={true}
 			>
 				<Form<IDataCollection>
 					fields={[
@@ -120,9 +121,9 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 						},
 						{
 							icon: faFlask,
-							items: options.properties.smell,
-							name: "smell",
-							placeholder: strings("createCharacteristicsSmell"),
+							items: options.properties.aroma,
+							name: "aroma",
+							placeholder: strings("createCharacteristicsAroma"),
 							type: "tags"
 						},
 						{
@@ -202,15 +203,13 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 		// rozlozeni props
 		const { id, image, ...rest } = this.state.record;
 		// ulozeni
-		fs.collection.save(image, id).then((path) => {
+		fs.copy(image, id).then((path) => {
 			// redux
 			this.props.dispatch(
 				pushRecord({
 					...rest,
 					id,
-					image: {
-						path
-					}
+					image: path
 				})
 			);
 			// presmerovani

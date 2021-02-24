@@ -88,7 +88,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 				onPress={() => onPress(item)}
 				onLongPress={() => onLongPress(item)}
 			>
-				<Image source={{ uri: item.image.path }} resizeMode="contain" style={styles.itemImage} />
+				<Image source={{ uri: "file://" + item.image }} resizeMode="contain" style={styles.itemImage} />
 				<View style={styles.itemInfo}>
 					<Typography type="Headline6" style={styles.infoName}>
 						{item.name}

@@ -4,14 +4,15 @@ import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
 import { Button, ButtonGroup, Grid, Input, Route, Spacer, Tags, Typography } from "../../components";
-import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { updateOptions } from "../../redux/actions/options";
 import { IDataOptions, IDataOptionsProperties } from "../../types/data";
 import { IReduxGoogle, IReduxStore } from "../../types/redux";
+import fs from "../../utils/file-system";
 import ga, { IGoogleDriveFile } from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
+
 interface IOptionsState {
 	tag: Record<IDataOptionsProperties, string>;
 	backupFiles: IGoogleDriveFile[];
@@ -29,9 +30,6 @@ interface IOptionsProps extends DispatchProp {
  * Doplnkove styly
  */
 const styles = StyleSheet.create({
-	driveEmpty: {
-		textAlign: "center"
-	},
 	googleAvatar: {
 		height: 64,
 		width: 64
@@ -51,8 +49,8 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		backupUpload: false,
 		backupWorking: true,
 		tag: {
+			aroma: null,
 			color: null,
-			smell: null,
 			taste: null
 		}
 	};
@@ -61,12 +59,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
-		ga.drive.list().then((files) => {
-			this.setState({
-				backupFiles: files,
-				backupWorking: false
-			});
-		});
+		this.loadBackupFiles();
 	}
 
 	/**
@@ -88,6 +81,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					},
 					title: strings("optionsTitle")
 				}}
+				scrollable={true}
 			>
 				{/* google ucet */}
 				{this.renderGoogleSignin()}
@@ -101,6 +95,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	}
 
+	/**
+	 * Prihlaseni Google
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	private renderGoogleSignin(): JSX.Element {
 		// rozlozeni props
 		const { dispatch, google } = this.props;
@@ -128,6 +127,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 							onPress={() => {
 								ga.auth.signIn().then((user) => {
 									dispatch(signResolved(user));
+									this.loadBackupFiles();
 								});
 							}}
 						/>
@@ -137,6 +137,23 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	}
 
+	/**
+	 * Nacteni souboru zalohy
+	 */
+	private loadBackupFiles(): void {
+		ga.drive.list().then((files) => {
+			this.setState({
+				backupFiles: files,
+				backupWorking: false
+			});
+		});
+	}
+
+	/**
+	 * Google Drive
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	private renderGoogleDrive(): JSX.Element {
 		// rozlozeni props
 		const { google } = this.props;
@@ -160,10 +177,8 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row>
-						<Grid.Column>
-							<Typography type="Body2" style={styles.driveEmpty}>
-								{backupFiles.length === 0 ? strings("optionsDriveEmpty") : JSON.stringify}
-							</Typography>
+						<Grid.Column horizontal="center">
+							<Typography type="Body2">{backupFiles.length === 0 ? strings("optionsDriveEmpty") : JSON.stringify(backupFiles)}</Typography>
 						</Grid.Column>
 					</Grid.Row>
 				</Grid.Wrapper>
@@ -173,6 +188,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		return null;
 	}
 
+	/**
+	 * Panak
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	private renderDram(): JSX.Element {
 		// rozlozeni props
 		const { options } = this.props;
@@ -189,6 +209,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	}
 
+	/**
+	 * Senzoricke vlastnosti
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	private renderProperties(): JSX.Element {
 		// rozlozeni props
 		const { options } = this.props;
@@ -222,18 +247,18 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					<Grid.Column>
 						<Input.Text
 							icon={faFlask}
-							placeholder={strings("createCharacteristicsSmell")}
-							onChange={this.handleTagChange.bind(this, "smell")}
+							placeholder={strings("createCharacteristicsAroma")}
+							onChange={this.handleTagChange.bind(this, "aroma")}
 							onSubmit={{
 								blur: false,
-								handler: this.handleTagAdd.bind(this, "smell"),
+								handler: this.handleTagAdd.bind(this, "aroma"),
 								reset: true
 							}}
 						/>
-						{options.properties.smell.length > 0 && (
+						{options.properties.aroma.length > 0 && (
 							<React.Fragment>
 								<Spacer />
-								<Tags items={options.properties.smell} onDelete={this.handleTagRemove.bind(this, "smell")} />
+								<Tags items={options.properties.aroma} onDelete={this.handleTagRemove.bind(this, "aroma")} />
 							</React.Fragment>
 						)}
 					</Grid.Column>
@@ -263,7 +288,27 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	}
 
-	private backupDownload = (): void => {
+	// zrevidovat - aby to pracovalo i s obrazkama
+
+	private backupDownload = async (): Promise<void> => {
+		// rozlozeni props
+		const { backupFiles } = this.state;
+
+		const records = backupFiles.find((file) => file.name === "data.json");
+
+		const data = await ga.drive.download(records.id);
+		const store = JSON.parse(data) as IReduxStore;
+
+		/*
+		for (const record of store.collection.records) {
+
+			const content = ga.drive.download(record.id);
+			
+			fs.save({ name: record.image.filename})
+		}
+*/
+
+		/*
 		this.setState(
 			{
 				backupDownload: true
@@ -287,7 +332,36 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 				});
 			}
 		);
+		*/
 	};
+
+	private async processFile(asset: string, files: IGoogleDriveFile[], base64: boolean): Promise<void> {
+		// definice
+		const content = await fs.read(asset);
+		const name = asset.split("/").pop();
+		const index = files.findIndex((backup) => backup.name === name);
+		const meta = files[index];
+		// zpracovani
+		if (index > -1) {
+			await ga.drive.update(meta, content, base64);
+		} else {
+			await ga.drive.create({ name }, content, base64);
+		}
+	}
+
+	private async processUpload(): Promise<IGoogleDriveFile[]> {
+		// rozlozeni props
+		const { backupFiles } = this.state;
+		// zpracovani assetu
+		const assets = await storage.readAssets();
+		for (const asset of assets.collection) {
+			await this.processFile(asset, backupFiles, true);
+		}
+		// zpracovani databaze
+		await this.processFile("data.json", backupFiles, false);
+		// vraceni seznamu
+		return await ga.drive.list();
+	}
 
 	private backupUpload = (): void => {
 		this.setState(
@@ -295,31 +369,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 				backupUpload: true
 			},
 			() => {
-				storage.stringify().then((stringified) => {
-					// nalezeni zaznamu
-					const recordsIndex = this.state.backupFiles.findIndex((file) => file.name === "data.json");
-					const recordsData = this.state.backupFiles[recordsIndex];
-					// zpracovani
-					if (recordsIndex > -1) {
-						ga.drive.update(recordsData, stringified).then((file) => {
-							// doplneni dat
-							const files = this.state.backupFiles.slice(0);
-							files[recordsIndex] = file;
-							// aktualizace stavu
-							this.setState({
-								backupFiles: files,
-								backupUpload: false
-							});
-						});
-					} else {
-						ga.drive.create({ name: "data.json" }, stringified).then((file) => {
-							// aktualizace stavu
-							this.setState({
-								backupFiles: [...this.state.backupFiles, file],
-								backupUpload: false
-							});
-						});
-					}
+				this.processUpload().then((files) => {
+					this.setState({
+						backupFiles: files,
+						backupUpload: false
+					});
 				});
 			}
 		);

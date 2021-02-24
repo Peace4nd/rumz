@@ -1,5 +1,5 @@
 import React from "react";
-import { ReturnKeyType, ScrollView, View } from "react-native";
+import { ReturnKeyType, View } from "react-native";
 import Input, { IInputCore, IInputState } from "../input";
 import { IInputDate } from "../input/components/date";
 import { IInputImage } from "../input/components/image";
@@ -123,14 +123,14 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 		const count = visible.length;
 		// sestaveni a vraceni
 		return (
-			<ScrollView keyboardDismissMode="on-drag" style={styles.wrapper}>
+			<View style={styles.wrapper}>
 				{visible.map((field, index) => (
 					<React.Fragment key={index}>
 						{index > 0 && <View style={styles.rowGap} />}
 						{this.renderField(field, index, count - 1 === index)}
 					</React.Fragment>
 				))}
-			</ScrollView>
+			</View>
 		);
 	}
 

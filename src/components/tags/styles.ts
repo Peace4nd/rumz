@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
 		color: Color.Dark
 	},
 	wrapper: {
-		backgroundColor: "pink",
 		flexDirection: "row",
 		flexWrap: "wrap",
 		marginBottom: -Measurement.Padding

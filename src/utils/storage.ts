@@ -78,10 +78,28 @@ async function readAll(): Promise<Record<IStorageKey, unknown>> {
 	return data;
 }
 
+/**
+ * Ziskani seznamu souboru
+ *
+ * @returns {Promise<Record<IStorageKey, string[]>>} Soubory
+ */
+async function readAssets(): Promise<Record<IStorageKey, string[]>> {
+	// nacteni kolekce
+	const store = await collection.read();
+	// sestaveni dat
+	const data = {
+		collection: store.records.map((record) => record.image),
+		options: []
+	};
+	// vraceni
+	return data;
+}
+
 // vychozi export
 export default {
 	collection,
 	options,
 	readAll,
+	readAssets,
 	stringify
 };

@@ -1,47 +1,56 @@
 import mime from "mime";
 import fs from "react-native-fs";
 import { IFileDocument } from "../types/file";
-import { IStorageKey } from "../types/storage";
 
-/**
- * Pridani noveho souboru do uloziste
- *
- * @param {IStorageKey} key Klic
- * @param {string} source Zdrojovy soubor
- * @param {string} file Nazev souboru
- * @returns {Promise<string>} Cesta k pridanemu souboru
- */
-async function copyAssets(key: IStorageKey, source: string, file: string): Promise<string> {
-	// definice
-	const dest = fs.DocumentDirectoryPath + "/" + key + "/" + file;
-	// overeni existence adresare
-	const exists = await fs.exists(fs.DocumentDirectoryPath + "/" + key);
-	if (!exists) {
-		await fs.mkdir(fs.DocumentDirectoryPath + "/" + key);
-	}
-	// nakopirovani
-	await fs.copyFile(source, dest);
-	// vraceni cesty
-	return "file://" + dest;
-}
-
-/**
- * Kolekce
- */
-export const collection = {
+// vychozi export
+export default {
 	/**
-	 * Pridani obrazku do kolekce
+	 * Ulozeni souboru
 	 *
 	 * @param {IFileDocument} document Vybrany dokument
 	 * @param {string} id Identifikator zaznamu
 	 * @returns {Promise<string>} Cesta k pridanemu souboru
 	 */
-	save: (document: IFileDocument, id: string): Promise<string> => {
-		return copyAssets("collection", document.path, id + "." + mime.getExtension(document.mime));
-	}
-};
+	copy: async (document: IFileDocument, id: string): Promise<string> => {
+		// definice
+		const file = id + "." + mime.getExtension(document.mime);
+		const dest = fs.DocumentDirectoryPath + "/" + file;
+		// overeni existence adresare
+		const exists = await fs.exists(fs.DocumentDirectoryPath);
+		if (!exists) {
+			await fs.mkdir(fs.DocumentDirectoryPath);
+		}
+		// nakopirovani
+		await fs.copyFile(document.path, dest);
+		// vraceni cesty
+		return dest;
+	},
 
-// vychozi export
-export default {
-	collection
+	/**
+	 * Nacteni souboru
+	 *
+	 * @param {string} file Soubor
+	 * @returns {Promise<string>} Obsah souboru
+	 */
+	read: async (file: string): Promise<string> => {
+		// nacteni souboru
+		const content = await fs.readFile(file, "base64");
+		// vraceni seznamu souboru
+		return content;
+	},
+
+	save: async (file: string, content: string): Promise<void> => {
+		/*
+		// definice
+		const file = id + "." + mime.getExtension(document.mime);
+		const dest = fs.DocumentDirectoryPath + "/" + file;
+		// overeni existence adresare
+		const exists = await fs.exists(fs.DocumentDirectoryPath);
+		if (!exists) {
+			await fs.mkdir(fs.DocumentDirectoryPath);
+		}
+		// nakopirovani
+		await fs.writeFile(document.path, content);
+		*/
+	}
 };

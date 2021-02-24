@@ -10,8 +10,8 @@ export const DEFAULT_STATE: IReduxOptions = {
 	values: {
 		dram: 40,
 		properties: {
+			aroma: [],
 			color: [],
-			smell: [],
 			taste: []
 		}
 	}

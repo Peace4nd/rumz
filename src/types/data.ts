@@ -1,5 +1,3 @@
-import { IFileDocument } from "./file";
-
 /**
  * Datovy typ zaznamu kolekce
  */
@@ -21,7 +19,7 @@ export interface IDataCollection {
 	/**
 	 * Obrazky
 	 */
-	image: IFileDocument;
+	image: string;
 
 	/**
 	 * Zeme puvodu (ISO kod zeme)
@@ -81,7 +79,7 @@ export interface IDataCollection {
 	/**
 	 * Cichove vlastnosti (tony kavy, vanilky, ...)
 	 */
-	smell: string;
+	aroma: string;
 
 	/**
 	 * Chutove vlastnosti (pomerance, vanilka, ...)
@@ -115,7 +113,7 @@ export interface IDataOptions {
 		/**
 		 * Cichove vlastnosti
 		 */
-		smell: string[];
+		aroma: string[];
 
 		/**
 		 * Chutove vlastnosti

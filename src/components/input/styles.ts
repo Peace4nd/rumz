@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 	},
 	fieldTags: {
 		flex: 1,
-		paddingBottom: Measurement.Padding * 0.5,
+		paddingBottom: Measurement.Padding * 1.5,
 		paddingTop: Measurement.Padding * 1.5
 	},
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 		padding: 2 * Measurement.Padding
 	},
 	menuScroll: {
-		maxHeight: Size["12x"]
+		maxHeight: 2 * Size["12x"]
 	},
 
 	// placeholder

@@ -1,6 +1,6 @@
 import { faCartPlus, faLightbulb, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { SafeAreaView, StatusBar, View } from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import { Color } from "../../../styles";
 import strings from "../../../utils/strings";
 import Header, { IHeader } from "../../header";
@@ -31,6 +31,11 @@ export interface IRoute<I> {
 	 * Pouzit plny padding
 	 */
 	padding?: boolean;
+
+	/**
+	 * Skrolovani
+	 */
+	scrollable?: boolean;
 }
 
 /**
@@ -60,7 +65,8 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 				path: "/create"
 			}
 		],
-		padding: true
+		padding: true,
+		scrollable: false
 	};
 
 	/**
@@ -70,19 +76,45 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { busy, header, children, navigation, padding } = this.props;
+		const { header, navigation } = this.props;
 		// sestaveni a vraceni
 		return (
 			<React.Fragment>
 				<StatusBar barStyle="default" backgroundColor={Color.Dark} />
 				<SafeAreaView style={styles.wrapper}>
 					<Header {...header} />
-					<View style={[styles.content, busy ? styles.contentBusy : null, padding ? styles.contentPadding : null]}>
-						{busy ? <Loading /> : children}
-					</View>
+					{this.renderContent()}
 					<Navigation tabs={navigation} />
 				</SafeAreaView>
 			</React.Fragment>
 		);
+	}
+
+	/**
+	 * Sestaveni obsahu
+	 *
+	 * @returns {JSX.Element} Element
+	 */
+	private renderContent(): JSX.Element {
+		// rozlozeni props
+		const { busy, children, padding, scrollable } = this.props;
+		// loading
+		if (busy) {
+			return (
+				<View style={[styles.contentWrapper, styles.contentBusy]}>
+					<Loading />
+				</View>
+			);
+		}
+		// skrolovani
+		if (scrollable) {
+			return (
+				<ScrollView keyboardDismissMode="on-drag" style={styles.contentWrapper} contentContainerStyle={[padding ? styles.contentPadding : null]}>
+					{busy ? <Loading /> : children}
+				</ScrollView>
+			);
+		}
+		// standardni view
+		return <View style={[styles.contentWrapper, padding ? styles.contentPadding : null]}>{busy ? <Loading /> : children}</View>;
 	}
 }

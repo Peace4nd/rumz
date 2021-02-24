@@ -68,10 +68,10 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 						<Tags items={value} onDelete={this.handleRemove} />
 					</View>
 				)}
-				<View style={styles.buttonGroup}>
+				<View style={styles.buttonGroup} pointerEvents={items.length ? "auto" : "none"}>
 					<Menu onSelect={this.handleAdd}>
 						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity, triggerWrapper: styles.buttonElement }}>
-							<Icon definition={faPlus} color="Base" />
+							<Icon definition={faPlus} color={items.length ? "Base" : "Muted"} />
 						</MenuTrigger>
 						<MenuOptions>
 							<ScrollView style={styles.menuScroll}>

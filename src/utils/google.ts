@@ -33,16 +33,14 @@ const fields = "createdTime,description,id,mimeType,modifiedTime,name,size";
  *
  * @param {IGoogleDriveMeta} meta Metadata
  * @param {string} content Obsah souboru
- * @param {boolean} base64 Base64
  * @returns {string} Multi-part data
  */
-function createUploadBody(meta: IGoogleDriveMeta, content: string, base64: boolean): string {
+function createUploadBody(meta: IGoogleDriveMeta, content: string): string {
 	const multipart =
 		`\r\n` +
 		`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n` +
 		`${JSON.stringify(meta)}\r\n` +
 		`--${boundary}\r\nContent-Type: ${meta.mimeType || "*/*"}\r\n` +
-		(base64 ? `Content-Transfer-Encoding: base64\r\n` : "") +
 		`\r\n${content}\r\n` +
 		`--${boundary}--`;
 	// vraceni
@@ -54,10 +52,9 @@ function createUploadBody(meta: IGoogleDriveMeta, content: string, base64: boole
  *
  * @param {IGoogleDriveMeta} meta Metadata
  * @param {string} content Obsah souboru
- * @param {boolean} base64 Base64
  * @returns {Promise<IGoogleDriveFile>} Souborova metadata
  */
-export async function create(meta: IGoogleDriveMeta, content: string, base64: boolean = false): Promise<IGoogleDriveFile> {
+export async function create(meta: IGoogleDriveMeta, content: string): Promise<IGoogleDriveFile> {
 	// definice
 	const now = moment().toISOString();
 	const body = createUploadBody(
@@ -68,8 +65,7 @@ export async function create(meta: IGoogleDriveMeta, content: string, base64: bo
 			modifiedTime: now,
 			parents: ["appDataFolder"]
 		},
-		content,
-		base64
+		content
 	);
 	const state = redux.getState();
 	// overeni prihlaseni
@@ -97,10 +93,9 @@ export async function create(meta: IGoogleDriveMeta, content: string, base64: bo
  *
  * @param {IGoogleDriveFile} file Soubor
  * @param {string} content Obsah souboru
- * @param {boolean} base64 Base64
  * @returns {Promise<IGoogleDriveFile>} Souborova metadata
  */
-export async function update(file: IGoogleDriveFile, content: string, base64: boolean = false): Promise<IGoogleDriveFile> {
+export async function update(file: IGoogleDriveFile, content: string): Promise<IGoogleDriveFile> {
 	// definice
 	const now = moment().toISOString();
 	const body = createUploadBody(
@@ -108,8 +103,7 @@ export async function update(file: IGoogleDriveFile, content: string, base64: bo
 			mimeType: mime.getType(file.name),
 			modifiedTime: now
 		},
-		content,
-		base64
+		content
 	);
 	const state = redux.getState();
 	// overeni prihlaseni
@@ -136,7 +130,6 @@ export async function update(file: IGoogleDriveFile, content: string, base64: bo
  * Odstraneni souboru
  *
  * @param {string} fileId ID souboru
- * @returns {Promise<void>} Prazdny odpoved
  */
 export async function remove(fileId: string): Promise<void> {
 	// definice
@@ -153,8 +146,6 @@ export async function remove(fileId: string): Promise<void> {
 		// parse
 		await fetched.text();
 	}
-	// vychozi navratova hodnota
-	return null;
 }
 
 /**
@@ -265,8 +256,6 @@ export default {
 
 		/**
 		 * Odhlaseni
-		 *
-		 * @returns {Promise<void>} Prazdna odpoved
 		 */
 		signOut: async (): Promise<void> => {
 			await GoogleSignin.revokeAccess();
@@ -274,6 +263,9 @@ export default {
 		}
 	},
 
+	/**
+	 * Drive
+	 */
 	drive: {
 		create,
 		download,

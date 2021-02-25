@@ -1,20 +1,22 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faChevronLeft, faFlask, faGlassCheers, faGlassWhiskey, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faChevronLeft, faFlask, faGlassCheers, faGlassWhiskey, faPalette } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
 import { Button, ButtonGroup, Grid, Input, Route, Spacer, Tags, Typography } from "../../components";
+import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
-import { updateOptions } from "../../redux/actions/options";
-import { IDataOptions, IDataOptionsProperties } from "../../types/data";
+import { loadOptions, updateOptions } from "../../redux/actions/options";
+import { IDataCollection, IDataOptions, IDataOptionsProperties } from "../../types/data";
 import { IReduxGoogle, IReduxStore } from "../../types/redux";
-import fs from "../../utils/file-system";
+import assets from "../../utils/assets";
 import ga, { IGoogleDriveFile } from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOptionsState {
-	tag: Record<IDataOptionsProperties, string>;
+	properties: Record<IDataOptionsProperties, string>;
+	cask: string;
 	backupFiles: IGoogleDriveFile[];
 	backupWorking: boolean;
 	backupDownload: boolean;
@@ -22,6 +24,7 @@ interface IOptionsState {
 }
 
 interface IOptionsProps extends DispatchProp {
+	collection: IDataCollection[];
 	google: IReduxGoogle;
 	options: IDataOptions;
 }
@@ -48,7 +51,8 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		backupFiles: [],
 		backupUpload: false,
 		backupWorking: true,
-		tag: {
+		cask: null,
+		properties: {
 			aroma: null,
 			color: null,
 			taste: null
@@ -91,6 +95,8 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 				{this.renderDram()}
 				{/* senzoricke tvlastnosti */}
 				{this.renderProperties()}
+				{/* typ sudu */}
+				{this.renderCask()}
 			</Route.Wrapper>
 		);
 	}
@@ -227,17 +233,17 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 						<Input.Text
 							icon={faPalette}
 							placeholder={strings("createCharacteristicsColor")}
-							onChange={this.handleTagChange.bind(this, "color")}
+							onChange={this.handlePropertiesChange.bind(this, "color")}
 							onSubmit={{
 								blur: false,
-								handler: this.handleTagAdd.bind(this, "color"),
+								handler: this.handlePropertiesAdd.bind(this, "color"),
 								reset: true
 							}}
 						/>
 						{options.properties.color.length > 0 && (
 							<React.Fragment>
 								<Spacer />
-								<Tags items={options.properties.color} onDelete={this.handleTagRemove.bind(this, "color")} />
+								<Tags items={options.properties.color} onDelete={this.handlePropertiesRemove.bind(this, "color")} />
 							</React.Fragment>
 						)}
 					</Grid.Column>
@@ -248,17 +254,17 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 						<Input.Text
 							icon={faFlask}
 							placeholder={strings("createCharacteristicsAroma")}
-							onChange={this.handleTagChange.bind(this, "aroma")}
+							onChange={this.handlePropertiesChange.bind(this, "aroma")}
 							onSubmit={{
 								blur: false,
-								handler: this.handleTagAdd.bind(this, "aroma"),
+								handler: this.handlePropertiesAdd.bind(this, "aroma"),
 								reset: true
 							}}
 						/>
 						{options.properties.aroma.length > 0 && (
 							<React.Fragment>
 								<Spacer />
-								<Tags items={options.properties.aroma} onDelete={this.handleTagRemove.bind(this, "aroma")} />
+								<Tags items={options.properties.aroma} onDelete={this.handlePropertiesRemove.bind(this, "aroma")} />
 							</React.Fragment>
 						)}
 					</Grid.Column>
@@ -269,17 +275,17 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 						<Input.Text
 							icon={faGlassCheers}
 							placeholder={strings("createCharacteristicsTaste")}
-							onChange={this.handleTagChange.bind(this, "taste")}
+							onChange={this.handlePropertiesChange.bind(this, "taste")}
 							onSubmit={{
 								blur: false,
-								handler: this.handleTagAdd.bind(this, "taste"),
+								handler: this.handlePropertiesAdd.bind(this, "taste"),
 								reset: true
 							}}
 						/>
 						{options.properties.taste.length > 0 && (
 							<React.Fragment>
 								<Spacer />
-								<Tags items={options.properties.taste} onDelete={this.handleTagRemove.bind(this, "taste")} />
+								<Tags items={options.properties.taste} onDelete={this.handlePropertiesRemove.bind(this, "taste")} />
 							</React.Fragment>
 						)}
 					</Grid.Column>
@@ -288,81 +294,175 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	}
 
-	// zrevidovat - aby to pracovalo i s obrazkama
+	/**
+	 * Typ sudu
+	 *
+	 * @returns {JSX.Element} Element
+	 */
+	private renderCask(): JSX.Element {
+		// rozlozeni props
+		const { options } = this.props;
+		// sestaveni a vraceni
+		return (
+			<Grid.Wrapper>
+				<Grid.Title>{strings("optionsCaskTitle")}</Grid.Title>
+				<Grid.Row>
+					<Grid.Column>
+						<Input.Text
+							icon={faBox}
+							onChange={this.handleCaskChange}
+							onSubmit={{
+								blur: false,
+								handler: this.handleCaskAdd,
+								reset: true
+							}}
+						/>
+						{options.cask.length > 0 && (
+							<React.Fragment>
+								<Spacer />
+								<Tags items={options.cask} onDelete={this.handleCaskRemove} />
+							</React.Fragment>
+						)}
+					</Grid.Column>
+				</Grid.Row>
+			</Grid.Wrapper>
+		);
+	}
 
-	private backupDownload = async (): Promise<void> => {
+	/**
+	 * Stazeni databaze
+	 *
+	 * @param {IGoogleDriveFile[]} files Soubory zalohy
+	 * @returns {Promise<IReduxStore>} Databaze
+	 */
+	private async processDownloadDatabase(files: IGoogleDriveFile[]): Promise<IReduxStore> {
+		// stazeni
+		const meta = files.find((file) => file.name === "data.json");
+		const data = await ga.drive.download(meta.id);
+		const store = JSON.parse(data) as IReduxStore;
+		// vraceni
+		return store;
+	}
+
+	/**
+	 * Stazeni assetu
+	 *
+	 * @param {string} asset Soubor
+	 * @param {IGoogleDriveFile[]} files Soubory zalohy
+	 */
+	private async processDownloadAsset(asset: string, files: IGoogleDriveFile[]): Promise<void> {
+		// stazeni
+		const name = asset.split("/").pop();
+		const meta = files.find((file) => file.name === name);
+		const data = await ga.drive.download(meta.id);
+		// ulozeni
+		await assets.save(asset, data);
+	}
+
+	/**
+	 * Stazeni kompletni zalohy
+	 *
+	 * @returns {Promise<IReduxStore>} Databaze
+	 */
+	private async processDownload(): Promise<IReduxStore> {
 		// rozlozeni props
 		const { backupFiles } = this.state;
-
-		const records = backupFiles.find((file) => file.name === "data.json");
-
-		const data = await ga.drive.download(records.id);
-		const store = JSON.parse(data) as IReduxStore;
-
-		/*
-		for (const record of store.collection.records) {
-
-			const content = ga.drive.download(record.id);
-			
-			fs.save({ name: record.image.filename})
+		// nacteni databaze
+		const database = await this.processDownloadDatabase(backupFiles);
+		// stazeni assetu
+		for (const record of database.collection.records) {
+			await this.processDownloadAsset(record.image, backupFiles);
 		}
-*/
+		// vraceni databaze
+		return database;
+	}
 
-		/*
-		this.setState(
-			{
-				backupDownload: true
-			},
-			() => {
-				const records = this.state.backupFiles.find((file) => file.name === "data.json");
-
-				ga.drive.download(records.id).then((data) => {
-					this.setState(
-						{
-							backupDownload: false
-						},
-						() => {
-							const store = JSON.parse(data) as IReduxStore;
-
-							this.props.dispatch(loadRecords(store.collection.records));
-
-							this.props.dispatch(updateOptions(store.options.values));
-						}
-					);
-				});
-			}
-		);
-		*/
-	};
-
-	private async processFile(asset: string, files: IGoogleDriveFile[], base64: boolean): Promise<void> {
+	/**
+	 * Nahrani assetu
+	 *
+	 * @param {string} asset Soubor
+	 * @param {IGoogleDriveFile[]} files Soubory zalohy
+	 */
+	private async processUploadAsset(asset: string, files: IGoogleDriveFile[]): Promise<void> {
 		// definice
-		const content = await fs.read(asset);
+		const content = await assets.read(asset);
 		const name = asset.split("/").pop();
 		const index = files.findIndex((backup) => backup.name === name);
 		const meta = files[index];
 		// zpracovani
 		if (index > -1) {
-			await ga.drive.update(meta, content, base64);
+			await ga.drive.update(meta, content);
 		} else {
-			await ga.drive.create({ name }, content, base64);
+			await ga.drive.create({ name }, content);
 		}
 	}
 
+	/**
+	 * Nahrani databaze
+	 *
+	 * @param {IGoogleDriveFile[]} files Soubory zalohy
+	 */
+	private async processUploadDatabase(files: IGoogleDriveFile[]): Promise<void> {
+		// definice
+		const content = await storage.stringify();
+		const index = files.findIndex((backup) => backup.name === "data.json");
+		const meta = files[index];
+		// zpracovani
+		if (index > -1) {
+			await ga.drive.update(meta, content);
+		} else {
+			await ga.drive.create({ name: "data.json" }, content);
+		}
+	}
+
+	/**
+	 * Nahrani kompletni zalohy
+	 *
+	 * @returns {Promise<IGoogleDriveFile[]>} Seznam souboru zalohy
+	 */
 	private async processUpload(): Promise<IGoogleDriveFile[]> {
 		// rozlozeni props
+		const { collection } = this.props;
 		const { backupFiles } = this.state;
 		// zpracovani assetu
-		const assets = await storage.readAssets();
-		for (const asset of assets.collection) {
-			await this.processFile(asset, backupFiles, true);
+		if (collection.length > 0) {
+			for (const record of collection) {
+				await this.processUploadAsset(record.image, backupFiles);
+			}
 		}
 		// zpracovani databaze
-		await this.processFile("data.json", backupFiles, false);
+		await this.processUploadDatabase(backupFiles);
 		// vraceni seznamu
 		return await ga.drive.list();
 	}
 
+	/**
+	 * Obnoveni ze zalohy
+	 */
+	private backupDownload = (): void => {
+		this.setState(
+			{
+				backupDownload: true
+			},
+			() => {
+				this.processDownload().then((store) => {
+					this.setState(
+						{
+							backupDownload: false
+						},
+						() => {
+							this.props.dispatch(loadRecords(store.collection.records));
+							this.props.dispatch(loadOptions(store.options.values));
+						}
+					);
+				});
+			}
+		);
+	};
+
+	/**
+	 * Provedeni zalohy
+	 */
 	private backupUpload = (): void => {
 		this.setState(
 			{
@@ -379,6 +479,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	};
 
+	/**
+	 * Zmena objemu frtanu
+	 *
+	 * @param {number} value Objem
+	 */
 	private handleDram = (value: number): void => {
 		this.props.dispatch(
 			updateOptions({
@@ -387,41 +492,106 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	};
 
-	private handleTagChange(section: IDataOptionsProperties, value: string): void {
+	/**
+	 * Zadani lastnosti
+	 *
+	 * @param {IDataOptionsProperties} section Sekce
+	 * @param {string} value Text
+	 */
+	private handlePropertiesChange(section: IDataOptionsProperties, value: string): void {
 		this.setState({
-			tag: {
-				...this.state.tag,
+			properties: {
+				...this.state.properties,
 				[section]: value
 			}
 		});
 	}
 
-	private handleTagAdd(section: IDataOptionsProperties): void {
+	/**
+	 * Pridani vlastnosti do databaze
+	 *
+	 * @param {IDataOptionsProperties} section Sekce
+	 */
+	private handlePropertiesAdd(section: IDataOptionsProperties): void {
 		this.props.dispatch(
 			updateOptions({
 				properties: {
-					[section]: [this.state.tag[section]]
+					[section]: [this.state.properties[section]]
 				}
 			})
 		);
 	}
 
-	private handleTagRemove(section: IDataOptionsProperties, value: string): void {
+	/**
+	 * Odebrani vlastnosti z databaze
+	 *
+	 * @param {IDataOptionsProperties} section Sekce
+	 * @param {string} value Text
+	 */
+	private handlePropertiesRemove(section: IDataOptionsProperties, value: string): void {
+		// odstraneni tagu
 		const current = this.props.options.properties[section].slice(0);
 		const index = current.findIndex((item) => value === item);
 		current.splice(index, 1);
-
+		// dispatch
 		this.props.dispatch(
-			updateOptions({
-				properties: {
-					[section]: current
-				}
-			})
+			updateOptions(
+				{
+					properties: {
+						[section]: current
+					}
+				},
+				"replace"
+			)
 		);
 	}
+
+	/**
+	 * Zadani typu sudu
+	 *
+	 * @param {string} value Text
+	 */
+	private handleCaskChange = (value: string): void => {
+		this.setState({
+			cask: value
+		});
+	};
+
+	/**
+	 * Pridani sudu do databaze
+	 */
+	private handleCaskAdd = (): void => {
+		this.props.dispatch(
+			updateOptions({
+				cask: [this.state.cask]
+			})
+		);
+	};
+
+	/**
+	 * Odebrani sudu z databaze
+	 *
+	 * @param {string} value Text
+	 */
+	private handleCaskRemove = (value: string): void => {
+		// odstraneni tagu
+		const current = this.props.options.cask.slice(0);
+		const index = current.findIndex((item) => value === item);
+		current.splice(index, 1);
+		// dispatch
+		this.props.dispatch(
+			updateOptions(
+				{
+					cask: current
+				},
+				"replace"
+			)
+		);
+	};
 }
 
 export default connect((store: IReduxStore) => ({
+	collection: store.collection.records,
 	google: store.google,
 	options: store.options.values
 }))(Options);

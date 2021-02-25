@@ -16,6 +16,7 @@ import {
 	faTimes,
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
+import mime from "mime";
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
 import { connect, DispatchProp } from "react-redux";
@@ -25,8 +26,8 @@ import { pushRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
 import { IFileDocument } from "../../types/file";
 import { IReduxStore } from "../../types/redux";
+import assets from "../../utils/assets";
 import country from "../../utils/country";
-import fs from "../../utils/file-system";
 import strings from "../../utils/strings";
 
 interface ICreatePushState {
@@ -203,7 +204,7 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 		// rozlozeni props
 		const { id, image, ...rest } = this.state.record;
 		// ulozeni
-		fs.copy(image, id).then((path) => {
+		assets.copy(image.path, id + "." + mime.getExtension(image.mime)).then((path) => {
 			// redux
 			this.props.dispatch(
 				pushRecord({

@@ -8,6 +8,7 @@ import { signResolved } from "../../redux/actions/google";
 import { loadOptions } from "../../redux/actions/options";
 import { IDataCollection, IDataOptions } from "../../types/data";
 import { IReduxGoogle, IReduxStore } from "../../types/redux";
+import { IStorageSections } from "../../types/storage";
 import ga from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
@@ -48,7 +49,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 		SplashScreen.hide();
 		// nacteni databaze
 		if (!init) {
-			storage.readAll().then((data: IReduxStore) => {
+			storage.readAll().then((data: IStorageSections) => {
 				batch(() => {
 					this.props.dispatch(loadRecords(data.collection.records));
 					this.props.dispatch(loadOptions(data.options.values));

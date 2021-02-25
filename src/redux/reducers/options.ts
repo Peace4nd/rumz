@@ -1,13 +1,14 @@
-import merge from "deepmerge";
 import update from "immutability-helper";
 import { IDataOptions } from "../../types/data";
 import { IReduxAction, IReduxOptions } from "../../types/redux";
+import merge, { IMergeArray } from "../../utils/merge";
 
 // vychozi state
 export const DEFAULT_STATE: IReduxOptions = {
 	changed: new Date(),
 	init: false,
 	values: {
+		cask: [],
 		dram: 40,
 		properties: {
 			aroma: [],
@@ -40,12 +41,18 @@ export default (state: IReduxOptions = DEFAULT_STATE, action: IReduxAction): IRe
 			});
 		}
 		case "options-update": {
+			// pretypovani
+			const payload = action.payload as {
+				values: Partial<IDataOptions>;
+				array: IMergeArray;
+			};
+			// aktualizace
 			return update(state, {
 				changed: {
 					$set: new Date()
 				},
 				values: {
-					$merge: merge(state.values, action.payload) as Partial<IDataOptions>
+					$merge: merge(state.values, payload.values, payload.array)
 				}
 			});
 		}

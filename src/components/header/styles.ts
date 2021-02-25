@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	title: {
-		color: Color.Text
+		color: Color.Highlight
 	},
 	wrapper: {
 		backgroundColor: Color.Base,

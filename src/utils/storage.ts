@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_STATE as collectionDefaul } from "../redux/reducers/collection";
 import { DEFAULT_STATE as optionsDefault } from "../redux/reducers/options";
 import { IReduxCollection, IReduxOptions } from "../types/redux";
-import { IStorageKey, IStorageSection } from "../types/storage";
+import { IStorageActions, IStorageKey, IStorageSections } from "../types/storage";
 
 /**
  * Ulozeni dat
@@ -35,7 +35,7 @@ async function read<T>(key: IStorageKey, defaults: T): Promise<T> {
 /**
  * Kolekce
  */
-const collection: IStorageSection<IReduxCollection> = {
+const collection: IStorageActions<IReduxCollection> = {
 	read: async () => read("collection", collectionDefaul),
 	write: async (data) => write("collection", data)
 };
@@ -43,7 +43,7 @@ const collection: IStorageSection<IReduxCollection> = {
 /**
  * Nastaveni
  */
-const options: IStorageSection<IReduxOptions> = {
+const options: IStorageActions<IReduxOptions> = {
 	read: async () => read("options", optionsDefault),
 	write: async (data) => write("options", data)
 };
@@ -55,7 +55,7 @@ const options: IStorageSection<IReduxOptions> = {
  */
 async function stringify(): Promise<string> {
 	// sestaveni dat
-	const data: Record<IStorageKey, unknown> = {
+	const data: IStorageSections = {
 		collection: await collection.read(),
 		options: await options.read()
 	};
@@ -66,30 +66,13 @@ async function stringify(): Promise<string> {
 /**
  * Ziskani kompletnich dat
  *
- * @returns {Promise<Record<IStorageKey, unknown>>} Data
+ * @returns {Promise<IStorageSections>} Data
  */
-async function readAll(): Promise<Record<IStorageKey, unknown>> {
+async function readAll(): Promise<IStorageSections> {
 	// sestaveni dat
 	const data = {
 		collection: await collection.read(),
 		options: await options.read()
-	};
-	// vraceni
-	return data;
-}
-
-/**
- * Ziskani seznamu souboru
- *
- * @returns {Promise<Record<IStorageKey, string[]>>} Soubory
- */
-async function readAssets(): Promise<Record<IStorageKey, string[]>> {
-	// nacteni kolekce
-	const store = await collection.read();
-	// sestaveni dat
-	const data = {
-		collection: store.records.map((record) => record.image),
-		options: []
 	};
 	// vraceni
 	return data;
@@ -100,6 +83,5 @@ export default {
 	collection,
 	options,
 	readAll,
-	readAssets,
 	stringify
 };

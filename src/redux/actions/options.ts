@@ -1,6 +1,7 @@
 import { IDataOptions } from "../../types/data";
 import { IReduxAction } from "../../types/redux";
 import { IUtilityRecursivePartial } from "../../types/utility";
+import { IMergeArray } from "../../utils/merge";
 
 /**
  * Nacteni nastaveni
@@ -19,11 +20,15 @@ export function loadOptions(values: IDataOptions): IReduxAction {
  * Aktualizace nastaveni
  *
  * @param {Partial<IDataOptions>} values Hodnoty
+ * @param {IMergeArray} array Zpracovani pole
  * @returns {IReduxAction} Akce
  */
-export function updateOptions(values: IUtilityRecursivePartial<IDataOptions>): IReduxAction {
+export function updateOptions(values: IUtilityRecursivePartial<IDataOptions>, array: IMergeArray = "append"): IReduxAction {
 	return {
-		payload: values,
+		payload: {
+			array,
+			values
+		},
 		type: "options-update"
 	};
 }

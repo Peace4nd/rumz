@@ -1,12 +1,22 @@
+import { IReduxCollection, IReduxOptions } from "./redux";
+
+/**
+ * Sekce uloziste
+ */
+export interface IStorageSections {
+	collection: IReduxCollection;
+	options: IReduxOptions;
+}
+
 /**
  * Typ uloziste
  */
-export type IStorageKey = "collection" | "options";
+export type IStorageKey = keyof IStorageSections;
 
 /**
  * Definice metod pro objekt
  */
-export interface IStorageSection<T> {
+export interface IStorageActions<T> {
 	/**
 	 * Nacteni cele kolekce
 	 *
@@ -18,7 +28,6 @@ export interface IStorageSection<T> {
 	 * Aktualizace zaznamu v kolekci
 	 *
 	 * @param {T} data Data
-	 * @returns {Promise<void>} Prazdna odpoved
 	 */
 	write: (data: T) => Promise<void>;
 }

@@ -72,6 +72,11 @@ export interface IDataCollection {
 	];
 
 	/**
+	 * Zrani v sudu
+	 */
+	cask: string;
+
+	/**
 	 * Barva (zlata, hneda, tmava zlata, ...)
 	 */
 	color: string;
@@ -120,6 +125,11 @@ export interface IDataOptions {
 		 */
 		taste: string[];
 	};
+
+	/**
+	 * Typ sudu
+	 */
+	cask: string[];
 }
 
 /**

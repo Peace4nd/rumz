@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
 	}
 });
 
+// soubor databaze
+const DATABASE: string = "data.json";
+
 /**
  * Nastaveni
  */
@@ -183,15 +186,43 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row>
-						<Grid.Column horizontal="center">
-							<Typography type="Body2">{backupFiles.length === 0 ? strings("optionsDriveEmpty") : JSON.stringify(backupFiles)}</Typography>
-						</Grid.Column>
+						<Grid.Column horizontal="center">{this.renderBackupStats()}</Grid.Column>
 					</Grid.Row>
 				</Grid.Wrapper>
 			);
 		}
 		// jinak se nic nezobrazuje
 		return null;
+	}
+
+	/**
+	 * Zakladni prehled o zaloze
+	 *
+	 * @returns {JSX.Element} Element
+	 */
+	private renderBackupStats(): JSX.Element {
+		// rozlozeni props
+		const { backupFiles } = this.state;
+		// pokud existuje nejaka zaloha
+		if (backupFiles.length > 0) {
+			// nalezeni databazoveho souboru
+			const meta = backupFiles.find((file) => file.name === DATABASE);
+			// sestaveni
+			return (
+				<React.Fragment>
+					<Typography type="Body2">{strings("optionsBackupCount", meta.properties.records)}</Typography>
+					<Typography type="Body2">{strings("optionsBackupLast", meta.modifiedTime)}</Typography>
+					<Typography type="Body2">
+						{strings(
+							"optionsBackupSize",
+							backupFiles.reduce((prev, current) => parseInt(current.size, 10), 0)
+						)}
+					</Typography>
+				</React.Fragment>
+			);
+		}
+		// zaloha neexistuje
+		return <Typography type="Body2">{strings("optionsDriveEmpty")}</Typography>;
 	}
 
 	/**
@@ -337,7 +368,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 */
 	private async processDownloadDatabase(files: IGoogleDriveFile[]): Promise<IReduxStore> {
 		// stazeni
-		const meta = files.find((file) => file.name === "data.json");
+		const meta = files.find((file) => file.name === DATABASE);
 		const data = await ga.drive.download(meta.id);
 		const store = JSON.parse(data) as IReduxStore;
 		// vraceni
@@ -405,13 +436,25 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	private async processUploadDatabase(files: IGoogleDriveFile[]): Promise<void> {
 		// definice
 		const content = await storage.stringify();
-		const index = files.findIndex((backup) => backup.name === "data.json");
+		const index = files.findIndex((backup) => backup.name === DATABASE);
 		const meta = files[index];
 		// zpracovani
 		if (index > -1) {
-			await ga.drive.update(meta, content);
+			await ga.drive.update(meta, content, {
+				properties: {
+					records: this.props.collection.length
+				}
+			});
 		} else {
-			await ga.drive.create({ name: "data.json" }, content);
+			await ga.drive.create(
+				{
+					name: DATABASE,
+					properties: {
+						records: this.props.collection.length
+					}
+				},
+				content
+			);
 		}
 	}
 

@@ -20,6 +20,7 @@
 	"createCharacteristicsColor": "Barva",
 	"createCharacteristicsAroma": "Aroma",
 	"createCharacteristicsTaste": "Chuť",
+	"createCask": "Typ sudu",
 	"createImage": "Obrázek",
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
@@ -40,6 +41,9 @@
 	"optionsDramTitle": "Objem frťanu",
 	"optionsPropertiesTitle": "Senzorické vlastnosti",
 	"optionsCaskTitle": "Typ sudu",
+	"optionsBackupCount": "Pocet rumů v kolekci: {0}",
+	"optionsBackupLast": "Posledni zaloha: {0|date}",
+	"optionsBackupSize": "Velikost zálohy: {0|bytes}",
 
 	"confirmTitleDelete": "Opravdu smazat?",
 	"confirmCancel": "Zrušit",

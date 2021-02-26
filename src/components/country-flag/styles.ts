@@ -5,8 +5,10 @@ const styles = StyleSheet.create({
 	flagWrapper: {
 		alignItems: "center",
 		aspectRatio: 1.5,
-		backgroundColor: Color.Highlight,
+		backgroundColor: Color.White,
+		borderColor: Color.Muted,
 		borderRadius: Measurement.Radius / 2,
+		borderWidth: StyleSheet.hairlineWidth,
 		height: "100%",
 		justifyContent: "center",
 		overflow: "hidden"

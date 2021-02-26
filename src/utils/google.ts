@@ -5,28 +5,28 @@ import { v4 as uuidv4 } from "uuid";
 import { setToken } from "../redux/actions/google";
 import redux from "../redux/store";
 
+/**
+ * Objekt souboru
+ */
 export interface IGoogleDriveFile {
 	id: string;
+	size: string;
 	name: string;
 	mimeType: string;
 	description: string;
 	createdTime: string;
 	modifiedTime: string;
-	size: string;
+	properties?: Record<string, unknown>;
 }
 
-export interface IGoogleDriveMeta {
-	name?: string;
-	mimeType?: string;
-	description?: string;
-	parents?: string[];
-	createdTime?: string;
-	modifiedTime?: string;
-}
+/**
+ * Vstupni metadata pro popis souboru
+ */
+export type IGoogleDriveMeta = Partial<Omit<IGoogleDriveFile, "id" | "size">>;
 
 // globalni promenne
 const boundary = uuidv4().replace(/-/g, "");
-const fields = "createdTime,description,id,mimeType,modifiedTime,name,size";
+const fields = "createdTime,description,id,mimeType,modifiedTime,name,size,properties";
 
 /**
  * Vytvoreni multi-part dat pro upload souboru
@@ -35,7 +35,7 @@ const fields = "createdTime,description,id,mimeType,modifiedTime,name,size";
  * @param {string} content Obsah souboru
  * @returns {string} Multi-part data
  */
-function createUploadBody(meta: IGoogleDriveMeta, content: string): string {
+function createUploadBody(meta: IGoogleDriveMeta & Record<string, unknown>, content: string): string {
 	const multipart =
 		`\r\n` +
 		`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n` +
@@ -93,13 +93,15 @@ export async function create(meta: IGoogleDriveMeta, content: string): Promise<I
  *
  * @param {IGoogleDriveFile} file Soubor
  * @param {string} content Obsah souboru
+ * @param {IGoogleDriveMeta} meta Doplnkova metadata
  * @returns {Promise<IGoogleDriveFile>} Souborova metadata
  */
-export async function update(file: IGoogleDriveFile, content: string): Promise<IGoogleDriveFile> {
+export async function update(file: IGoogleDriveFile, content: string, meta: IGoogleDriveMeta = null): Promise<IGoogleDriveFile> {
 	// definice
 	const now = moment().toISOString();
 	const body = createUploadBody(
 		{
+			...meta,
 			mimeType: mime.getType(file.name),
 			modifiedTime: now
 		},

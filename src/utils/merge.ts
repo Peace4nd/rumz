@@ -13,7 +13,7 @@ export type IMergeArray = "replace" | "append";
  * @param {IMergeArray} array Prace s polem
  * @returns {Partial<T>} Objekt
  */
-export default function merge<T>(x: Partial<T>, y: Partial<T>, array: IMergeArray = "append"): Partial<T> {
+export default function merge<T>(x: Partial<T>, y: Partial<T>, array: IMergeArray = "replace"): Partial<T> {
 	// osetreni prace s polem
 	const options: deepmerge.Options = {};
 	if (array === "replace") {

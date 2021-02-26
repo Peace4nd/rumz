@@ -270,6 +270,8 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 					/>
 				);
 		}
+		// v pripade ze je pole skryte
+		return null;
 	}
 
 	/**

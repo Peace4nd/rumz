@@ -1,4 +1,4 @@
-import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Text } from "react-native";
 import { connect } from "react-redux";
@@ -35,16 +35,13 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 				header={{
 					actionLeft: {
 						icon: faTimes,
-						onPress: this.back
+						onPress: () => this.redirect("/overview")
 					},
-					actionRight: {
-						icon: faPencilAlt,
-						onPress: () => this.redirect("/create/:id", { id: record.id })
-					},
-					title: record?.name
+					title: record.name
 				}}
 			>
 				<Text>{JSON.stringify(record)}</Text>
+				<Text>editace na dlouhe podrzeni hodnoty</Text>
 			</Route.Wrapper>
 		);
 	}

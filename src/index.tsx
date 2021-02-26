@@ -6,7 +6,7 @@ import { MenuProvider } from "react-native-popup-menu";
 import { Provider } from "react-redux";
 import { BackButton, NativeRouter, Redirect, Route, Switch } from "react-router-native";
 import store from "./redux/store";
-import { Push, Update } from "./routes/create";
+import Create from "./routes/create";
 import Options from "./routes/options";
 import { Collection, Detail } from "./routes/overview";
 import Stats from "./routes/stats";
@@ -43,8 +43,7 @@ class App extends React.PureComponent {
 							<Redirect exact={true} strict={true} from="/" to={"/overview"} />
 							<Route exact={true} strict={true} path={"/overview"} component={Collection} />
 							<Route exact={true} strict={true} path={"/overview/:id"} component={Detail} />
-							<Route exact={true} strict={true} path={"/create"} component={Push} />
-							<Route exact={true} strict={true} path={"/create/:id"} component={Update} />
+							<Route exact={true} strict={true} path={"/create"} component={Create} />
 							<Route exact={true} strict={true} path={"/stats"} component={Stats} />
 							<Route exact={true} strict={true} path={"/options"} component={Options} />
 						</Switch>

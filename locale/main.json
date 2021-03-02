@@ -15,6 +15,7 @@
 	"createAlcohol": "Alkohol",
 	"createNotes": "Poznámky",
 	"createRating": "Hodnocení",
+	"createRipening": "Délka zrání",
 	"createRipeningLowest": "Nejkratší zrání",
 	"createRipeningHighest": "Nejdelší zrání",
 	"createCharacteristicsColor": "Barva",
@@ -24,6 +25,10 @@
 	"createImage": "Obrázek",
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
+
+	"editTitle": "Editace",
+	"editSave": "Uložit",
+	"editUndefined": "Tato hodnota nebyla vyplněna",
 
 	"overviewEmpty": "Kolekce je prázdná",
 	"overviewRipeningYears": "let",

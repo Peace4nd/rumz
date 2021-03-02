@@ -83,7 +83,7 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 					blurOnSubmit={onSubmit?.blur ?? true}
 					returnKeyType={returnKey}
 				/>
-				<Icon style={styles.icon} definition={icon[1]} color="Dark" />
+				{icon && <Icon style={styles.icon} definition={icon[1]} color="Dark" />}
 				<TextInput
 					ref={this.ref2}
 					style={styles.fieldBasic}

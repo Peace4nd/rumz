@@ -79,17 +79,17 @@ export interface IDataCollection {
 	/**
 	 * Barva (zlata, hneda, tmava zlata, ...)
 	 */
-	color: string;
+	color: string[];
 
 	/**
 	 * Cichove vlastnosti (tony kavy, vanilky, ...)
 	 */
-	aroma: string;
+	aroma: string[];
 
 	/**
 	 * Chutove vlastnosti (pomerance, vanilka, ...)
 	 */
-	taste: string;
+	taste: string[];
 
 	/**
 	 * Pocet vypitych panaku (a 40ml)

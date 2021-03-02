@@ -109,12 +109,16 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 		// skrolovani
 		if (scrollable) {
 			return (
-				<ScrollView keyboardDismissMode="on-drag" style={styles.contentWrapper} contentContainerStyle={[padding ? styles.contentPadding : null]}>
+				<ScrollView
+					keyboardDismissMode="on-drag"
+					style={styles.contentWrapper}
+					contentContainerStyle={[padding ? styles.contentPaddingFull : styles.contentPaddingHalf]}
+				>
 					{busy ? <Loading /> : children}
 				</ScrollView>
 			);
 		}
 		// standardni view
-		return <View style={[styles.contentWrapper, padding ? styles.contentPadding : null]}>{busy ? <Loading /> : children}</View>;
+		return <View style={[styles.contentWrapper, padding ? styles.contentPaddingFull : styles.contentPaddingHalf]}>{busy ? <Loading /> : children}</View>;
 	}
 }

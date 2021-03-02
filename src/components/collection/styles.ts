@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		height: Measurement.Components.Collection.Height,
 		margin: Measurement.Padding,
-		marginBottom: Measurement.Padding * 2,
 		overflow: "hidden",
 		padding: Measurement.Padding
 	},

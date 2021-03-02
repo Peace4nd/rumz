@@ -112,7 +112,8 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 							icon: faPercentage,
 							name: "alcohol",
 							placeholder: strings("createAlcohol"),
-							type: "number"
+							type: "number",
+							unit: "%"
 						},
 						{
 							icon: faPalette,
@@ -149,7 +150,8 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 							icon: faEuroSign,
 							name: "price",
 							placeholder: strings("createPrice"),
-							type: "number"
+							type: "number",
+							unit: "Kč"
 						},
 						{
 							icon: [faLongArrowAltDown, faLongArrowAltUp],

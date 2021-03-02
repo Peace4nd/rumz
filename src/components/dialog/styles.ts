@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flex: 1,
 		flexDirection: "column",
-		justifyContent: "center"
+		justifyContent: "flex-start"
 	},
 	contentTitle: {
 		alignItems: "center",
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 		flex: 0,
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginBottom: Measurement.Padding,
+		marginBottom: 2 * Measurement.Padding,
 		paddingBottom: Measurement.Padding,
 		width: "100%"
 	},

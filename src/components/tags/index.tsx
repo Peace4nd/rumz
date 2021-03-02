@@ -38,10 +38,12 @@ export interface ITags {
 const Tags = (props: ITags): JSX.Element => {
 	// rozlozeni props
 	const { items, onDelete, onModify } = props;
+	// osetreni nicoty
+	const safeItems = items || [];
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
-			{items.map((item, index) => (
+			{safeItems.map((item, index) => (
 				<TouchableOpacity
 					key={index}
 					style={styles.item}

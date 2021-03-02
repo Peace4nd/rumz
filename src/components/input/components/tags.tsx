@@ -54,29 +54,32 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 		// rozlozeni props
 		const { icon, items, placeholder } = this.props;
 		const { value } = this.state;
+		// osetreni nicoty
+		const safeItems = items || [];
+		const safeValue = value || [];
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null, styles.wrapperButton, styles.wrapperSpring]}>
 				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
-				{value.length === 0 && (
+				{safeValue.length === 0 && (
 					<Typography type="Body1" style={[styles.fieldBasic, styles.fieldPlaceholder]}>
 						{placeholder}
 					</Typography>
 				)}
-				{value.length > 0 && (
+				{safeValue.length > 0 && (
 					<View style={styles.fieldTags}>
-						<Tags items={value} onDelete={this.handleRemove} />
+						<Tags items={safeValue} onDelete={this.handleRemove} />
 					</View>
 				)}
-				<View style={styles.buttonGroup} pointerEvents={items.length ? "auto" : "none"}>
+				<View style={styles.buttonGroup} pointerEvents={safeItems.length ? "auto" : "none"}>
 					<Menu onSelect={this.handleAdd}>
 						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity, triggerWrapper: styles.buttonElement }}>
-							<Icon definition={faPlus} color={items.length ? "Base" : "Muted"} />
+							<Icon definition={faPlus} color={safeItems.length ? "Base" : "Muted"} />
 						</MenuTrigger>
 						<MenuOptions>
 							<ScrollView style={styles.menuScroll}>
-								{items
-									.filter((item) => !this.state.value.includes(item))
+								{safeItems
+									.filter((item) => !safeValue.includes(item))
 									.map((item, index) => (
 										<MenuOption key={index} value={item} style={styles.menuItem}>
 											<Typography type="Body1">{item}</Typography>

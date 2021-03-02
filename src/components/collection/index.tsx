@@ -129,12 +129,14 @@ export default class Collection extends React.PureComponent<ICollection> {
 						&gt; {item.ripening[0]} {strings("overviewRipeningYears")}
 					</Typography>
 				);
-			} else {
+			} else if (item.ripening[1]) {
 				return (
 					<Typography>
 						&lt; {item.ripening[1]} {strings("overviewRipeningYears")}
 					</Typography>
 				);
+			} else {
+				return null;
 			}
 		}
 	}

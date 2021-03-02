@@ -1,13 +1,25 @@
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisV, faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { StyleSheet, View } from "react-native";
 import { connect, DispatchProp } from "react-redux";
-import { Editable, Grid, Image, Route } from "../../components";
+import { CountryFlag, Editable, Grid, Image, Route, Typography } from "../../components";
 import { updateRecord } from "../../redux/actions/collection";
+import { Size } from "../../styles";
 import { IDataCollection, IDataOptions } from "../../types/data";
 import { IReduxStore } from "../../types/redux";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
 
+const styles = StyleSheet.create({
+	originFlag: {
+		marginRight: Size["1x"]
+	},
+	originWrapper: {
+		alignItems: "center",
+		flexDirection: "row",
+		height: Size["3x"]
+	}
+});
 interface IOverviewDetailProps extends DispatchProp {
 	collection: IDataCollection[];
 	options: IDataOptions;
@@ -38,6 +50,19 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 					actionLeft: {
 						icon: faTimes,
 						onPress: () => this.redirect("/overview")
+					},
+					actionRight: {
+						icon: faEllipsisV,
+						items: {
+							options: strings("optionsTitle")
+						},
+						onPress: (item) => {
+							switch (item) {
+								case "options":
+									this.redirect("/options");
+									break;
+							}
+						}
 					},
 					title: record.name
 				}}
@@ -178,6 +203,12 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 								}}
 								label={strings("createOrigin")}
 								value={record.origin}
+								customRenderValue={() => (
+									<View style={styles.originWrapper}>
+										<CountryFlag code={record.origin} style={styles.originFlag} />
+										<Typography type="Body1">{country[record.origin].name}</Typography>
+									</View>
+								)}
 								onChange={this.handleChange.bind(this, record.id, "origin")}
 							/>
 						</Grid.Column>

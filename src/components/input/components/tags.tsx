@@ -80,6 +80,7 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 							<ScrollView style={styles.menuScroll}>
 								{safeItems
 									.filter((item) => !safeValue.includes(item))
+									.sort()
 									.map((item, index) => (
 										<MenuOption key={index} value={item} style={styles.menuItem}>
 											<Typography type="Body1">{item}</Typography>

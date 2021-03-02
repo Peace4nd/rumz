@@ -43,7 +43,7 @@ const Tags = (props: ITags): JSX.Element => {
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
-			{safeItems.map((item, index) => (
+			{safeItems.sort().map((item, index) => (
 				<TouchableOpacity
 					key={index}
 					style={styles.item}

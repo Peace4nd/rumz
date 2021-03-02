@@ -8,8 +8,10 @@ const styles = StyleSheet.create({
 	buttonElement: {
 		alignItems: "center",
 		aspectRatio: 1,
+		backgroundColor: Color.White,
 		height: Measurement.Components.Input.Height,
-		justifyContent: "center"
+		justifyContent: "center",
+		width: Measurement.Components.Input.Height
 	},
 	buttonGroup: {
 		bottom: 0,
@@ -50,6 +52,10 @@ const styles = StyleSheet.create({
 	fieldMultiline: {
 		paddingVertical: Measurement.Padding * 1.5,
 		textAlignVertical: "top"
+	},
+	fieldPicker: {
+		marginLeft: -Measurement.Padding,
+		marginRight: -2 * Measurement.Padding
 	},
 	fieldPlaceholder: {
 		color: Color.Muted
@@ -113,6 +119,7 @@ const styles = StyleSheet.create({
 		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: "row",
 		height: Measurement.Components.Input.Height,
+		overflow: "hidden",
 		paddingHorizontal: Measurement.Padding * 2
 	},
 	wrapperButton: {

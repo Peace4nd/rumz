@@ -55,6 +55,11 @@ export interface IEditable<F extends IEditableField> {
 	 * Placeholder
 	 */
 	placeholder?: F["placeholder"];
+
+	/**
+	 * Custom render hodnoty
+	 */
+	customRenderValue: () => JSX.Element;
 }
 
 /**
@@ -73,8 +78,12 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IEditable<IEditableField> = {
+		customRenderValue: null,
+		field: null,
 		label: null,
 		onChange: null,
+		placeholder: null,
+		unit: null,
 		value: 0
 	};
 
@@ -85,7 +94,7 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { label } = this.props;
+		const { customRenderValue, label } = this.props;
 		const { opened } = this.state;
 		// sestaveni a vraceni
 		return (
@@ -94,7 +103,7 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 					<Typography type="Headline6" style={styles.label}>
 						{label}
 					</Typography>
-					{this.renderValue()}
+					{customRenderValue ? customRenderValue() : this.renderValue()}
 				</TouchableOpacity>
 				<Dialog
 					opened={opened}

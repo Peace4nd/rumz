@@ -1,3 +1,4 @@
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { Picker } from "@react-native-picker/picker";
 import { PickerItemProps } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
@@ -57,7 +58,13 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		return (
 			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
 				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
-				<Picker selectedValue={value} style={styles.fieldBasic} mode="dialog" prompt={placeholder} onValueChange={this.handleChange}>
+				<Picker
+					selectedValue={value}
+					style={[styles.fieldBasic, styles.fieldPicker]}
+					mode="dialog"
+					prompt={placeholder}
+					onValueChange={this.handleChange}
+				>
 					{items.map((item) => (
 						<Picker.Item key={item.value} {...item} />
 					))}
@@ -67,6 +74,9 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 						{placeholder}
 					</Typography>
 				)}
+				<View style={[styles.buttonGroup, styles.buttonElement]} pointerEvents="none">
+					<Icon definition={faChevronDown} color="Base" />
+				</View>
 			</View>
 		);
 	}

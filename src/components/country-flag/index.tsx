@@ -18,10 +18,10 @@ export interface ICountryFlag extends ViewProps {
  */
 const CountryFlag = (props: ICountryFlag): JSX.Element => {
 	// rozlozeni props
-	const { code } = props;
+	const { code, style, ...rest } = props;
 	// sestaveni a vraceni
 	return (
-		<View style={styles.flagWrapper}>
+		<View style={[styles.flagWrapper, style]} {...rest}>
 			{React.createElement(country[code].flag.default, {
 				height: "100%",
 				preserveAspectRatio: "none",

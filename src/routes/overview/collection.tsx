@@ -1,4 +1,4 @@
-import { faEllipsisV, faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
+import { faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import SplashScreen from "react-native-splash-screen";
 import { batch, connect, DispatchProp } from "react-redux";
@@ -82,21 +82,10 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 		return (
 			<Route.Wrapper
 				busy={!init}
-				header={{
-					actionRight: {
-						icon: faEllipsisV,
-						items: {
-							options: strings("optionsTitle")
-						},
-						onPress: (item) => {
-							switch (item) {
-								case "options":
-									this.redirect("/options");
-									break;
-							}
-						}
-					},
-					title: strings("headerMain")
+				title={strings("applicationTitle")}
+				features={{
+					menu: true,
+					search: true
 				}}
 				padding={false}
 			>

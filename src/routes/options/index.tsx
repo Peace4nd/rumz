@@ -1,5 +1,5 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faBox, faChevronLeft, faFlask, faGlassCheers, faGlassWhiskey, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faPalette } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
@@ -80,14 +80,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={backupWorking}
-				header={{
-					actionLeft: {
-						icon: faChevronLeft,
-						onPress: () => this.redirect("/overview")
-					},
-					title: strings("optionsTitle")
+				title={strings("optionsTitle")}
+				features={{
+					back: true
 				}}
+				busy={backupWorking}
 				scrollable={true}
 			>
 				{/* google ucet */}
@@ -215,7 +212,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					<Typography type="Body2">
 						{strings(
 							"optionsBackupSize",
-							backupFiles.reduce((prev, current) => parseInt(current.size, 10), 0)
+							backupFiles.reduce((prev, current) => prev + parseInt(current.size, 10), 0)
 						)}
 					</Typography>
 				</React.Fragment>

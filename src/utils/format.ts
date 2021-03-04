@@ -12,7 +12,7 @@ export function date(value: MomentInput): string {
 	if (value) {
 		return moment(value).format("DD. MM. YYYY");
 	}
-	return strings("editUndefined");
+	return strings("overviewUndefined");
 }
 
 /**
@@ -25,7 +25,7 @@ export function array(value: string[]): string {
 	if (Array.isArray(value)) {
 		return value.join(", ");
 	}
-	return strings("editUndefined");
+	return strings("overviewUndefined");
 }
 
 /**
@@ -37,7 +37,7 @@ export function array(value: string[]): string {
  */
 export function number(value: number, unit?: string): string {
 	if (isNaN(value)) {
-		return strings("editUndefined");
+		return strings("overviewUndefined");
 	}
 	return value.toFixed(0) + (unit || "");
 }
@@ -50,7 +50,7 @@ export function number(value: number, unit?: string): string {
  */
 export function string(value: string): string {
 	if (!value) {
-		return strings("editUndefined");
+		return strings("overviewUndefined");
 	}
 	return value;
 }
@@ -74,7 +74,7 @@ export function range(value: number[], unit?: string): string {
 			}
 		}
 	}
-	return strings("editUndefined");
+	return strings("overviewUndefined");
 }
 
 /**
@@ -91,7 +91,7 @@ export function item(value: ItemValue, items: PickerItemProps[]): string {
 			return found.label;
 		}
 	}
-	return strings("editUndefined");
+	return strings("overviewUndefined");
 }
 
 /**

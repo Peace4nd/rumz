@@ -9,10 +9,21 @@ import EditableBase from "./base";
  * Tagy
  */
 export default class EditableTags extends EditableBase<IInputTags> {
+	/**
+	 * Vykreslit pole
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	protected renderField(): JSX.Element {
 		const { field, label, value } = this.props;
 		return <Input.Tags {...field} placeholder={label} value={value} onChange={this.handleChange} />;
 	}
+
+	/**
+	 * Vykreslit hodnotu
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	protected renderValue(): JSX.Element {
 		const { value } = this.props;
 		return <Typography type="Body1">{format.array(value)}</Typography>;

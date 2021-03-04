@@ -45,12 +45,22 @@ export default class Rating extends React.PureComponent<IRating> {
 		// definice
 		const stars: JSX.Element[] = [];
 		// sestaveni
-		for (let i = 0; i < 10; i++) {
-			stars.push(
-				<TouchableOpacity key={i} onPress={() => onChange(i + 1)}>
-					<Icon definition={value > i ? faStarSolid : faStarRegular} color={value > i ? "Base" : "Muted"} />
-				</TouchableOpacity>
-			);
+		if (onChange) {
+			for (let i = 0; i < 10; i++) {
+				stars.push(
+					<TouchableOpacity key={i} onPress={() => onChange(i + 1)}>
+						<Icon definition={value > i ? faStarSolid : faStarRegular} color={value > i ? "Base" : "Muted"} />
+					</TouchableOpacity>
+				);
+			}
+		} else {
+			for (let i = 0; i < 10; i++) {
+				stars.push(
+					<View key={i}>
+						<Icon definition={value > i ? faStarSolid : faStarRegular} color={value > i ? "Base" : "Muted"} />
+					</View>
+				);
+			}
 		}
 		// vraceni
 		return <View style={styles.wrapper}>{stars}</View>;

@@ -5,10 +5,25 @@ const styles = StyleSheet.create({
 	actionOption: {
 		padding: 2 * Measurement.Padding
 	},
+	actionWrapper: {
+		alignItems: "center",
+		flex: 0,
+		justifyContent: "center",
+		width: Measurement.Components.Header.Height * 0.75
+	},
 	sectionAction: {
 		alignItems: "center",
+		flexDirection: "row",
+		height: Measurement.Components.Header.Height,
 		justifyContent: "center",
-		width: Measurement.Components.Header.Height
+		position: "absolute",
+		top: 0
+	},
+	sectionActionLeft: {
+		left: 0
+	},
+	sectionActionRight: {
+		right: 0
 	},
 	sectionTitle: {
 		alignItems: "center",

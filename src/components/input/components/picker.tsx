@@ -70,7 +70,7 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 					))}
 				</Picker>
 				{!value && (
-					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay]}>
+					<Typography type="Body1" style={[styles.placeholder, styles.placeholderOverlay, icon ? styles.placeholderOverlayIcon : null]}>
 						{placeholder}
 					</Typography>
 				)}

@@ -5,8 +5,12 @@ const styles = StyleSheet.create({
 	label: {
 		marginBottom: Measurement.Padding / 2
 	},
-	wrapper: {
+	touchable: {
 		flex: 1
+	},
+	wrapper: {
+		flex: 1,
+		width: "100%"
 	}
 });
 

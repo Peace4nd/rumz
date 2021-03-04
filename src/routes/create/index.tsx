@@ -1,6 +1,5 @@
 import {
 	faBox,
-	faCheck,
 	faComments,
 	faEuroSign,
 	faFlask,
@@ -67,19 +66,19 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				busy={this.state.working}
-				header={{
-					actionLeft: {
-						icon: faTimes,
-						onPress: () => this.redirect("/overview")
-					},
-					actionRight: {
-						disabled: this.state.working,
-						icon: faCheck,
-						onPress: this.handleSave
-					},
-					title: strings("headerAdd")
+				title={strings("createTitle")}
+				features={{
+					back: true
 				}}
+				busy={this.state.working}
+				actions={[
+					{
+						disabled: this.state.working,
+						icon: faTimes,
+						onPress: this.handleSave,
+						type: "press"
+					}
+				]}
 				scrollable={true}
 			>
 				<Form<IDataCollection>

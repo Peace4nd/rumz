@@ -95,8 +95,11 @@ const styles = StyleSheet.create({
 	placeholderOverlay: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: Color.White,
-		marginLeft: Size["7x"],
+		marginLeft: Size["2x"],
 		marginRight: Size["6x"]
+	},
+	placeholderOverlayIcon: {
+		marginLeft: Size["7x"]
 	},
 
 	// jednotka

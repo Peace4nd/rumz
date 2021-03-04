@@ -9,7 +9,8 @@ import styles from "../styles";
 
 interface IInputRangeState {
 	error: string;
-	value: [number, number];
+	valueMin: number;
+	valueMax: number;
 }
 
 /**
@@ -29,7 +30,8 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	 */
 	public state: IInputRangeState = {
 		error: null,
-		value: this.props.value
+		valueMax: this.props?.value?.[1] || 0,
+		valueMin: this.props?.value?.[0] || 0
 	};
 
 	/**
@@ -64,7 +66,7 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	public render(): JSX.Element {
 		// rozlozeni props
 		const { icon, onSubmit, placeholder, returnKey } = this.props;
-		const { error, value } = this.state;
+		const { error, valueMax, valueMin } = this.state;
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
@@ -72,11 +74,11 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 				<TextInput
 					ref={this.ref1}
 					style={styles.fieldBasic}
-					value={value[0] ? String(value[0]) : ""}
+					value={valueMin ? String(valueMin) : ""}
 					placeholder={placeholder[0]}
 					placeholderTextColor={Color.Muted}
 					keyboardType="numeric"
-					onChangeText={(text) => this.handleChange(0, text)}
+					onChangeText={(text) => this.handleChange("min", text)}
 					onSubmitEditing={() => {
 						this.ref2.current.focus();
 					}}
@@ -87,11 +89,11 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 				<TextInput
 					ref={this.ref2}
 					style={styles.fieldBasic}
-					value={value[1] ? String(value[1]) : ""}
+					value={valueMax ? String(valueMax) : ""}
 					placeholder={placeholder[1]}
 					placeholderTextColor={Color.Muted}
 					keyboardType="numeric"
-					onChangeText={(text) => this.handleChange(1, text)}
+					onChangeText={(text) => this.handleChange("max", text)}
 					onSubmitEditing={this.handleSubmit}
 					blurOnSubmit={onSubmit?.blur ?? true}
 					returnKeyType={returnKey}
@@ -121,7 +123,8 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 		// reset hodnoty
 		if (onSubmit.reset) {
 			this.setState({
-				value: [0, 0]
+				valueMax: 0,
+				valueMin: 0
 			});
 		}
 		// handler
@@ -133,24 +136,26 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	/**
 	 * Zmenova udalost
 	 *
-	 * @param {number} index Index
+	 * @param {"min"|"max"} type Typ
 	 * @param {string} value Hodnota
 	 */
-	private handleChange(index: number, value: string): void {
+	private handleChange(type: "min" | "max", value: string): void {
 		// rozlozeni props
 		const { validator } = this.props;
-		const { value: current } = this.state;
-		// parsovani hodnoty
+		const { valueMax, valueMin } = this.state;
+		// priprava
 		const parsed = parseInt(value, 10) || 0;
-		// zmena rozsahu
-		current[index] = parsed;
+		const updatedValueMax = type === "max" ? parsed : valueMax;
+		const updatedValueMin = type === "min" ? parsed : valueMin;
 		// aktualizace
 		this.setState(
 			{
-				error: validator ? validator(current) : null,
-				value: current
+				error: validator ? validator([updatedValueMin, updatedValueMax]) : null,
+				valueMax: updatedValueMax,
+				valueMin: updatedValueMin
 			},
 			() => {
+				const current: [number, number] = [updatedValueMin, updatedValueMax];
 				this.props.onChange(current, { filled: current.reduce((prev, cur) => prev + cur, 0) > 0, valid: this.state.error === null });
 			}
 		);

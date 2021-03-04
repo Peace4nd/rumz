@@ -1,11 +1,10 @@
 {
-	"headerMain": "Rumotéka",
-	"headerAdd": "Nový rum",
+	"applicationTitle": "Rumotéka",
 
 	"navigationOverview": "Přehled",
-	"navigationStats": "Statistika",
 	"navigationCreate": "Přidat",
 
+	"createTitle": "Nový rum",
 	"createName": "Název",
 	"createPurchased": "Zakoupeno",
 	"createOrigin": "Země původu",
@@ -26,15 +25,14 @@
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
 
-	"editTitle": "Editace",
-	"editSave": "Uložit",
-	"editUndefined": "Tato hodnota nebyla vyplněna",
-
 	"overviewEmpty": "Kolekce je prázdná",
 	"overviewRipeningYears": "let",
 	"overviewDramTitle": "Přidat vypitého panáka",
 	"overviewDramDrink": "Vypít",
 	"overviewDramCount": "Počet panáků",
+	"overviewEditTitle": "overviewEditace",
+	"overviewEditSave": "Uložit",
+	"overviewUndefined": "Tato hodnota nebyla vyplněna",
 
 	"optionsTitle": "Nastavení",
 	"optionsGoogleTitle": "Přihlášení Google",
@@ -51,6 +49,8 @@
 	"optionsBackupSize": "Velikost zálohy: {0|bytes}",
 
 	"confirmTitleDelete": "Opravdu smazat?",
-	"confirmCancel": "Zrušit",
-	"confirmOk": "Potvrdit"
+	"confirmButtonCancel": "Zrušit",
+	"confirmButtonConfirm": "Potvrdit",
+
+	"statsTitle": "Statistika"
 }

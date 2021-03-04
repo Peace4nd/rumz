@@ -1,9 +1,9 @@
-import { faCartPlus, faLightbulb, faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCartPlus, faEllipsisV, faListUl, faSearch } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import { Color } from "../../../styles";
 import strings from "../../../utils/strings";
-import Header, { IHeader } from "../../header";
+import Header, { IHeaderAction } from "../../header";
 import Loading from "../../loading";
 import Navigation, { INavigationTab } from "../../navigation";
 import styles from "../styles";
@@ -11,21 +11,46 @@ import styles from "../styles";
 /**
  * Dostupne vlastnosti
  */
-export interface IRoute<I> {
+export interface IRoute {
 	/**
-	 * Zaneprazdneno
+	 * Nadpis
 	 */
-	busy?: boolean;
+	title: string;
 
 	/**
-	 * Hlavicka
+	 * Funkce
 	 */
-	header: IHeader<I>;
+	features?: {
+		/**
+		 * Zpet
+		 */
+		back?: boolean;
+
+		/**
+		 * Vyhledavani
+		 */
+		search?: boolean;
+
+		/**
+		 * Menu
+		 */
+		menu?: boolean;
+	};
 
 	/**
 	 * Navigace
 	 */
 	navigation?: INavigationTab[];
+
+	/**
+	 * Akce
+	 */
+	actions?: IHeaderAction[];
+
+	/**
+	 * Zaneprazdneno
+	 */
+	busy?: boolean;
 
 	/**
 	 * Pouzit plny padding
@@ -41,23 +66,23 @@ export interface IRoute<I> {
 /**
  * Obecna routa
  */
-export default class Route<I extends Record<string, string>> extends React.PureComponent<IRoute<I>> {
+export default class Route extends React.PureComponent<IRoute> {
 	/**
 	 * Vychozi vlastnosti
 	 */
-	public static defaultProps: IRoute<unknown> = {
+	public static defaultProps: IRoute = {
+		actions: [],
 		busy: false,
-		header: null,
+		features: {
+			back: false,
+			menu: false,
+			search: false
+		},
 		navigation: [
 			{
 				icon: faListUl,
 				label: strings("navigationOverview"),
 				path: "/overview"
-			},
-			{
-				icon: faLightbulb,
-				label: strings("navigationStats"),
-				path: "/stats"
 			},
 			{
 				icon: faCartPlus,
@@ -66,7 +91,8 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 			}
 		],
 		padding: true,
-		scrollable: false
+		scrollable: false,
+		title: null
 	};
 
 	/**
@@ -76,13 +102,54 @@ export default class Route<I extends Record<string, string>> extends React.PureC
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { header, navigation } = this.props;
+		const { actions, features, navigation, title } = this.props;
+		// definice
+		const preparedActions: IHeaderAction[] = actions.slice(0);
+		// vyhledavani
+		if (features.search) {
+			preparedActions.push({
+				icon: faSearch,
+				onPress: null,
+				type: "press"
+			});
+		}
+		// menu
+		if (features.menu) {
+			preparedActions.push({
+				icon: faEllipsisV,
+				items: [
+					{
+						label: strings("optionsTitle"),
+						path: "/options",
+						type: "path"
+					},
+					{
+						label: strings("statsTitle"),
+						path: "/stats",
+						type: "path"
+					}
+				],
+				type: "menu"
+			});
+		}
 		// sestaveni a vraceni
 		return (
 			<React.Fragment>
 				<StatusBar barStyle="default" backgroundColor={Color.Dark} />
 				<SafeAreaView style={styles.wrapper}>
-					<Header {...header} />
+					<Header
+						title={title}
+						back={
+							features.back
+								? {
+										icon: faArrowLeft,
+										path: "/overview",
+										type: "path"
+								  }
+								: null
+						}
+						actions={preparedActions}
+					/>
 					{this.renderContent()}
 					<Navigation tabs={navigation} />
 				</SafeAreaView>

@@ -99,7 +99,7 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
-				<TouchableOpacity onPress={this.handleToggle}>
+				<TouchableOpacity style={styles.touchable} onPress={this.handleToggle}>
 					<Typography type="Headline6" style={styles.label}>
 						{label}
 					</Typography>
@@ -108,9 +108,9 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 				<Dialog
 					opened={opened}
 					onToggle={this.handleToggle}
-					title={strings("editTitle")}
+					title={strings("overviewEditTitle")}
 					button={{
-						label: strings("editSave"),
+						label: strings("overviewEditSave"),
 						onPress: this.handlePress
 					}}
 				>
@@ -120,16 +120,32 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 		);
 	}
 
+	/**
+	 * Vykreslit pole
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	protected abstract renderField(): JSX.Element;
 
+	/**
+	 * Vykreslit hodnotu
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	protected abstract renderValue(): JSX.Element;
 
+	/**
+	 * Prepnuti editace
+	 */
 	private handleToggle = (): void => {
 		this.setState({
 			opened: !this.state.opened
 		});
 	};
 
+	/**
+	 * Ulozeni
+	 */
 	private handlePress = (): void => {
 		this.setState(
 			{
@@ -141,20 +157,14 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 		);
 	};
 
+	/**
+	 * Zmena hodnoty
+	 *
+	 * @param {F["value"]} value Hodnota
+	 */
 	protected handleChange = (value: F["value"]): void => {
 		this.setState({
 			value
 		});
-	};
-
-	protected handleSave = (value: F["value"]): void => {
-		this.setState(
-			{
-				value
-			},
-			() => {
-				this.props.onChange(this.state.value);
-			}
-		);
 	};
 }

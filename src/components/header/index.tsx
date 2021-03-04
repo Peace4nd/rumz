@@ -2,39 +2,100 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
+import { RouteComponentProps, withRouter } from "react-router-native";
 import { Icon } from "..";
+import { IRouterPath } from "../../utils/router";
 import Typography from "../typography";
 import styles from "./styles";
 
 /**
+ * Polozka menu (presmerovani)
+ */
+interface IHeaderActionMenuItemPath {
+	type: "path";
+	label: string;
+	path: IRouterPath;
+}
+
+/**
+ * Polozka menu (kliknuti)
+ */
+interface IHeaderActionMenuItemPress {
+	type: "press";
+	label: string;
+	onPress: () => void;
+}
+
+/**
+ * Polozka menu
+ */
+export type IHeaderActionMenuItem = IHeaderActionMenuItemPath | IHeaderActionMenuItemPress;
+
+/**
+ * Akce (presmerovani)
+ */
+interface IHeaderActionPath {
+	type: "path";
+	icon: IconDefinition;
+	path: IRouterPath;
+	disabled?: boolean;
+}
+
+/**
+ * Akce (kliknuti)
+ */
+interface IHeaderActionPress {
+	type: "press";
+	icon: IconDefinition;
+	onPress: () => void;
+	disabled?: boolean;
+}
+
+/**
+ * Akce (nabidka)
+ */
+interface IHeaderActionMenu {
+	type: "menu";
+	icon: IconDefinition;
+	items: IHeaderActionMenuItem[];
+	disabled?: boolean;
+}
+
+/**
  * Akce
  */
-export interface IHeaderAction<I> {
-	icon: IconDefinition;
-	onPress: (item?: keyof I) => void;
-	disabled?: boolean;
-	items?: I;
-}
+export type IHeaderAction = IHeaderActionPath | IHeaderActionPress | IHeaderActionMenu;
 
 /**
  * Dostupne vlastnosti
  */
-export interface IHeader<I> {
+export interface IHeader {
+	/**
+	 * Titulek
+	 */
 	title: string;
-	actionLeft?: IHeaderAction<I>;
-	actionRight?: IHeaderAction<I>;
+
+	/**
+	 * Zpet
+	 */
+	back?: IHeaderAction;
+
+	/**
+	 * Nabidka
+	 */
+	actions?: IHeaderAction[];
 }
 
 /**
  * Hlavicka
  */
-export default class Header<I extends Record<string, string>> extends React.PureComponent<IHeader<I>> {
+class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 	/**
 	 * Vychozi vlastnosti
 	 */
-	public static defaultProps: IHeader<unknown> = {
-		actionLeft: null,
-		actionRight: null,
+	public static defaultProps: IHeader = {
+		actions: [],
+		back: null,
 		title: null
 	};
 
@@ -45,17 +106,25 @@ export default class Header<I extends Record<string, string>> extends React.Pure
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { actionLeft, actionRight, title } = this.props;
+		const { actions, back, title } = this.props;
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
-				<View style={styles.sectionAction}>{this.renderAction(actionLeft)}</View>
+				<View style={[styles.sectionAction, styles.sectionActionLeft]}>
+					<View style={styles.actionWrapper}>{this.renderAction(back)}</View>
+				</View>
 				<View style={styles.sectionTitle}>
 					<Typography type="Headline6" style={styles.title}>
 						{title}
 					</Typography>
 				</View>
-				<View style={styles.sectionAction}>{this.renderAction(actionRight)}</View>
+				<View style={[styles.sectionAction, styles.sectionActionRight]}>
+					{actions.map((action, index) => (
+						<View key={index} style={styles.actionWrapper}>
+							{this.renderAction(action)}
+						</View>
+					))}
+				</View>
 			</View>
 		);
 	}
@@ -66,33 +135,64 @@ export default class Header<I extends Record<string, string>> extends React.Pure
 	 * @param {IHeaderAction} action Definice akce
 	 * @returns {JSX.Element} Element
 	 */
-	private renderAction(action: IHeaderAction<I>): JSX.Element {
+	private renderAction(action: IHeaderAction): JSX.Element {
+		// rozlozeni props
+		const { history } = this.props;
+		// pokud existuje akce
 		if (action) {
-			// menu
-			if (action.items) {
-				return (
-					<Menu onSelect={(value) => action.onPress(value)}>
-						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity }}>
+			switch (action.type) {
+				// menu
+				case "menu": {
+					return (
+						<Menu
+							onSelect={(value: number) => {
+								// vybrana polozka menu
+								const item = action.items[value];
+								// zpracovani akce
+								switch (item.type) {
+									case "path":
+										history.push(item.path);
+										break;
+									case "press":
+										item.onPress();
+										break;
+								}
+							}}
+						>
+							<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity }}>
+								<Icon definition={action.icon} color="Highlight" />
+							</MenuTrigger>
+							<MenuOptions>
+								{action.items.map((item, index) => (
+									<MenuOption key={index} style={styles.actionOption} value={index}>
+										<Typography type="Body1">{item.label}</Typography>
+									</MenuOption>
+								))}
+							</MenuOptions>
+						</Menu>
+					);
+				}
+				// presmerovani
+				case "path": {
+					return (
+						<TouchableOpacity onPress={() => history.push(action.path)} disabled={action.disabled || false}>
 							<Icon definition={action.icon} color="Highlight" />
-						</MenuTrigger>
-						<MenuOptions>
-							{Object.entries(action.items).map((entry) => (
-								<MenuOption key={entry[0]} style={styles.actionOption} value={entry[0]}>
-									<Typography type="Body1">{entry[1]}</Typography>
-								</MenuOption>
-							))}
-						</MenuOptions>
-					</Menu>
-				);
+						</TouchableOpacity>
+					);
+				}
+				// kliknuti
+				case "press": {
+					return (
+						<TouchableOpacity onPress={action.onPress} disabled={action.disabled || false}>
+							<Icon definition={action.icon} color="Highlight" />
+						</TouchableOpacity>
+					);
+				}
 			}
-			// vychozi akce
-			return (
-				<TouchableOpacity onPress={() => action.onPress()} disabled={action.disabled || false}>
-					<Icon definition={action.icon} color="Highlight" />
-				</TouchableOpacity>
-			);
 		}
 		// zadna akce
 		return null;
 	}
 }
+
+export default withRouter(Header);

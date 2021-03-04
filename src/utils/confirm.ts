@@ -26,12 +26,12 @@ export default {
 					{
 						onPress: options.onConfirm,
 						style: "destructive",
-						text: strings("confirmOk")
+						text: strings("confirmButtonConfirm")
 					},
 					{
 						onPress: options?.onDismiss,
 						style: "cancel",
-						text: strings("confirmCancel")
+						text: strings("confirmButtonCancel")
 					}
 				],
 				{

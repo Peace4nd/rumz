@@ -27,7 +27,7 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 	 * Vychozi stav
 	 */
 	public state: IInputTagsState = {
-		value: this.props.value
+		value: this.props.value || []
 	};
 
 	/**

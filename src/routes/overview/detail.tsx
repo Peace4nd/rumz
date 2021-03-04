@@ -1,4 +1,3 @@
-import { faEllipsisV, faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { connect, DispatchProp } from "react-redux";
@@ -46,25 +45,10 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				header={{
-					actionLeft: {
-						icon: faTimes,
-						onPress: () => this.redirect("/overview")
-					},
-					actionRight: {
-						icon: faEllipsisV,
-						items: {
-							options: strings("optionsTitle")
-						},
-						onPress: (item) => {
-							switch (item) {
-								case "options":
-									this.redirect("/options");
-									break;
-							}
-						}
-					},
-					title: record.name
+				title={record.name}
+				features={{
+					back: true,
+					menu: true
 				}}
 				scrollable={true}
 			>

@@ -31,3 +31,16 @@ export interface IStorageActions<T> {
 	 */
 	write: (data: T) => Promise<void>;
 }
+
+/**
+ * Definice metody pro odstraneni
+ */
+export interface IStorageRemove {
+	/**
+	 * Odstraneni konkretniho zaznamu
+	 *
+	 * @param {string} id Identifikator
+	 * @returns {Promise<void>} Kompletni kolekce
+	 */
+	remove: (id: string) => Promise<void>;
+}

@@ -1,12 +1,16 @@
+import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Share, StyleSheet, View } from "react-native";
 import { connect, DispatchProp } from "react-redux";
-import { CountryFlag, Editable, Grid, Image, Route, Typography } from "../../components";
-import { updateRecord } from "../../redux/actions/collection";
+import { CountryFlag, Editable, Grid, Route, Typography } from "../../components";
+import { removeRecord, updateRecord } from "../../redux/actions/collection";
 import { Size } from "../../styles";
 import { IDataCollection, IDataOptions } from "../../types/data";
+import { IFileDocument } from "../../types/file";
 import { IReduxStore } from "../../types/redux";
+import assets from "../../utils/assets";
 import country from "../../utils/country";
+import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 const styles = StyleSheet.create({
@@ -47,8 +51,39 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 			<Route.Wrapper
 				title={record.name}
 				features={{
+					actions: [
+						{
+							icon: faShareAlt,
+							onPress: () => {
+								Share.share(
+									{
+										message: JSON.stringify(record, null, 4),
+										title: "title"
+									},
+									{
+										dialogTitle: "dialog"
+									}
+								);
+							},
+							type: "press"
+						}
+					],
 					back: true,
-					menu: true
+					menu: {
+						enabled: true,
+						items: [
+							{
+								label: strings("overviewEditRemove"),
+								onPress: () => {
+									Promise.all([storage.collection.remove(record.id), assets.remove(record.image)]).then(() => {
+										this.props.dispatch(removeRecord(record.id));
+										this.redirect("/overview");
+									});
+								},
+								type: "press"
+							}
+						]
+					}
 				}}
 				scrollable={true}
 			>
@@ -56,7 +91,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 					{/* obrazek */}
 					<Grid.Row>
 						<Grid.Column>
-							<Image source={record.image} />
+							<Editable.Image label={strings("createImage")} value={{ path: record.image }} onChange={this.handleImage.bind(this, record.id)} />
 						</Grid.Column>
 					</Grid.Row>
 					{/* nazev */}
@@ -190,7 +225,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 								customRenderValue={() => (
 									<View style={styles.originWrapper}>
 										<CountryFlag code={record.origin} style={styles.originFlag} />
-										<Typography type="Body1">{country[record.origin].name}</Typography>
+										<Typography type="Body1">{record.origin ? country[record.origin].name : null}</Typography>
 									</View>
 								)}
 								onChange={this.handleChange.bind(this, record.id, "origin")}
@@ -233,8 +268,27 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 		);
 	}
 
+	/**
+	 * Uprava hodnoty
+	 *
+	 * @param {string} id Identifikator
+	 * @param {keyof IDataCollection} field Pole
+	 * @param {unknown} value Hodnota
+	 */
 	private handleChange(id: string, field: keyof IDataCollection, value: unknown): void {
 		this.props.dispatch(updateRecord(id, { [field]: value }));
+	}
+
+	/**
+	 * Uprava obrazku
+	 *
+	 * @param {string} id Identifikator
+	 * @param {unknown} value Hodnota
+	 */
+	private handleImage(id: string, value: IFileDocument): void {
+		assets.create(value.path, id).then((path) => {
+			this.props.dispatch(updateRecord(id, { image: path }));
+		});
 	}
 }
 

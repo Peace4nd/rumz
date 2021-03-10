@@ -1,11 +1,21 @@
 import { User } from "@react-native-community/google-signin";
 import { Action } from "redux";
+import { IGoogleDriveFile } from "../utils/google";
 import { IDataCollection, IDataOptions } from "./data";
 
 /**
  * Typy
  */
-export type IReduxType = "google-resolved" | "google-token" | "collection-load" | "collection-push" | "collection-update" | "options-load" | "options-update";
+export type IReduxType =
+	| "google-resolved"
+	| "google-token"
+	| "collection-load"
+	| "collection-push"
+	| "collection-update"
+	| "collection-remove"
+	| "options-load"
+	| "options-update"
+	| "backup-load";
 
 /**
  * Akce
@@ -47,6 +57,21 @@ export interface IReduxGoogle {
 }
 
 /**
+ * Zaloha
+ */
+export interface IReduxBackup {
+	loaded: boolean;
+	files: IGoogleDriveFile[];
+	exist: boolean;
+	database: IGoogleDriveFile;
+	modified: string;
+	stats: {
+		records: number;
+		size: number;
+	};
+}
+
+/**
  * Kolekce
  */
 export type IReduxCollection = IDataWrapperArray<IDataCollection>;
@@ -60,6 +85,7 @@ export type IReduxOptions = IDataWrapperObject<IDataOptions>;
  * Store
  */
 export interface IReduxStore {
+	backup: IReduxBackup;
 	google: IReduxGoogle;
 	collection: IReduxCollection;
 	options: IReduxOptions;

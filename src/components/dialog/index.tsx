@@ -57,10 +57,13 @@ export default class Dialog extends React.PureComponent<IDialog> {
 					{fullscreen && (
 						<Header
 							title={title}
-							actionRight={{
-								icon: faTimes,
-								onPress: () => onToggle(false)
-							}}
+							actions={[
+								{
+									icon: faTimes,
+									onPress: () => onToggle(false),
+									type: "press"
+								}
+							]}
 						/>
 					)}
 					<View style={[styles.wrapper, fullscreen ? styles.wrapperFullscreen : null]}>

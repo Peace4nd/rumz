@@ -8,9 +8,10 @@ const styles = StyleSheet.create({
 	},
 	contentChildren: {
 		alignItems: "center",
-		flex: 1,
 		flexDirection: "column",
-		justifyContent: "flex-start"
+		justifyContent: "flex-start",
+		paddingVertical: Measurement.Padding * 2,
+		width: "100%"
 	},
 	contentTitle: {
 		alignItems: "center",
@@ -19,13 +20,11 @@ const styles = StyleSheet.create({
 		flex: 0,
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginBottom: 2 * Measurement.Padding,
 		paddingBottom: Measurement.Padding,
 		width: "100%"
 	},
 	contentWrapper: {
 		alignItems: "center",
-		aspectRatio: 1.5,
 		backgroundColor: Color.Highlight,
 		borderRadius: Measurement.Radius,
 		elevation: 8,

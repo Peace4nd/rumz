@@ -1,9 +1,10 @@
-import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { FlatList, Image, ListRenderItemInfo, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { CountryFlag, Icon } from "..";
 import { IDataCollection } from "../../types/data";
 import strings from "../../utils/strings";
+import Image from "../image";
 import Typography from "../typography";
 import styles from "./styles";
 
@@ -14,7 +15,7 @@ export interface ICollection {
 	/**
 	 * Zaznamy kolekce
 	 */
-	records: IDataCollection[];
+	record: IDataCollection;
 
 	/**
 	 * Panak
@@ -45,7 +46,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 		dram: 0,
 		onLongPress: null,
 		onPress: null,
-		records: []
+		record: null
 	};
 
 	/**
@@ -55,59 +56,34 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { records } = this.props;
-		// prazdna kolekce
-		if (records.length === 0) {
-			return (
-				<View style={styles.emptyWrapper}>
-					<Icon definition={faListUl} size="9x" color="Muted" />
-					<Typography type="Headline4" style={styles.emptyText}>
-						{strings("overviewEmpty")}
-					</Typography>
-				</View>
-			);
-		}
-		// sestaveni a vraceni
-		return <FlatList data={records} scrollEnabled={true} renderItem={this.renderRecord} keyExtractor={(item) => item.id} style={styles.wrapper} />;
-	}
-
-	/**
-	 * Sestaveni polozky seznamu
-	 *
-	 * @param {ListRenderItemInfo<IDataCollection>} params Parametry
-	 * @returns {JSX.Element} Element polozky
-	 */
-	private renderRecord = ({ index, item }: ListRenderItemInfo<IDataCollection>): JSX.Element => {
-		// rozlozeni props
-		const { dram, onLongPress, onPress } = this.props;
+		const { dram, onLongPress, onPress, record } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Pressable
-				key={index}
-				style={({ pressed }) => [styles.itemWrapper, pressed ? styles.itemWrapperPressed : null]}
-				onPress={() => onPress(item)}
-				onLongPress={() => onLongPress(item)}
+				style={({ pressed }) => [styles.wrapper, pressed ? styles.wrapperPressed : null]}
+				onPress={() => onPress(record)}
+				onLongPress={() => onLongPress(record)}
 			>
-				<Image source={{ uri: "file://" + item.image }} resizeMode="contain" style={styles.itemImage} />
-				<View style={styles.itemInfo}>
+				<Image source={record.image} bare={true} style={styles.image} />
+				<View style={styles.info}>
 					<Typography type="Headline6" style={styles.infoName}>
-						{item.name}
+						{record.name}
 					</Typography>
 					<Typography type="Body1" style={styles.infoManufacturer}>
-						{item.manufacturer}
+						{record.manufacturer}
 					</Typography>
 					<View style={styles.infoAdditional}>
-						<CountryFlag code={item.origin} />
-						<View style={styles.infoRipening}>{this.renderRipening(item)}</View>
+						<CountryFlag code={record.origin} />
+						<View style={styles.infoRipening}>{this.renderRipening(record)}</View>
 						<View style={styles.infoPortions}>
 							<Icon definition={faGlassWhiskey} size="2x" style={styles.infoPortionsIcon} />
-							<Typography type="Body2">{Math.ceil((item.volume - item.drunk * dram) / dram)}x</Typography>
+							<Typography type="Body2">{dram}x</Typography>
 						</View>
 					</View>
 				</View>
 			</Pressable>
 		);
-	};
+	}
 
 	/**
 	 * Zrani

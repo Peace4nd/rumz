@@ -44,3 +44,16 @@ export function updateRecord(id: string, record: IUtilityRecursivePartial<IDataC
 		type: "collection-update"
 	};
 }
+
+/**
+ * Odstraneni zaznamu z kolekce
+ *
+ * @param {string} id Identifikator
+ * @returns {IReduxAction} Akce
+ */
+export function removeRecord(id: string): IReduxAction {
+	return {
+		payload: id,
+		type: "collection-remove"
+	};
+}

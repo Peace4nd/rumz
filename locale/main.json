@@ -30,8 +30,9 @@
 	"overviewDramTitle": "Přidat vypitého panáka",
 	"overviewDramDrink": "Vypít",
 	"overviewDramCount": "Počet panáků",
-	"overviewEditTitle": "overviewEditace",
+	"overviewEditTitle": "Editace",
 	"overviewEditSave": "Uložit",
+	"overviewEditRemove": "Smazat",
 	"overviewUndefined": "Tato hodnota nebyla vyplněna",
 
 	"optionsTitle": "Nastavení",
@@ -45,7 +46,7 @@
 	"optionsPropertiesTitle": "Senzorické vlastnosti",
 	"optionsCaskTitle": "Typ sudu",
 	"optionsBackupCount": "Pocet rumů v kolekci: {0}",
-	"optionsBackupLast": "Posledni zaloha: {0|date}",
+	"optionsBackupLast": "Posledni záloha: {0|date}",
 	"optionsBackupSize": "Velikost zálohy: {0|bytes}",
 
 	"confirmTitleDelete": "Opravdu smazat?",

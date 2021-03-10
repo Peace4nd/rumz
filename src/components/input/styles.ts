@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		height: Measurement.Components.Input.Height,
 		overflow: "hidden",
-		paddingHorizontal: Measurement.Padding * 2
+		paddingHorizontal: Measurement.Padding * 2,
+		width: "100%"
 	},
 	wrapperButton: {
 		paddingRight: Measurement.Components.Input.Height
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		height: width / 2,
 		justifyContent: "center",
-		marginHorizontal: width / 6
+		paddingVertical: Measurement.Padding * 2
 	},
 	wrapperMultiline: {
 		alignItems: "flex-start"

@@ -1,19 +1,22 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Color, Measurement } from "../../styles";
-
-const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
 	image: {
+		aspectRatio: 1,
 		flex: 1
 	},
 	wrapper: {
+		alignItems: "center",
+		aspectRatio: 1,
+		backgroundColor: Color.White,
 		borderColor: Color.Muted,
 		borderRadius: Measurement.Radius,
 		borderWidth: StyleSheet.hairlineWidth,
-		height: width - 4 * Measurement.Padding,
+		flex: 1,
+		justifyContent: "center",
 		overflow: "hidden",
-		width: width - 4 * Measurement.Padding
+		padding: 2 * Measurement.Padding
 	}
 });
 

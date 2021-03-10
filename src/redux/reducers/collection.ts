@@ -57,6 +57,19 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 				}
 			});
 		}
+		case "collection-remove": {
+			// nalezeni
+			const index = state.records.findIndex((record) => record.id === action.payload);
+			// aktualizace
+			return update(state, {
+				changed: {
+					$set: new Date()
+				},
+				records: {
+					$splice: [[index, 1]]
+				}
+			});
+		}
 	}
 	return state;
 };

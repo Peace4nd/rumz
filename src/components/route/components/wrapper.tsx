@@ -1,12 +1,18 @@
 import { faArrowLeft, faCartPlus, faEllipsisV, faListUl, faSearch } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { SafeAreaView, ScrollView, StatusBar, View } from "react-native";
+import { Animated, SafeAreaView, ScrollView, StatusBar, View } from "react-native";
+import { Typography } from "../..";
 import { Color } from "../../../styles";
 import strings from "../../../utils/strings";
-import Header, { IHeaderAction } from "../../header";
+import Header, { IHeaderAction, IHeaderActionMenuItem } from "../../header";
 import Loading from "../../loading";
-import Navigation, { INavigationTab } from "../../navigation";
+import Navigation from "../../navigation";
 import styles from "../styles";
+
+interface IRouteState {
+	searchActive: boolean;
+	searchText: string;
+}
 
 /**
  * Dostupne vlastnosti
@@ -34,18 +40,23 @@ export interface IRoute {
 		/**
 		 * Menu
 		 */
-		menu?: boolean;
+		menu?: {
+			/**
+			 * Povoleni
+			 */
+			enabled: boolean;
+
+			/**
+			 * Doplnkove polozky
+			 */
+			items?: IHeaderActionMenuItem[];
+		};
+
+		/**
+		 * Doplnkove akce
+		 */
+		actions?: IHeaderAction[];
 	};
-
-	/**
-	 * Navigace
-	 */
-	navigation?: INavigationTab[];
-
-	/**
-	 * Akce
-	 */
-	actions?: IHeaderAction[];
 
 	/**
 	 * Zaneprazdneno
@@ -66,34 +77,38 @@ export interface IRoute {
 /**
  * Obecna routa
  */
-export default class Route extends React.PureComponent<IRoute> {
+export default class Route extends React.PureComponent<IRoute, IRouteState> {
 	/**
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IRoute = {
-		actions: [],
 		busy: false,
 		features: {
+			actions: [],
 			back: false,
-			menu: false,
+			menu: {
+				enabled: false,
+				items: []
+			},
 			search: false
 		},
-		navigation: [
-			{
-				icon: faListUl,
-				label: strings("navigationOverview"),
-				path: "/overview"
-			},
-			{
-				icon: faCartPlus,
-				label: strings("navigationCreate"),
-				path: "/create"
-			}
-		],
 		padding: true,
 		scrollable: false,
 		title: null
 	};
+
+	/**
+	 * Vychozi stav
+	 */
+	public state: IRouteState = {
+		searchActive: false,
+		searchText: null
+	};
+
+	/**
+	 * Animacni hodnota
+	 */
+	private toggle = new Animated.Value(0);
 
 	/**
 	 * Render
@@ -102,19 +117,23 @@ export default class Route extends React.PureComponent<IRoute> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { actions, features, navigation, title } = this.props;
+		const { features, title } = this.props;
 		// definice
-		const preparedActions: IHeaderAction[] = actions.slice(0);
+		const preparedActions: IHeaderAction[] = [];
+		// doplnkove akce
+		if (Array.isArray(features.actions)) {
+			preparedActions.push(...features.actions);
+		}
 		// vyhledavani
 		if (features.search) {
 			preparedActions.push({
 				icon: faSearch,
-				onPress: null,
+				onPress: this.handleSearchToggle,
 				type: "press"
 			});
 		}
 		// menu
-		if (features.menu) {
+		if (features.menu?.enabled) {
 			preparedActions.push({
 				icon: faEllipsisV,
 				items: [
@@ -127,7 +146,8 @@ export default class Route extends React.PureComponent<IRoute> {
 						label: strings("statsTitle"),
 						path: "/stats",
 						type: "path"
-					}
+					},
+					...(features.menu?.items || [])
 				],
 				type: "menu"
 			});
@@ -151,7 +171,23 @@ export default class Route extends React.PureComponent<IRoute> {
 						actions={preparedActions}
 					/>
 					{this.renderContent()}
-					<Navigation tabs={navigation} />
+					<Navigation
+						tabs={[
+							{
+								icon: faListUl,
+								label: strings("navigationOverview"),
+								path: "/overview"
+							},
+							{
+								icon: faCartPlus,
+								label: strings("navigationCreate"),
+								path: "/create"
+							}
+						]}
+					/>
+					<Animated.View pointerEvents="none" style={[styles.searchWrapper, { opacity: this.toggle }]}>
+						<Typography>hledani</Typography>
+					</Animated.View>
 				</SafeAreaView>
 			</React.Fragment>
 		);
@@ -188,4 +224,31 @@ export default class Route extends React.PureComponent<IRoute> {
 		// standardni view
 		return <View style={[styles.contentWrapper, padding ? styles.contentPaddingFull : styles.contentPaddingHalf]}>{busy ? <Loading /> : children}</View>;
 	}
+
+	/**
+	 * Prepinani zobrazeni vyhledavaciho pole
+	 */
+	private handleSearchToggle = (): void => {
+		this.setState(
+			{
+				searchActive: !this.state.searchActive,
+				searchText: null
+			},
+			() => {
+				if (this.state.searchActive) {
+					Animated.timing(this.toggle, {
+						duration: 500,
+						toValue: 1,
+						useNativeDriver: true
+					}).start();
+				} else {
+					Animated.timing(this.toggle, {
+						duration: 500,
+						toValue: 0,
+						useNativeDriver: true
+					}).start();
+				}
+			}
+		);
+	};
 }

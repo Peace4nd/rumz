@@ -4,26 +4,27 @@ import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
 import { Button, ButtonGroup, Grid, Input, Route, Spacer, Tags, Typography } from "../../components";
+import { loadBackup } from "../../redux/actions/backup";
 import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { loadOptions, updateOptions } from "../../redux/actions/options";
 import { IDataCollection, IDataOptions, IDataOptionsProperties } from "../../types/data";
-import { IReduxGoogle, IReduxStore } from "../../types/redux";
+import { IReduxBackup, IReduxGoogle, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import ga, { IGoogleDriveFile } from "../../utils/google";
-import storage from "../../utils/storage";
+import storage, { DATABASE } from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOptionsState {
 	properties: Record<IDataOptionsProperties, string>;
 	cask: string;
-	backupFiles: IGoogleDriveFile[];
 	backupWorking: boolean;
 	backupDownload: boolean;
 	backupUpload: boolean;
 }
 
 interface IOptionsProps extends DispatchProp {
+	backup: IReduxBackup;
 	collection: IDataCollection[];
 	google: IReduxGoogle;
 	options: IDataOptions;
@@ -39,9 +40,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-// soubor databaze
-const DATABASE: string = "data.json";
-
 /**
  * Nastaveni
  */
@@ -51,9 +49,8 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 */
 	public state: IOptionsState = {
 		backupDownload: false,
-		backupFiles: [],
 		backupUpload: false,
-		backupWorking: true,
+		backupWorking: false,
 		cask: null,
 		properties: {
 			aroma: null,
@@ -66,7 +63,9 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 * Pripojeni komponenty
 	 */
 	public componentDidMount(): void {
-		this.loadBackupFiles();
+		if (!this.props.backup.loaded) {
+			this.loadBackupFiles();
+		}
 	}
 
 	/**
@@ -147,12 +146,24 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 * Nacteni souboru zalohy
 	 */
 	private loadBackupFiles(): void {
-		ga.drive.list().then((files) => {
-			this.setState({
-				backupFiles: files,
-				backupWorking: false
-			});
-		});
+		this.setState(
+			{
+				backupWorking: true
+			},
+			() => {
+				ga.drive.list().then((files) => {
+					this.setState(
+						{
+							backupWorking: false
+						},
+						() => {
+							/*  */
+							this.props.dispatch(loadBackup(files));
+						}
+					);
+				});
+			}
+		);
 	}
 
 	/**
@@ -162,8 +173,8 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 */
 	private renderGoogleDrive(): JSX.Element {
 		// rozlozeni props
-		const { google } = this.props;
-		const { backupDownload, backupFiles, backupUpload, backupWorking } = this.state;
+		const { backup, google } = this.props;
+		const { backupDownload, backupUpload, backupWorking } = this.state;
 		// pokud je prihlaseny google ucet
 		if (google.signed) {
 			return (
@@ -175,7 +186,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 								<Button label={strings("optionsDriveBackup")} disabled={backupWorking} busy={backupUpload} onPress={this.backupUpload} />
 								<Button
 									label={strings("optionsDriveRestore")}
-									disabled={backupWorking || backupFiles.length === 0}
+									disabled={backupWorking || !backup.exist}
 									busy={backupDownload}
 									onPress={this.backupDownload}
 								/>
@@ -199,22 +210,15 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 */
 	private renderBackupStats(): JSX.Element {
 		// rozlozeni props
-		const { backupFiles } = this.state;
+		const { backup } = this.props;
 		// pokud existuje nejaka zaloha
-		if (backupFiles.length > 0) {
-			// nalezeni databazoveho souboru
-			const meta = backupFiles.find((file) => file.name === DATABASE);
+		if (backup.exist) {
 			// sestaveni
 			return (
 				<React.Fragment>
-					<Typography type="Body2">{strings("optionsBackupCount", meta.properties.records)}</Typography>
-					<Typography type="Body2">{strings("optionsBackupLast", meta.modifiedTime)}</Typography>
-					<Typography type="Body2">
-						{strings(
-							"optionsBackupSize",
-							backupFiles.reduce((prev, current) => prev + parseInt(current.size, 10), 0)
-						)}
-					</Typography>
+					<Typography type="Body2">{strings("optionsBackupCount", backup.stats.records)}</Typography>
+					<Typography type="Body2">{strings("optionsBackupLast", backup.modified)}</Typography>
+					<Typography type="Body2">{strings("optionsBackupSize", backup.stats.size)}</Typography>
 				</React.Fragment>
 			);
 		}
@@ -394,12 +398,12 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 */
 	private async processDownload(): Promise<IReduxStore> {
 		// rozlozeni props
-		const { backupFiles } = this.state;
+		const { backup } = this.props;
 		// nacteni databaze
-		const database = await this.processDownloadDatabase(backupFiles);
+		const database = await this.processDownloadDatabase(backup.files);
 		// stazeni assetu
 		for (const record of database.collection.records) {
-			await this.processDownloadAsset(record.image, backupFiles);
+			await this.processDownloadAsset(record.image, backup.files);
 		}
 		// vraceni databaze
 		return database;
@@ -462,16 +466,15 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 	 */
 	private async processUpload(): Promise<IGoogleDriveFile[]> {
 		// rozlozeni props
-		const { collection } = this.props;
-		const { backupFiles } = this.state;
+		const { backup, collection } = this.props;
 		// zpracovani assetu
 		if (collection.length > 0) {
 			for (const record of collection) {
-				await this.processUploadAsset(record.image, backupFiles);
+				await this.processUploadAsset(record.image, backup.files);
 			}
 		}
 		// zpracovani databaze
-		await this.processUploadDatabase(backupFiles);
+		await this.processUploadDatabase(backup.files);
 		// vraceni seznamu
 		return await ga.drive.list();
 	}
@@ -510,10 +513,14 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 			},
 			() => {
 				this.processUpload().then((files) => {
-					this.setState({
-						backupFiles: files,
-						backupUpload: false
-					});
+					this.setState(
+						{
+							backupUpload: false
+						},
+						() => {
+							this.props.dispatch(loadBackup(files));
+						}
+					);
 				});
 			}
 		);
@@ -631,6 +638,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 }
 
 export default connect((store: IReduxStore) => ({
+	backup: store.backup,
 	collection: store.collection.records,
 	google: store.google,
 	options: store.options.values

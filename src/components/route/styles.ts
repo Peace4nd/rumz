@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement } from "../../styles";
+import { Color, Measurement, Size } from "../../styles";
 
 const styles = StyleSheet.create({
 	contentBusy: {
@@ -12,13 +12,25 @@ const styles = StyleSheet.create({
 	contentPaddingHalf: {
 		padding: Measurement.Padding
 	},
-
 	contentWrapper: {
 		flex: 1
 	},
+	searchActive: {
+		top: Measurement.Components.Header.Height
+	},
+	searchWrapper: {
+		backgroundColor: "pink",
+		height: Size["8x"],
+		left: 0,
+		opacity: 0,
+		position: "absolute",
+		top: Measurement.Components.Header.Height,
+		width: "100%"
+	},
 	wrapper: {
 		backgroundColor: Color.Highlight,
-		flex: 1
+		flex: 1,
+		flexDirection: "column"
 	}
 });
 

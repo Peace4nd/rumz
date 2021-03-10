@@ -1,5 +1,6 @@
 import {
 	faBox,
+	faCheck,
 	faComments,
 	faEuroSign,
 	faFlask,
@@ -13,10 +14,8 @@ import {
 	faPencilAlt,
 	faPercentage,
 	faSmile,
-	faTimes,
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
-import mime from "mime";
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
 import { connect, DispatchProp } from "react-redux";
@@ -68,17 +67,17 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 			<Route.Wrapper
 				title={strings("createTitle")}
 				features={{
+					actions: [
+						{
+							disabled: this.state.working,
+							icon: faCheck,
+							onPress: this.handleSave,
+							type: "press"
+						}
+					],
 					back: true
 				}}
 				busy={this.state.working}
-				actions={[
-					{
-						disabled: this.state.working,
-						icon: faTimes,
-						onPress: this.handleSave,
-						type: "press"
-					}
-				]}
 				scrollable={true}
 			>
 				<Form<IDataCollection>
@@ -216,7 +215,7 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 		// rozlozeni props
 		const { id, image, ...rest } = this.state.record;
 		// ulozeni
-		assets.copy(image.path, id + "." + mime.getExtension(image.mime)).then((path) => {
+		assets.create(image.path, id).then((path) => {
 			// redux
 			this.props.dispatch(
 				pushRecord({

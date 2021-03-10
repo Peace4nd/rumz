@@ -2,14 +2,15 @@ import { StyleSheet } from "react-native";
 import { Color, Measurement, Size } from "../../styles";
 
 const styles = StyleSheet.create({
-	emptyText: {
-		color: Color.Muted,
-		marginTop: Measurement.Padding * 3
+	image: {
+		aspectRatio: 1,
+		flex: 0,
+		height: "100%"
 	},
-	emptyWrapper: {
-		alignItems: "center",
+	info: {
 		flex: 1,
-		justifyContent: "center"
+		flexDirection: "column",
+		padding: Measurement.Padding
 	},
 	infoAdditional: {
 		alignItems: "center",
@@ -43,17 +44,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center"
 	},
-	itemImage: {
-		aspectRatio: 1,
-		flex: 0,
-		height: "100%"
-	},
-	itemInfo: {
-		flex: 1,
-		flexDirection: "column",
-		padding: Measurement.Padding
-	},
-	itemWrapper: {
+	wrapper: {
 		backgroundColor: Color.White,
 		borderColor: Color.Base,
 		borderRadius: Measurement.Radius,
@@ -62,14 +53,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "row",
 		height: Measurement.Components.Collection.Height,
-		margin: Measurement.Padding,
 		overflow: "hidden",
 		padding: Measurement.Padding
 	},
-	itemWrapperPressed: {
+	wrapperPressed: {
 		opacity: 0.2
-	},
-	wrapper: {}
+	}
 });
 
 export default styles;

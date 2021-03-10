@@ -1,10 +1,11 @@
 import React from "react";
-import { Image, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import FetchBlob from "react-native-fetch-blob";
 import { IInput, IInputCore } from "..";
 import { IFileDocument } from "../../../types/file";
 import Icon from "../../icon";
+import Image from "../../image";
 import Typography from "../../typography";
 import styles from "../styles";
 
@@ -71,7 +72,7 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 						)}
 					</View>
 				)}
-				{path && <Image source={{ uri: path }} resizeMode="contain" style={styles.image} />}
+				{path && <Image source={path} style={styles.image} bare={true} />}
 			</Pressable>
 		);
 	}

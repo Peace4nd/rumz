@@ -1,8 +1,8 @@
-import { faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
+import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import SplashScreen from "react-native-splash-screen";
 import { batch, connect, DispatchProp } from "react-redux";
-import { Collection, Dialog, Input, Route } from "../../components";
+import { Collection, Dialog, Grid, Icon, Input, Route, Typography } from "../../components";
 import { loadRecords, updateRecord } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { loadOptions } from "../../redux/actions/options";
@@ -77,27 +77,22 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 	public render(): JSX.Element {
 		// rozlozeni props
 		const { opened } = this.state;
-		const { collection, init, options } = this.props;
+		const { init } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
 				busy={!init}
 				title={strings("applicationTitle")}
 				features={{
-					menu: true,
+					menu: {
+						enabled: true
+					},
 					search: true
 				}}
-				padding={false}
+				scrollable={true}
 			>
 				{/* kolekce */}
-				<Collection
-					dram={options?.dram}
-					records={collection}
-					onPress={(record) => {
-						this.redirect("/overview/:id", { id: record.id });
-					}}
-					onLongPress={this.handleDramOpen}
-				/>
+				<Grid.Wrapper>{this.renderRecords()}</Grid.Wrapper>
 				{/* modal pro pridani panaku */}
 				<Dialog
 					opened={opened}
@@ -116,6 +111,49 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 			</Route.Wrapper>
 		);
 	}
+
+	/**
+	 * Sestaveni kolekce
+	 *
+	 * @returns {JSX.Element | JSX.Element[]} Element
+	 */
+	private renderRecords(): JSX.Element | JSX.Element[] {
+		// rozlozeni props
+		const { collection, options } = this.props;
+		// pokud nexistuje zaznam
+		if (collection.length === 0) {
+			return (
+				<Grid.Row>
+					<Grid.Column horizontal="center" vertical="center">
+						<Icon definition={faListUl} size="9x" color="Muted" />
+						<Typography type="Headline4">{strings("overviewEmpty")}</Typography>
+					</Grid.Column>
+				</Grid.Row>
+			);
+		}
+		// sestaveni kolekce
+		return collection.map((record) => (
+			<Grid.Row key={record.id}>
+				<Grid.Column>
+					<Collection
+						record={record}
+						dram={Math.ceil((record.volume - record.drunk) / options.dram)}
+						onPress={this.handleDetail}
+						onLongPress={this.handleDramOpen}
+					/>
+				</Grid.Column>
+			</Grid.Row>
+		));
+	}
+
+	/**
+	 * Zobrazeni detailu
+	 *
+	 * @param {IDataCollection} record Aktualni zaznam
+	 */
+	private handleDetail = (record: IDataCollection): void => {
+		this.redirect("/overview/:id", { id: record.id });
+	};
 
 	/**
 	 * Otevreni okna pro zadani panaku
@@ -145,6 +183,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 	 */
 	private handleDramUpdate = (): void => {
 		// rozlozeni props
+		const { options } = this.props;
 		const { dram, selected } = this.state;
 		// aktualizace zaznamu
 		this.setState(
@@ -155,7 +194,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 			() => {
 				this.props.dispatch(
 					updateRecord(selected.id, {
-						drunk: selected.drunk + dram
+						drunk: selected.drunk + options.dram * dram
 					})
 				);
 			}

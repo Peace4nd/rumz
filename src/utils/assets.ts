@@ -1,4 +1,5 @@
 import fs from "react-native-fs";
+import ImageResizer from "react-native-image-resizer";
 
 /**
  * Overeni existence adresare pro assety
@@ -16,18 +17,22 @@ export default {
 	 * Ulozeni souboru
 	 *
 	 * @param {string} source Zdrojovy soubor
-	 * @param {string} file Nazev ciloveho souboru
+	 * @param {string} id Identifikator zaznamu
 	 * @returns {Promise<string>} Cesta k pridanemu souboru
 	 */
-	copy: async (source: string, file: string): Promise<string> => {
+	create: async (source: string, id: string): Promise<string> => {
 		// definice
-		const dest = fs.DocumentDirectoryPath + "/" + file;
+		const dest = fs.DocumentDirectoryPath + "/" + id + "." + source.split(".").pop();
 		// overeni existence adresare
 		await checkAssetsPath();
 		// nakopirovani
 		await fs.copyFile(source, dest);
+		// komprese
+		const res = await ImageResizer.createResizedImage(dest, 600, 600, "WEBP", 90, 0, fs.DocumentDirectoryPath, true, { onlyScaleDown: true });
+		// odmazani zdrojoveho souboru
+		await fs.unlink(dest);
 		// vraceni cesty
-		return dest;
+		return res.path;
 	},
 
 	/**
@@ -41,6 +46,15 @@ export default {
 		const content = await fs.readFile(file, "base64");
 		// vraceni seznamu souboru
 		return content;
+	},
+
+	/**
+	 * Smazani souboru souboru
+	 *
+	 * @param {string} file Soubor
+	 */
+	remove: async (file: string): Promise<void> => {
+		await fs.unlink(file);
 	},
 
 	/**

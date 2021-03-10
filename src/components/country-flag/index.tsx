@@ -19,6 +19,10 @@ export interface ICountryFlag extends ViewProps {
 const CountryFlag = (props: ICountryFlag): JSX.Element => {
 	// rozlozeni props
 	const { code, style, ...rest } = props;
+	// overeni
+	if (!country?.[code]) {
+		return null;
+	}
 	// sestaveni a vraceni
 	return (
 		<View style={[styles.flagWrapper, style]} {...rest}>

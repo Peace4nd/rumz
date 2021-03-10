@@ -18,7 +18,9 @@ export default class Stats extends Route.Content {
 				title={strings("statsTitle")}
 				features={{
 					back: true,
-					menu: true
+					menu: {
+						enabled: true
+					}
 				}}
 				scrollable={true}
 			>

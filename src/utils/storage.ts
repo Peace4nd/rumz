@@ -1,8 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DEFAULT_STATE as collectionDefaul } from "../redux/reducers/collection";
 import { DEFAULT_STATE as optionsDefault } from "../redux/reducers/options";
+import { IDataCollection } from "../types/data";
 import { IReduxCollection, IReduxOptions } from "../types/redux";
-import { IStorageActions, IStorageKey, IStorageSections } from "../types/storage";
+import { IStorageActions, IStorageKey, IStorageRemove, IStorageSections } from "../types/storage";
 
 /**
  * Ulozeni dat
@@ -22,7 +23,7 @@ async function write(key: IStorageKey, value: unknown): Promise<void> {
  * @param {T} defaults Vychozi hodnota
  * @returns {Promise<T>} Data
  */
-async function read<T>(key: IStorageKey, defaults: T): Promise<T> {
+async function read<T>(key: IStorageKey, defaults?: T): Promise<T> {
 	// nacteni dat
 	const raw = await AsyncStorage.getItem(key);
 	if (raw != null) {
@@ -35,8 +36,18 @@ async function read<T>(key: IStorageKey, defaults: T): Promise<T> {
 /**
  * Kolekce
  */
-const collection: IStorageActions<IReduxCollection> = {
+const collection: IStorageActions<IReduxCollection> & IStorageRemove = {
 	read: async () => read("collection", collectionDefaul),
+	remove: async (id) => {
+		// nacteni a vyhledani zaznamu
+		const records: IDataCollection[] = await read("collection");
+		const index = records.findIndex((record) => record.id === id);
+		// pokud existuje
+		if (index !== -1) {
+			records.splice(index, 1);
+			await write("collection", records);
+		}
+	},
 	write: async (data) => write("collection", data)
 };
 
@@ -77,6 +88,9 @@ async function readAll(): Promise<IStorageSections> {
 	// vraceni
 	return data;
 }
+
+// soubor databaze
+export const DATABASE: string = "data.json";
 
 // vychozi export
 export default {

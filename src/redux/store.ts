@@ -2,12 +2,14 @@ import { combineReducers, createStore } from "redux";
 import { debounce } from "throttle-debounce";
 import { IReduxStore } from "../types/redux";
 import storage from "../utils/storage";
+import backup from "./reducers/backup";
 import collection from "./reducers/collection";
 import google from "./reducers/google";
 import options from "./reducers/options";
 
 // reducery
 const reducers = combineReducers({
+	backup,
 	collection,
 	google,
 	options

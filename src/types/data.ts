@@ -6,6 +6,7 @@ export interface IDataCollection {
 	 * Identifikator
 	 */
 	id: string;
+
 	/**
 	 * Nazev
 	 */

@@ -68,9 +68,9 @@ export function range(value: number[], unit?: string): string {
 			return value[0].toFixed(0) + " - " + value[1].toFixed(0) + (unit || "");
 		} else {
 			if (value[0]) {
-				return value[0].toFixed(0) + (unit || "");
+				return ">" + value[0].toFixed(0) + (unit || "");
 			} else {
-				return value[1].toFixed(0) + (unit || "");
+				return "<" + value[1].toFixed(0) + (unit || "");
 			}
 		}
 	}
@@ -95,6 +95,19 @@ export function item(value: ItemValue, items: PickerItemProps[]): string {
 }
 
 /**
+ * Hodnoceni
+ *
+ * @param {number} value Hodnota
+ * @returns {string} Formatovana hodnota
+ */
+export function rating(value: number): string {
+	if (isNaN(value)) {
+		return strings("overviewUndefined");
+	}
+	return value.toFixed(0) + "/10";
+}
+
+/**
  * Export
  */
 export default {
@@ -103,5 +116,6 @@ export default {
 	item,
 	number,
 	range,
+	rating,
 	string
 };

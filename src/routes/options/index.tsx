@@ -264,7 +264,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					<Grid.Column>
 						<Input.Text
 							icon={faPalette}
-							placeholder={strings("createCharacteristicsColor")}
+							placeholder={strings("createColor")}
 							onChange={this.handlePropertiesChange.bind(this, "color")}
 							onSubmit={{
 								blur: false,
@@ -285,7 +285,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					<Grid.Column>
 						<Input.Text
 							icon={faFlask}
-							placeholder={strings("createCharacteristicsAroma")}
+							placeholder={strings("createAroma")}
 							onChange={this.handlePropertiesChange.bind(this, "aroma")}
 							onSubmit={{
 								blur: false,
@@ -306,7 +306,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 					<Grid.Column>
 						<Input.Text
 							icon={faGlassCheers}
-							placeholder={strings("createCharacteristicsTaste")}
+							placeholder={strings("createTaste")}
 							onChange={this.handlePropertiesChange.bind(this, "taste")}
 							onSubmit={{
 								blur: false,

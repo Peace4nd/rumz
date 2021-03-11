@@ -1,5 +1,6 @@
 import moment from "moment";
 import data from "../../locale/main.json";
+import { ILocaleStrings } from "../types/locale";
 
 /**
  * Jednotky velikosti (v bytech)
@@ -9,11 +10,11 @@ const byteUnits = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 /**
  * Prekladovy retezec
  *
- * @param {keyof typeof data} key Retezec
+ * @param {ILocaleStrings} key Retezec
  * @param {unknown[]} params Parametry
  * @returns {string} Text
  */
-export default function strings(key: keyof typeof data, ...params: unknown[]): string {
+export default function strings(key: ILocaleStrings, ...params: unknown[]): string {
 	// regularni vyrazy
 	const rGlobal = /\{[^{]+\}/i;
 	const rParam = /\{\s*([0-9]+)(\s*\|\s*([a-z]+))?\s*\}/gi;

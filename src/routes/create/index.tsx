@@ -117,21 +117,21 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 							icon: faPalette,
 							items: options.properties.color,
 							name: "color",
-							placeholder: strings("createCharacteristicsColor"),
+							placeholder: strings("createColor"),
 							type: "tags"
 						},
 						{
 							icon: faFlask,
 							items: options.properties.aroma,
 							name: "aroma",
-							placeholder: strings("createCharacteristicsAroma"),
+							placeholder: strings("createAroma"),
 							type: "tags"
 						},
 						{
 							icon: faGlassCheers,
 							items: options.properties.taste,
 							name: "taste",
-							placeholder: strings("createCharacteristicsTaste"),
+							placeholder: strings("createTaste"),
 							type: "tags"
 						},
 						{

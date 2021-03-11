@@ -9,6 +9,7 @@ import { IDataCollection, IDataOptions } from "../../types/data";
 import { IFileDocument } from "../../types/file";
 import { IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
+import { stringify } from "../../utils/collection";
 import country from "../../utils/country";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
@@ -55,15 +56,10 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						{
 							icon: faShareAlt,
 							onPress: () => {
-								Share.share(
-									{
-										message: JSON.stringify(record, null, 4),
-										title: "title"
-									},
-									{
-										dialogTitle: "dialog"
-									}
-								);
+								Share.share({
+									message: stringify(record),
+									title: record.name
+								});
 							},
 							type: "press"
 						}
@@ -139,7 +135,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 								field={{
 									items: options.properties.color
 								}}
-								label={strings("createCharacteristicsColor")}
+								label={strings("createColor")}
 								value={record.color}
 								onChange={this.handleChange.bind(this, record.id, "color")}
 							/>
@@ -152,7 +148,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 								field={{
 									items: options.properties.aroma
 								}}
-								label={strings("createCharacteristicsAroma")}
+								label={strings("createAroma")}
 								value={record.aroma}
 								onChange={this.handleChange.bind(this, record.id, "aroma")}
 							/>
@@ -165,7 +161,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 								field={{
 									items: options.properties.taste
 								}}
-								label={strings("createCharacteristicsTaste")}
+								label={strings("createTaste")}
 								value={record.taste}
 								onChange={this.handleChange.bind(this, record.id, "taste")}
 							/>

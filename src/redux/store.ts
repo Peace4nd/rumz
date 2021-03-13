@@ -1,11 +1,35 @@
-import { combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, createStore, Dispatch, Middleware } from "redux";
 import { debounce } from "throttle-debounce";
-import { IReduxStore } from "../types/redux";
+import { IReduxAction, IReduxStore } from "../types/redux";
 import storage from "../utils/storage";
 import backup from "./reducers/backup";
 import collection from "./reducers/collection";
 import google from "./reducers/google";
 import options from "./reducers/options";
+
+// middleware pro asynchronni akce
+const asyncDispatchMiddleware: Middleware<unknown, IReduxStore, Dispatch<IReduxAction>> = (actual) => (next) => (action) => {
+	// definice
+	let finished = false;
+	let queue: IReduxAction[] = [];
+	// flush
+	const flush = (): void => {
+		queue.forEach((a) => actual.dispatch(a));
+		queue = [];
+	};
+	// async
+	const async = (asyncAction: IReduxAction): void => {
+		queue = queue.concat([asyncAction]);
+		if (finished) {
+			flush();
+		}
+	};
+	// prirazeni metody
+	next({ ...action, async });
+	// vyprazdneni fronty
+	finished = true;
+	flush();
+};
 
 // reducery
 const reducers = combineReducers({
@@ -16,7 +40,8 @@ const reducers = combineReducers({
 });
 
 // priprava
-const store = createStore(reducers, {});
+const middleware = applyMiddleware(asyncDispatchMiddleware as Middleware);
+const store = createStore(reducers, {}, middleware);
 
 // serializace dat do uloziste
 let currentState: IReduxStore = null;

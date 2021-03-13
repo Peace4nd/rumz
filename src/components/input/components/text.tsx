@@ -1,7 +1,9 @@
+import { faTags } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TextInput, View } from "react-native";
 import { IInput, IInputCore } from "..";
 import { Color } from "../../../styles";
+import Dropdown from "../../dropdown";
 import Icon from "../../icon";
 import Typography from "../../typography";
 import styles from "../styles";
@@ -14,7 +16,12 @@ interface IInputTextState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputText = IInput<string>;
+export interface IInputText extends IInput<string> {
+	/**
+	 * Preddefinovane hodnoty
+	 */
+	predefined?: string[];
+}
 
 /**
  * Textovy vstup
@@ -54,7 +61,7 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, onSubmit, placeholder, returnKey } = this.props;
+		const { icon, onSubmit, placeholder, predefined, returnKey } = this.props;
 		const { error, value } = this.state;
 		// sestaveni a vraceni
 		return (
@@ -71,6 +78,7 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 					blurOnSubmit={onSubmit?.blur ?? true}
 					returnKeyType={returnKey}
 				/>
+				{predefined && <Dropdown appearance="Popover" icon={faTags} items={predefined} onSelect={this.handleChange} />}
 				{error && (
 					<Typography type="Subtitle2" style={styles.error}>
 						{error}

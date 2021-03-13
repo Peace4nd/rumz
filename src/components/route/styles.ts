@@ -6,11 +6,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center"
 	},
-	contentPaddingFull: {
+	contentPadding: {
 		padding: 2 * Measurement.Padding
-	},
-	contentPaddingHalf: {
-		padding: Measurement.Padding
 	},
 	contentWrapper: {
 		flex: 1

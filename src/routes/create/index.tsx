@@ -24,7 +24,7 @@ import { Form, Route } from "../../components";
 import { pushRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
 import { IFileDocument } from "../../types/file";
-import { IReduxStore } from "../../types/redux";
+import { IReduxCollection, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
@@ -36,6 +36,7 @@ interface ICreatePushState {
 
 interface ICreatePushProps extends DispatchProp {
 	options: IDataOptions;
+	predefined: IReduxCollection["predefined"];
 }
 
 interface ICreatePushParams {
@@ -61,7 +62,7 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { options } = this.props;
+		const { options, predefined } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
@@ -98,6 +99,7 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 							icon: faIndustry,
 							name: "manufacturer",
 							placeholder: strings("createManufacturer"),
+							predefined: predefined.manufacturer,
 							type: "text"
 						},
 						{
@@ -233,5 +235,6 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 }
 
 export default connect((store: IReduxStore) => ({
-	options: store.options.values
+	options: store.options.values,
+	predefined: store.collection.predefined
 }))(CreatePush);

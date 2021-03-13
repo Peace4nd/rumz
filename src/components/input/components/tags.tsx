@@ -1,8 +1,8 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
+import { View } from "react-native";
 import { IInput, IInputCore } from "..";
+import Dropdown from "../../dropdown";
 import Icon from "../../icon";
 import Tags from "../../tags";
 import Typography from "../../typography";
@@ -55,8 +55,8 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 		const { icon, items, placeholder } = this.props;
 		const { value } = this.state;
 		// osetreni nicoty
-		const safeItems = items || [];
 		const safeValue = value || [];
+		const safeItems = (items || []).filter((item) => !safeValue.includes(item));
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null, styles.wrapperButton, styles.wrapperSpring]}>
@@ -71,25 +71,7 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 						<Tags items={safeValue} onDelete={this.handleRemove} />
 					</View>
 				)}
-				<View style={styles.buttonGroup} pointerEvents={safeItems.length ? "auto" : "none"}>
-					<Menu onSelect={this.handleAdd}>
-						<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity, triggerWrapper: styles.buttonElement }}>
-							<Icon definition={faPlus} color={safeItems.length ? "Base" : "Muted"} />
-						</MenuTrigger>
-						<MenuOptions>
-							<ScrollView style={styles.menuScroll}>
-								{safeItems
-									.filter((item) => !safeValue.includes(item))
-									.sort()
-									.map((item, index) => (
-										<MenuOption key={index} value={item} style={styles.menuItem}>
-											<Typography type="Body1">{item}</Typography>
-										</MenuOption>
-									))}
-							</ScrollView>
-						</MenuOptions>
-					</Menu>
-				</View>
+				<Dropdown icon={faPlus} items={safeItems} onSelect={this.handleAdd} />
 			</View>
 		);
 	}

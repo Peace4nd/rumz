@@ -6,6 +6,9 @@ import { IReduxAction, IReduxCollection } from "../../types/redux";
 export const DEFAULT_STATE: IReduxCollection = {
 	changed: new Date(),
 	init: false,
+	predefined: {
+		manufacturer: []
+	},
 	records: []
 };
 
@@ -19,6 +22,9 @@ export const DEFAULT_STATE: IReduxCollection = {
 export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): IReduxCollection => {
 	switch (action.type) {
 		case "collection-load": {
+			// preddefinovani vyrobci
+			action.async({ type: "collection-predefined" });
+			// aktualizace
 			return update(state, {
 				changed: {
 					$set: new Date()
@@ -32,6 +38,9 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 			});
 		}
 		case "collection-push": {
+			// preddefinovani vyrobci
+			action.async({ type: "collection-predefined" });
+			// aktualizace
 			return update(state, {
 				changed: {
 					$set: new Date()
@@ -45,6 +54,8 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 			// priprava
 			const payload = action.payload as { id: string; record: Partial<IDataCollection> };
 			const index = state.records.findIndex((record) => record.id === payload.id);
+			// preddefinovani vyrobci
+			action.async({ type: "collection-predefined" });
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -60,6 +71,8 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 		case "collection-remove": {
 			// nalezeni
 			const index = state.records.findIndex((record) => record.id === action.payload);
+			// preddefinovani vyrobci
+			action.async({ type: "collection-predefined" });
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -67,6 +80,24 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 				},
 				records: {
 					$splice: [[index, 1]]
+				}
+			});
+		}
+		case "collection-predefined": {
+			// definice
+			const manufacturer: string[] = [];
+			// naplneni
+			state.records.forEach((record) => {
+				if (!manufacturer.includes(record.manufacturer)) {
+					manufacturer.push(record.manufacturer);
+				}
+			});
+			// aktualizace
+			return update(state, {
+				predefined: {
+					manufacturer: {
+						$set: manufacturer
+					}
 				}
 			});
 		}

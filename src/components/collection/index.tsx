@@ -3,6 +3,7 @@ import React from "react";
 import { Pressable, View } from "react-native";
 import { CountryFlag, Icon } from "..";
 import { IDataCollection } from "../../types/data";
+import format from "../../utils/format";
 import strings from "../../utils/strings";
 import Image from "../image";
 import Typography from "../typography";
@@ -74,7 +75,9 @@ export default class Collection extends React.PureComponent<ICollection> {
 					</Typography>
 					<View style={styles.infoAdditional}>
 						<CountryFlag code={record.origin} />
-						<View style={styles.infoRipening}>{this.renderRipening(record)}</View>
+						<View style={styles.infoRipening}>
+							<Typography type="Body2">{format.range(record.ripening, strings("overviewRipeningYears"))}</Typography>
+						</View>
 						<View style={styles.infoPortions}>
 							<Icon definition={faGlassWhiskey} size="2x" style={styles.infoPortionsIcon} />
 							<Typography type="Body2">{dram}x</Typography>
@@ -83,37 +86,5 @@ export default class Collection extends React.PureComponent<ICollection> {
 				</View>
 			</Pressable>
 		);
-	}
-
-	/**
-	 * Zrani
-	 *
-	 * @param {IDataCollection} item Polozka kolekce
-	 * @returns {JSX.Element} Element polozky
-	 */
-	private renderRipening(item: IDataCollection): JSX.Element {
-		if (item.ripening[0] && item.ripening[1]) {
-			return (
-				<Typography>
-					{item.ripening[0]} - {item.ripening[1]} {strings("overviewRipeningYears")}
-				</Typography>
-			);
-		} else {
-			if (item.ripening[0]) {
-				return (
-					<Typography>
-						&gt; {item.ripening[0]} {strings("overviewRipeningYears")}
-					</Typography>
-				);
-			} else if (item.ripening[1]) {
-				return (
-					<Typography>
-						&lt; {item.ripening[1]} {strings("overviewRipeningYears")}
-					</Typography>
-				);
-			} else {
-				return null;
-			}
-		}
 	}
 }

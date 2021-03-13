@@ -64,11 +64,6 @@ export interface IRoute {
 	busy?: boolean;
 
 	/**
-	 * Pouzit plny padding
-	 */
-	padding?: boolean;
-
-	/**
 	 * Skrolovani
 	 */
 	scrollable?: boolean;
@@ -92,7 +87,6 @@ export default class Route extends React.PureComponent<IRoute, IRouteState> {
 			},
 			search: false
 		},
-		padding: true,
 		scrollable: false,
 		title: null
 	};
@@ -200,7 +194,7 @@ export default class Route extends React.PureComponent<IRoute, IRouteState> {
 	 */
 	private renderContent(): JSX.Element {
 		// rozlozeni props
-		const { busy, children, padding, scrollable } = this.props;
+		const { busy, children, scrollable } = this.props;
 		// loading
 		if (busy) {
 			return (
@@ -212,17 +206,13 @@ export default class Route extends React.PureComponent<IRoute, IRouteState> {
 		// skrolovani
 		if (scrollable) {
 			return (
-				<ScrollView
-					keyboardDismissMode="on-drag"
-					style={styles.contentWrapper}
-					contentContainerStyle={[padding ? styles.contentPaddingFull : styles.contentPaddingHalf]}
-				>
+				<ScrollView keyboardDismissMode="on-drag" style={styles.contentWrapper} contentContainerStyle={styles.contentPadding}>
 					{busy ? <Loading /> : children}
 				</ScrollView>
 			);
 		}
 		// standardni view
-		return <View style={[styles.contentWrapper, padding ? styles.contentPaddingFull : styles.contentPaddingHalf]}>{busy ? <Loading /> : children}</View>;
+		return <View style={[styles.contentWrapper, styles.contentPadding]}>{busy ? <Loading /> : children}</View>;
 	}
 
 	/**

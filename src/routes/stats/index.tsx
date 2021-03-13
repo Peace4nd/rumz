@@ -1,12 +1,19 @@
 import React from "react";
 import { Text } from "react-native";
+import { connect, DispatchProp } from "react-redux";
 import { Route } from "../../components";
+import { IDataCollection } from "../../types/data";
+import { IReduxStore } from "../../types/redux";
 import strings from "../../utils/strings";
+
+interface IStatsProps extends DispatchProp {
+	collection: IDataCollection[];
+}
 
 /**
  * Statistika
  */
-export default class Stats extends Route.Content {
+class Stats extends Route.Content<IStatsProps> {
 	/**
 	 * Render
 	 *
@@ -29,3 +36,17 @@ export default class Stats extends Route.Content {
 		);
 	}
 }
+
+/*
+- statistiku zkolektovat v reduxu? (nejaky "interni" reducer?)
+top staty
+nejvyssi cena
+nejlepe hodnocene
+nejstarsi	
+top vyrobce
+
+- pri zadavani noveho rumu zkollektovat existujici hodnoty a nabizet je pres vyskakovaci menu
+*/
+export default connect((store: IReduxStore) => ({
+	collection: store.collection.records
+}))(Stats);

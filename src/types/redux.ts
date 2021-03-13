@@ -13,6 +13,7 @@ export type IReduxType =
 	| "collection-push"
 	| "collection-update"
 	| "collection-remove"
+	| "collection-predefined"
 	| "options-load"
 	| "options-update"
 	| "backup-load";
@@ -22,6 +23,7 @@ export type IReduxType =
  */
 export interface IReduxAction<P = unknown> extends Action<IReduxType> {
 	payload?: P;
+	async?: <A = any>(action: IReduxAction<A>) => void;
 }
 
 /**
@@ -74,7 +76,17 @@ export interface IReduxBackup {
 /**
  * Kolekce
  */
-export type IReduxCollection = IDataWrapperArray<IDataCollection>;
+export interface IReduxCollection extends IDataWrapperArray<IDataCollection> {
+	/**
+	 * Preddefinovane hodnoty
+	 */
+	predefined: {
+		/**
+		 * Vyrobce
+		 */
+		manufacturer: Array<IDataCollection["manufacturer"]>;
+	};
+}
 
 /**
  * Nastaveni

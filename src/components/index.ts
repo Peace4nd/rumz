@@ -3,6 +3,7 @@ export { default as ButtonGroup } from "./button-group";
 export { default as Collection } from "./collection";
 export { default as CountryFlag } from "./country-flag";
 export { default as Dialog } from "./dialog";
+export { default as Dropdown } from "./dropdown";
 export { default as Editable } from "./editable";
 export { default as Form } from "./form";
 export { default as Grid } from "./grid";

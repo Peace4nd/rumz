@@ -6,26 +6,28 @@ import strings from "./strings";
  * Datum
  *
  * @param {MomentInput} value Hodnota
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function date(value: MomentInput): string {
+export function date(value: MomentInput, textual: boolean = true): string {
 	if (value) {
 		return moment(value).format("DD. MM. YYYY");
 	}
-	return strings("overviewUndefined");
+	return textual ? strings("overviewUndefined") : null;
 }
 
 /**
  * Pole
  *
  * @param {string[]} value Hodnota
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function array(value: string[]): string {
+export function array(value: string[], textual: boolean = true): string {
 	if (Array.isArray(value)) {
 		return value.join(", ");
 	}
-	return strings("overviewUndefined");
+	return textual ? strings("overviewUndefined") : null;
 }
 
 /**
@@ -33,11 +35,12 @@ export function array(value: string[]): string {
  *
  * @param {number} value Hodnota
  * @param {string} unit Jednotka
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function number(value: number, unit?: string): string {
+export function number(value: number, unit?: string, textual: boolean = true): string {
 	if (isNaN(value)) {
-		return strings("overviewUndefined");
+		return textual ? strings("overviewUndefined") : null;
 	}
 	return value.toFixed(0) + (unit || "");
 }
@@ -46,11 +49,12 @@ export function number(value: number, unit?: string): string {
  * Retezec
  *
  * @param {string} value Hodnota
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function string(value: string): string {
+export function string(value: string, textual: boolean = true): string {
 	if (!value) {
-		return strings("overviewUndefined");
+		return textual ? strings("overviewUndefined") : null;
 	}
 	return value;
 }
@@ -60,9 +64,10 @@ export function string(value: string): string {
  *
  * @param {number[]} value Hodnota
  * @param {string} unit Jednotka
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function range(value: number[], unit?: string): string {
+export function range(value: number[], unit?: string, textual: boolean = true): string {
 	if (Array.isArray(value) && (value[0] > 0 || value[1] > 0)) {
 		if (value[0] && value[1]) {
 			return value[0].toFixed(0) + " - " + value[1].toFixed(0) + (unit || "");
@@ -74,7 +79,7 @@ export function range(value: number[], unit?: string): string {
 			}
 		}
 	}
-	return strings("overviewUndefined");
+	return textual ? strings("overviewUndefined") : null;
 }
 
 /**
@@ -82,27 +87,29 @@ export function range(value: number[], unit?: string): string {
  *
  * @param {ItemValue} value Hodnota
  * @param {PickerItemProps[]} items Polozky
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function item(value: ItemValue, items: PickerItemProps[]): string {
+export function item(value: ItemValue, items: PickerItemProps[], textual: boolean = true): string {
 	if (value) {
 		const found = items.find((rec) => rec.value === value);
 		if (found) {
 			return found.label;
 		}
 	}
-	return strings("overviewUndefined");
+	return textual ? strings("overviewUndefined") : null;
 }
 
 /**
  * Hodnoceni
  *
  * @param {number} value Hodnota
+ * @param {boolean} textual Textovy vystup
  * @returns {string} Formatovana hodnota
  */
-export function rating(value: number): string {
+export function rating(value: number, textual: boolean = true): string {
 	if (isNaN(value)) {
-		return strings("overviewUndefined");
+		return textual ? strings("overviewUndefined") : null;
 	}
 	return value.toFixed(0) + "/10";
 }

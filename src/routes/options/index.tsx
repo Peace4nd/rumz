@@ -157,7 +157,6 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 							backupWorking: false
 						},
 						() => {
-							/*  */
 							this.props.dispatch(loadBackup(files));
 						}
 					);

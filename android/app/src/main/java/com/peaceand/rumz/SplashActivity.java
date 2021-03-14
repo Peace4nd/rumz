@@ -1,4 +1,4 @@
-package com.rumoteka;
+package com.peaceand.rumz;
 
 import android.content.Intent;
 import android.os.Bundle;

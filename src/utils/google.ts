@@ -170,7 +170,7 @@ export async function list(): Promise<IGoogleDriveFile[]> {
 		// parse
 		const parsed = (await fetched.json()) as { files: IGoogleDriveFile[] };
 		// vraceni
-		return parsed.files;
+		return parsed.files || [];
 	}
 	// vychozi navratova hodnota
 	return [];

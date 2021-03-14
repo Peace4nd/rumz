@@ -76,7 +76,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 					<View style={styles.infoAdditional}>
 						<CountryFlag code={record.origin} />
 						<View style={styles.infoRipening}>
-							<Typography type="Body2">{format.range(record.ripening, strings("overviewRipeningYears"))}</Typography>
+							<Typography type="Body2">{format.range(record.ripening, strings("overviewRipeningYears"), false)}</Typography>
 						</View>
 						<View style={styles.infoPortions}>
 							<Icon definition={faGlassWhiskey} size="2x" style={styles.infoPortionsIcon} />

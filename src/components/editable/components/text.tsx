@@ -25,7 +25,11 @@ export default class EditableNumber extends EditableBase<IInputText> {
 	 * @returns {JSX.Element} Element
 	 */
 	protected renderValue(): JSX.Element {
-		const { value } = this.props;
-		return <Typography type="Body1">{format.string(value)}</Typography>;
+		const formated = format.string(this.props.value);
+		return (
+			<Typography type="Body1" style={this.getMandatoryStyle(formated.empty)}>
+				{formated.value}
+			</Typography>
+		);
 	}
 }

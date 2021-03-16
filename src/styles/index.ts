@@ -129,7 +129,7 @@ export const Typography = StyleSheet.create({
 export const Measurement = {
 	Components: {
 		Collection: {
-			Height: 144
+			Height: 160
 		},
 		Header: {
 			Height: Size["7x"]

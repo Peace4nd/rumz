@@ -21,6 +21,11 @@ export interface IDropdown {
 	icon: IconDefinition;
 
 	/**
+	 * Popisky hodnot
+	 */
+	labels?: Record<string, string>;
+
+	/**
 	 * Vyber polozky
 	 */
 	onSelect: (item: string) => void;
@@ -39,7 +44,7 @@ export interface IDropdown {
  */
 const Dropdown = (props: IDropdown): JSX.Element => {
 	// rozlozeni props
-	const { appearance, icon, items, onSelect } = props;
+	const { appearance, icon, items, labels, onSelect } = props;
 	// sestaveni a vraceni
 	return (
 		<View style={styles.buttonGroup} pointerEvents={items.length ? "auto" : "none"}>
@@ -51,7 +56,7 @@ const Dropdown = (props: IDropdown): JSX.Element => {
 					<ScrollView style={styles.menuScroll} showsVerticalScrollIndicator={appearance !== "Popover"}>
 						{items.sort().map((item, index) => (
 							<MenuOption key={index} value={item} style={styles.menuItem}>
-								<Typography type="Body1">{item}</Typography>
+								<Typography type="Body1">{labels && labels?.[item] ? labels[item] : item}</Typography>
 							</MenuOption>
 						))}
 					</ScrollView>

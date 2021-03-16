@@ -132,18 +132,39 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 			);
 		}
 		// sestaveni kolekce
-		return collection.map((record) => (
-			<Grid.Row key={record.id}>
-				<Grid.Column>
-					<Collection
-						record={record}
-						dram={Math.ceil((record.volume - record.drunk) / options.dram)}
-						onPress={this.handleDetail}
-						onLongPress={this.handleDramOpen}
-					/>
-				</Grid.Column>
-			</Grid.Row>
-		));
+		return collection
+			.sort((a, b) => a.drunk - b.drunk)
+			.map((record) => (
+				<Grid.Row key={record.id}>
+					<Grid.Column>
+						<Collection
+							record={record}
+							dram={options.dram}
+							complete={this.calculateCompleteness(record)}
+							onPress={this.handleDetail}
+							onLongPress={this.handleDramOpen}
+						/>
+					</Grid.Column>
+				</Grid.Row>
+			));
+	}
+
+	/**
+	 * Overeni kompletniho zaznamu
+	 *
+	 * @param {IDataCollection} record Zaznam
+	 * @returns {boolean} Kompletni zaznam
+	 */
+	private calculateCompleteness(record: IDataCollection): boolean {
+		// rozlozeni props
+		const { options } = this.props;
+		// overeni
+		let complete = true;
+		options.mandatory.forEach((property) => {
+			complete = complete && Boolean(record[property]);
+		});
+		// vraceni
+		return complete;
 	}
 
 	/**

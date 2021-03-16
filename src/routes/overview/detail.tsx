@@ -87,13 +87,33 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 					{/* obrazek */}
 					<Grid.Row>
 						<Grid.Column>
-							<Editable.Image label={strings("createImage")} value={{ path: record.image }} onChange={this.handleImage.bind(this, record.id)} />
+							<Editable.Image
+								mandatory={options.mandatory.includes("image")}
+								value={{ path: record.image }}
+								onChange={this.handleImage.bind(this, record.id)}
+							/>
 						</Grid.Column>
 					</Grid.Row>
 					{/* nazev */}
 					<Grid.Row>
 						<Grid.Column>
-							<Editable.Text label={strings("createName")} value={record.name} onChange={this.handleChange.bind(this, record.id, "name")} />
+							<Editable.Text
+								label={strings("createName")}
+								mandatory={options.mandatory.includes("name")}
+								value={record.name}
+								onChange={this.handleChange.bind(this, record.id, "name")}
+							/>
+						</Grid.Column>
+					</Grid.Row>
+					{/* doplnujici nazev */}
+					<Grid.Row>
+						<Grid.Column>
+							<Editable.Text
+								label={strings("createSubname")}
+								mandatory={options.mandatory.includes("subname")}
+								value={record.subname}
+								onChange={this.handleChange.bind(this, record.id, "subname")}
+							/>
 						</Grid.Column>
 					</Grid.Row>
 					{/* vyrobce */}
@@ -101,6 +121,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Text
 								label={strings("createManufacturer")}
+								mandatory={options.mandatory.includes("manufacturer")}
 								value={record.manufacturer}
 								onChange={this.handleChange.bind(this, record.id, "manufacturer")}
 							/>
@@ -111,6 +132,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Number
 								label={strings("createVolume")}
+								mandatory={options.mandatory.includes("volume")}
 								value={record.volume}
 								unit="ml"
 								onChange={this.handleChange.bind(this, record.id, "volume")}
@@ -122,6 +144,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Number
 								label={strings("createAlcohol")}
+								mandatory={options.mandatory.includes("alcohol")}
 								value={record.alcohol}
 								unit="%"
 								onChange={this.handleChange.bind(this, record.id, "alcohol")}
@@ -136,6 +159,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 									items: options.properties.color
 								}}
 								label={strings("createColor")}
+								mandatory={options.mandatory.includes("color")}
 								value={record.color}
 								onChange={this.handleChange.bind(this, record.id, "color")}
 							/>
@@ -149,6 +173,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 									items: options.properties.aroma
 								}}
 								label={strings("createAroma")}
+								mandatory={options.mandatory.includes("aroma")}
 								value={record.aroma}
 								onChange={this.handleChange.bind(this, record.id, "aroma")}
 							/>
@@ -162,6 +187,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 									items: options.properties.taste
 								}}
 								label={strings("createTaste")}
+								mandatory={options.mandatory.includes("taste")}
 								value={record.taste}
 								onChange={this.handleChange.bind(this, record.id, "taste")}
 							/>
@@ -178,6 +204,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 									}))
 								}}
 								label={strings("createCask")}
+								mandatory={options.mandatory.includes("cask")}
 								value={record.cask}
 								onChange={this.handleChange.bind(this, record.id, "cask")}
 							/>
@@ -188,6 +215,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Number
 								label={strings("createPrice")}
+								mandatory={options.mandatory.includes("price")}
 								value={record.price}
 								unit="Kč"
 								onChange={this.handleChange.bind(this, record.id, "price")}
@@ -199,6 +227,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Range
 								label={strings("createRipening")}
+								mandatory={options.mandatory.includes("ripening")}
 								value={record.ripening}
 								unit={strings("overviewRipeningYears")}
 								placeholder={[strings("createRipeningLowest"), strings("createRipeningHighest")]}
@@ -217,6 +246,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 									}))
 								}}
 								label={strings("createOrigin")}
+								mandatory={options.mandatory.includes("origin")}
 								value={record.origin}
 								customRenderValue={() => (
 									<View style={styles.originWrapper}>
@@ -233,6 +263,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Date
 								label={strings("createPurchased")}
+								mandatory={options.mandatory.includes("purchased")}
 								value={record.purchased}
 								onChange={this.handleChange.bind(this, record.id, "purchased")}
 							/>
@@ -243,6 +274,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 						<Grid.Column>
 							<Editable.Rating
 								label={strings("createRating")}
+								mandatory={options.mandatory.includes("rating")}
 								value={record.rating}
 								onChange={this.handleChange.bind(this, record.id, "rating")}
 							/>
@@ -254,6 +286,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, unknown, IOverv
 							<Editable.Multiline
 								field={{ lines: 3 }}
 								label={strings("createNotes")}
+								mandatory={options.mandatory.includes("notes")}
 								value={record.notes}
 								onChange={this.handleChange.bind(this, record.id, "notes")}
 							/>

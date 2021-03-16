@@ -37,7 +37,6 @@ export default class InputNumber extends React.PureComponent<IInputSpinner, IInp
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputSpinner = {
-		highlight: false,
 		icon: null,
 		max: Infinity,
 		min: -Infinity,

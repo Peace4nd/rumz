@@ -96,6 +96,12 @@ class CreatePush extends Route.Content<ICreatePushProps, ICreatePushState, ICrea
 							type: "text"
 						},
 						{
+							icon: faPencilAlt,
+							name: "subname",
+							placeholder: strings("createSubname"),
+							type: "text"
+						},
+						{
 							icon: faIndustry,
 							name: "manufacturer",
 							placeholder: strings("createManufacturer"),

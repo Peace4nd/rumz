@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Measurement } from "../../styles";
+import { Color, Measurement } from "../../styles";
 
 const styles = StyleSheet.create({
 	label: {
@@ -7,6 +7,12 @@ const styles = StyleSheet.create({
 	},
 	touchable: {
 		flex: 1
+	},
+	valueMissing: {
+		color: Color.Muted
+	},
+	valueMissingMandatory: {
+		color: Color.Base
 	},
 	wrapper: {
 		flex: 1,

@@ -13,6 +13,11 @@ export interface IDataCollection {
 	name: string;
 
 	/**
+	 * Doplnujici nazev
+	 */
+	subname: string;
+
+	/**
 	 * Datum zakoupeni
 	 */
 	purchased: Date;
@@ -93,7 +98,7 @@ export interface IDataCollection {
 	taste: string[];
 
 	/**
-	 * Pocet vypitych panaku (a 40ml)
+	 * Vypite mnozsti
 	 */
 	drunk: number;
 }
@@ -131,6 +136,11 @@ export interface IDataOptions {
 	 * Typ sudu
 	 */
 	cask: string[];
+
+	/**
+	 * Mandatorni polozky kolekce
+	 */
+	mandatory: string[];
 }
 
 /**

@@ -29,7 +29,6 @@ export default class InputRating extends React.PureComponent<IInputRating, IInpu
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputRating = {
-		highlight: false,
 		icon: null,
 		onChange: null,
 		onSubmit: null,

@@ -10,6 +10,22 @@ export const DEFAULT_STATE: IReduxOptions = {
 	values: {
 		cask: [],
 		dram: 40,
+		mandatory: [
+			"alcohol",
+			"aroma",
+			"cask",
+			"color",
+			"image",
+			"manufacturer",
+			"name",
+			"origin",
+			"price",
+			"purchased",
+			"rating",
+			"ripening",
+			"taste",
+			"volume"
+		],
 		properties: {
 			aroma: [],
 			color: [],
@@ -36,7 +52,7 @@ export default (state: IReduxOptions = DEFAULT_STATE, action: IReduxAction): IRe
 					$set: true
 				},
 				values: {
-					$set: (action.payload as IDataOptions) || DEFAULT_STATE.values
+					$set: merge(DEFAULT_STATE.values, action.payload) as IDataOptions
 				}
 			});
 		}

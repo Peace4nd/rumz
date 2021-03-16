@@ -3,31 +3,52 @@ import moment, { MomentInput } from "moment";
 import strings from "./strings";
 
 /**
+ * Vystupni vlastnosti
+ */
+export interface IFormatOutput {
+	empty: boolean;
+	value: string;
+}
+
+/**
+ * Pomocna funkc epro zpracovani vystupu
+ *
+ * @param {boolean} empty Prazdnota
+ * @param {string} value Hodnota
+ * @param {string} unit Jednotka
+ * @returns {IFormatOutput} Oetreny vystup
+ */
+function outputHelper(empty: boolean, value?: string, unit?: string): IFormatOutput {
+	return {
+		empty,
+		value: empty ? strings("overviewUndefined") : value + (unit || "")
+	};
+}
+
+/**
  * Datum
  *
  * @param {MomentInput} value Hodnota
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function date(value: MomentInput, textual: boolean = true): string {
+export function date(value: MomentInput): IFormatOutput {
 	if (value) {
-		return moment(value).format("DD. MM. YYYY");
+		return outputHelper(false, moment(value).format("DD. MM. YYYY"));
 	}
-	return textual ? strings("overviewUndefined") : null;
+	return outputHelper(true);
 }
 
 /**
  * Pole
  *
  * @param {string[]} value Hodnota
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function array(value: string[], textual: boolean = true): string {
+export function array(value: string[]): IFormatOutput {
 	if (Array.isArray(value)) {
-		return value.join(", ");
+		return outputHelper(false, value.join(", "));
 	}
-	return textual ? strings("overviewUndefined") : null;
+	return outputHelper(true);
 }
 
 /**
@@ -35,28 +56,26 @@ export function array(value: string[], textual: boolean = true): string {
  *
  * @param {number} value Hodnota
  * @param {string} unit Jednotka
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function number(value: number, unit?: string, textual: boolean = true): string {
+export function number(value: number, unit?: string): IFormatOutput {
 	if (isNaN(value)) {
-		return textual ? strings("overviewUndefined") : null;
+		return outputHelper(true);
 	}
-	return value.toFixed(0) + (unit || "");
+	return outputHelper(false, value.toFixed(0), unit);
 }
 
 /**
  * Retezec
  *
  * @param {string} value Hodnota
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function string(value: string, textual: boolean = true): string {
+export function string(value: string): IFormatOutput {
 	if (!value) {
-		return textual ? strings("overviewUndefined") : null;
+		return outputHelper(true);
 	}
-	return value;
+	return outputHelper(false, value);
 }
 
 /**
@@ -64,22 +83,21 @@ export function string(value: string, textual: boolean = true): string {
  *
  * @param {number[]} value Hodnota
  * @param {string} unit Jednotka
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function range(value: number[], unit?: string, textual: boolean = true): string {
+export function range(value: number[], unit?: string): IFormatOutput {
 	if (Array.isArray(value) && (value[0] > 0 || value[1] > 0)) {
 		if (value[0] && value[1]) {
-			return value[0].toFixed(0) + " - " + value[1].toFixed(0) + (unit || "");
+			return outputHelper(false, value[0].toFixed(0) + " - " + value[1].toFixed(0), unit);
 		} else {
 			if (value[0]) {
-				return ">" + value[0].toFixed(0) + (unit || "");
+				return outputHelper(false, ">" + value[0].toFixed(0), unit);
 			} else {
-				return "<" + value[1].toFixed(0) + (unit || "");
+				return outputHelper(false, "<" + value[1].toFixed(0), unit);
 			}
 		}
 	}
-	return textual ? strings("overviewUndefined") : null;
+	return outputHelper(true);
 }
 
 /**
@@ -87,31 +105,29 @@ export function range(value: number[], unit?: string, textual: boolean = true): 
  *
  * @param {ItemValue} value Hodnota
  * @param {PickerItemProps[]} items Polozky
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function item(value: ItemValue, items: PickerItemProps[], textual: boolean = true): string {
+export function item(value: ItemValue, items: PickerItemProps[]): IFormatOutput {
 	if (value) {
 		const found = items.find((rec) => rec.value === value);
 		if (found) {
-			return found.label;
+			return outputHelper(false, found.label);
 		}
 	}
-	return textual ? strings("overviewUndefined") : null;
+	return outputHelper(true);
 }
 
 /**
  * Hodnoceni
  *
  * @param {number} value Hodnota
- * @param {boolean} textual Textovy vystup
- * @returns {string} Formatovana hodnota
+ * @returns {IFormatOutput} Formatovana hodnota
  */
-export function rating(value: number, textual: boolean = true): string {
+export function rating(value: number): IFormatOutput {
 	if (isNaN(value)) {
-		return textual ? strings("overviewUndefined") : null;
+		return outputHelper(true);
 	}
-	return value.toFixed(0) + "/10";
+	return outputHelper(false, value.toFixed(0) + "/10");
 }
 
 /**

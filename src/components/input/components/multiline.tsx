@@ -34,7 +34,6 @@ export default class InputMultiline extends React.PureComponent<IInputMultiline,
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputMultiline = {
-		highlight: false,
 		icon: null,
 		lines: 5,
 		onChange: null,

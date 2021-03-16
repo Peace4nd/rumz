@@ -25,7 +25,11 @@ export default class EditableTags extends EditableBase<IInputTags> {
 	 * @returns {JSX.Element} Element
 	 */
 	protected renderValue(): JSX.Element {
-		const { value } = this.props;
-		return <Typography type="Body1">{format.array(value)}</Typography>;
+		const formated = format.array(this.props.value);
+		return (
+			<Typography type="Body1" style={this.getMandatoryStyle(formated.empty)}>
+				{formated.value}
+			</Typography>
+		);
 	}
 }

@@ -16,7 +16,15 @@ interface IInputTagsState {
  * Dostupne vlastnosti
  */
 export interface IInputTags extends IInput<string[]> {
+	/**
+	 * Polozky
+	 */
 	items: string[];
+
+	/**
+	 * Popisky hodnot
+	 */
+	labels?: Record<string, string>;
 }
 
 /**
@@ -34,7 +42,6 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputTags = {
-		highlight: false,
 		icon: null,
 		items: [],
 		onChange: null,
@@ -52,26 +59,25 @@ export default class InputTags extends React.PureComponent<IInputTags, IInputTag
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { icon, items, placeholder } = this.props;
+		const { icon, items, labels, placeholder } = this.props;
 		const { value } = this.state;
-		// osetreni nicoty
-		const safeValue = value || [];
-		const safeItems = (items || []).filter((item) => !safeValue.includes(item));
+		// vyfiltrovani pouzitych hodnot
+		const filtered = (items || []).filter((item) => !value.includes(item));
 		// sestaveni a vraceni
 		return (
 			<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null, styles.wrapperButton, styles.wrapperSpring]}>
 				{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
-				{safeValue.length === 0 && (
+				{value.length === 0 && (
 					<Typography type="Body1" style={[styles.fieldBasic, styles.fieldPlaceholder]}>
 						{placeholder}
 					</Typography>
 				)}
-				{safeValue.length > 0 && (
+				{value.length > 0 && (
 					<View style={styles.fieldTags}>
-						<Tags items={safeValue} onDelete={this.handleRemove} />
+						<Tags items={value} labels={labels} onDelete={this.handleRemove} />
 					</View>
 				)}
-				<Dropdown icon={faPlus} items={safeItems} onSelect={this.handleAdd} />
+				<Dropdown icon={faPlus} items={filtered} labels={labels} onSelect={this.handleAdd} />
 			</View>
 		);
 	}

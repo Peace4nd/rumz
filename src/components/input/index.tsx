@@ -69,11 +69,6 @@ export interface IInput<V> {
 	 * Validator
 	 */
 	validator?: (value: V) => string;
-
-	/**
-	 * Zvyrazneni
-	 */
-	highlight?: boolean;
 }
 
 /**

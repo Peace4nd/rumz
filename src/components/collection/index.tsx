@@ -19,9 +19,14 @@ export interface ICollection {
 	record: IDataCollection;
 
 	/**
-	 * Panak
+	 * Velikost panaku
 	 */
 	dram: number;
+
+	/**
+	 * Kompleni zaznam
+	 */
+	complete: boolean;
 
 	/**
 	 * Stisknuti
@@ -44,6 +49,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: ICollection = {
+		complete: false,
 		dram: 0,
 		onLongPress: null,
 		onPress: null,
@@ -57,7 +63,9 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { dram, onLongPress, onPress, record } = this.props;
+		const { complete, dram, onLongPress, onPress, record } = this.props;
+		// priprava zrani
+		const ripening = format.range(record.ripening, strings("overviewRipeningYears"));
 		// sestaveni a vraceni
 		return (
 			<Pressable
@@ -70,20 +78,26 @@ export default class Collection extends React.PureComponent<ICollection> {
 					<Typography type="Headline6" style={styles.infoName}>
 						{record.name}
 					</Typography>
+					{record.subname && (
+						<Typography type="Subtitle2" style={styles.infoSubname}>
+							{record.subname}
+						</Typography>
+					)}
 					<Typography type="Body1" style={styles.infoManufacturer}>
 						{record.manufacturer}
 					</Typography>
 					<View style={styles.infoAdditional}>
 						<CountryFlag code={record.origin} />
 						<View style={styles.infoRipening}>
-							<Typography type="Body2">{format.range(record.ripening, strings("overviewRipeningYears"), false)}</Typography>
+							<Typography type="Body2">{ripening.empty ? null : ripening.value}</Typography>
 						</View>
 						<View style={styles.infoPortions}>
 							<Icon definition={faGlassWhiskey} size="2x" style={styles.infoPortionsIcon} />
-							<Typography type="Body2">{dram}x</Typography>
+							<Typography type="Body2">{Math.ceil((record.volume - record.drunk) / dram)}x</Typography>
 						</View>
 					</View>
 				</View>
+				<View style={[styles.status, complete ? styles.statusComplete : styles.statusIncomplete]} />
 			</Pressable>
 		);
 	}

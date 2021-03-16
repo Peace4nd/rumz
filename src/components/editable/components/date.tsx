@@ -25,7 +25,11 @@ export default class EditableDate extends EditableBase<IInputDate> {
 	 * @returns {JSX.Element} Element
 	 */
 	protected renderValue(): JSX.Element {
-		const { value } = this.props;
-		return <Typography type="Body1">{format.date(value)}</Typography>;
+		const formated = format.date(this.props.value);
+		return (
+			<Typography type="Body1" style={this.getMandatoryStyle(formated.empty)}>
+				{formated.value}
+			</Typography>
+		);
 	}
 }

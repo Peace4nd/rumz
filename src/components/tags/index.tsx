@@ -19,6 +19,11 @@ export interface ITags {
 	items: string[];
 
 	/**
+	 * Popisky hodnot
+	 */
+	labels?: Record<string, string>;
+
+	/**
 	 * Smazani
 	 */
 	onDelete?: (tag: string) => void;
@@ -37,13 +42,11 @@ export interface ITags {
  */
 const Tags = (props: ITags): JSX.Element => {
 	// rozlozeni props
-	const { items, onDelete, onModify } = props;
-	// osetreni nicoty
-	const safeItems = items || [];
+	const { items, labels, onDelete, onModify } = props;
 	// sestaveni a vraceni
 	return (
 		<View style={styles.wrapper}>
-			{safeItems.sort().map((item, index) => (
+			{(items || []).sort().map((item, index) => (
 				<TouchableOpacity
 					key={index}
 					style={styles.item}
@@ -59,7 +62,7 @@ const Tags = (props: ITags): JSX.Element => {
 					onLongPress={onModify ? () => onModify(item) : null}
 				>
 					<Typography type="Body1" style={styles.label}>
-						{item}
+						{labels && labels?.[item] ? labels[item] : item}
 					</Typography>
 				</TouchableOpacity>
 			))}

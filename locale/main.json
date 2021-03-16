@@ -6,6 +6,7 @@
 
 	"createTitle": "Nový rum",
 	"createName": "Název",
+	"createSubname": "Doplňkové pojmenování",
 	"createPurchased": "Zakoupeno",
 	"createOrigin": "Země původu",
 	"createManufacturer": "Výrobce",

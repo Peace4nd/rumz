@@ -37,7 +37,6 @@ export default class InputNumber extends React.PureComponent<IInputNumber, IInpu
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputNumber = {
-		highlight: false,
 		icon: null,
 		onChange: null,
 		onSubmit: null,

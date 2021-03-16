@@ -30,7 +30,6 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputImage = {
-		highlight: false,
 		icon: null,
 		onChange: null,
 		onSubmit: null,

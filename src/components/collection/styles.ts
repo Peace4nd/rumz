@@ -17,16 +17,15 @@ const styles = StyleSheet.create({
 		flex: 0,
 		flexDirection: "row",
 		height: Size["4x"],
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		marginTop: Measurement.Padding
 	},
 	infoManufacturer: {
 		flex: 1,
-		marginBottom: Measurement.Padding / 2
+		marginTop: Measurement.Padding
 	},
 	infoName: {
-		flex: 0,
-		fontWeight: "bold",
-		marginBottom: Measurement.Padding / 2
+		flex: 0
 	},
 	infoPortions: {
 		alignItems: "center",
@@ -44,6 +43,24 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center"
 	},
+	infoSubname: {
+		color: Color.Muted,
+		flex: 0,
+		marginTop: Measurement.Padding / 2
+	},
+	status: {
+		bottom: 0,
+		height: Size["1x"],
+		left: 0,
+		position: "absolute",
+		right: 0
+	},
+	statusComplete: {
+		backgroundColor: Color.Base
+	},
+	statusIncomplete: {
+		backgroundColor: Color.Muted
+	},
 	wrapper: {
 		backgroundColor: Color.White,
 		borderColor: Color.Base,
@@ -54,7 +71,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		height: Measurement.Components.Collection.Height,
 		overflow: "hidden",
-		padding: Measurement.Padding
+		padding: Measurement.Padding,
+		paddingBottom: Measurement.Padding + Size["1x"]
 	},
 	wrapperPressed: {
 		opacity: 0.2

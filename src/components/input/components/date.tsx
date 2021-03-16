@@ -29,7 +29,6 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputDate = {
-		highlight: false,
 		icon: faCalendarAlt,
 		onChange: null,
 		onSubmit: null,

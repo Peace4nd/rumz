@@ -38,7 +38,6 @@ export default class InputRange extends React.PureComponent<IInputRange, IInputR
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputRange = {
-		highlight: false,
 		icon: null,
 		onChange: null,
 		onSubmit: null,

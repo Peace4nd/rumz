@@ -25,7 +25,11 @@ export default class EditablePicker extends EditableBase<IInputPicker> {
 	 * @returns {JSX.Element} Element
 	 */
 	protected renderValue(): JSX.Element {
-		const { field, value } = this.props;
-		return <Typography type="Body1">{format.item(value, field.items)}</Typography>;
+		const formated = format.item(this.props.value, this.props.field.items);
+		return (
+			<Typography type="Body1" style={this.getMandatoryStyle(formated.empty)}>
+				{formated.value}
+			</Typography>
+		);
 	}
 }

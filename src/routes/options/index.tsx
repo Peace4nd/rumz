@@ -1,5 +1,5 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faPalette, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
@@ -96,7 +96,60 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 				{this.renderProperties()}
 				{/* typ sudu */}
 				{this.renderCask()}
+				{/* povinne polozky kolekce */}
+				{this.renderRequiredCollection()}
 			</Route.Wrapper>
+		);
+	}
+
+	private renderRequiredCollection(): JSX.Element {
+		// rozlozeni props
+		const { options } = this.props;
+		// definice
+		const available: Required<Record<Exclude<keyof IDataCollection, "id" | "drunk">, string>> = {
+			alcohol: strings("createAlcohol"),
+			aroma: strings("createAroma"),
+			cask: strings("createCask"),
+			color: strings("createColor"),
+			image: strings("createImage"),
+			manufacturer: strings("createManufacturer"),
+			name: strings("createName"),
+			notes: strings("createNotes"),
+			origin: strings("createOrigin"),
+			price: strings("createPrice"),
+			purchased: strings("createPurchased"),
+			rating: strings("createRating"),
+			ripening: strings("createRipening"),
+			subname: strings("createSubname"),
+			taste: strings("createTaste"),
+			volume: strings("createVolume")
+		};
+		// sestaveni
+		return (
+			<Grid.Wrapper>
+				<Grid.Title>{strings("optionsGoogleTitle")}</Grid.Title>
+
+				<Grid.Row>
+					<Grid.Column>
+						<Input.Tags
+							icon={faPlusCircle}
+							items={Object.keys(available)}
+							labels={available}
+							value={options.mandatory}
+							onChange={(mandatory) => {
+								this.props.dispatch(
+									updateOptions(
+										{
+											mandatory
+										},
+										"replace"
+									)
+								);
+							}}
+						/>
+					</Grid.Column>
+				</Grid.Row>
+			</Grid.Wrapper>
 		);
 	}
 

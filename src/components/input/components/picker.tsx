@@ -34,7 +34,6 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputPicker = {
-		highlight: false,
 		icon: null,
 		items: [],
 		onChange: null,
@@ -42,7 +41,7 @@ export default class InputPicker extends React.PureComponent<IInputPicker, IInpu
 		placeholder: null,
 		returnKey: "default",
 		validator: null,
-		value: ""
+		value: null
 	};
 
 	/**

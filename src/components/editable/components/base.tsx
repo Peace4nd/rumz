@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { StyleProp, TextStyle, TouchableOpacity, View } from "react-native";
 import strings from "../../../utils/strings";
 import Dialog from "../../dialog";
 import Typography from "../../typography";
@@ -44,7 +44,7 @@ export interface IEditable<F extends IEditableField> {
 	/**
 	 * Vlastnosti vstupniho pole
 	 */
-	field?: Omit<F, "value" | "onChange" | "highlight" | "onSubmit" | "placeholder" | "returnKey" | "validator" | "unit">;
+	field?: Omit<F, "value" | "onChange" | "onSubmit" | "placeholder" | "returnKey" | "validator" | "unit">;
 
 	/**
 	 * Jednotka
@@ -55,6 +55,11 @@ export interface IEditable<F extends IEditableField> {
 	 * Placeholder
 	 */
 	placeholder?: F["placeholder"];
+
+	/**
+	 * Povinna polozka
+	 */
+	mandatory?: boolean;
 
 	/**
 	 * Custom render hodnoty
@@ -81,6 +86,7 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 		customRenderValue: null,
 		field: null,
 		label: null,
+		mandatory: false,
 		onChange: null,
 		placeholder: null,
 		unit: null,
@@ -167,4 +173,17 @@ export default abstract class EditableBase<F extends IEditableField> extends Rea
 			value
 		});
 	};
+
+	/**
+	 * Stylovani povinne hodnoty
+	 *
+	 * @param {boolean} empty Prazdnota
+	 * @returns {StyleProp<TextStyle>} Styly
+	 */
+	protected getMandatoryStyle(empty: boolean): StyleProp<TextStyle> {
+		if (empty) {
+			return this.props.mandatory ? styles.valueMissingMandatory : styles.valueMissing;
+		}
+		return null;
+	}
 }

@@ -39,7 +39,6 @@ export default class InputText extends React.PureComponent<IInputText, IInputTex
 	 * Vychozi vlastnosti
 	 */
 	public static defaultProps: IInputText = {
-		highlight: false,
 		icon: null,
 		onChange: null,
 		onSubmit: null,

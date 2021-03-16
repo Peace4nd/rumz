@@ -23,7 +23,6 @@ export default class EditableNumber extends EditableBase<IInputRating> {
 	 * @returns {JSX.Element} Element
 	 */
 	protected renderValue(): JSX.Element {
-		const { value } = this.props;
-		return <Rating value={value} />;
+		return <Rating value={this.props.value} />;
 	}
 }

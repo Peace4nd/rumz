@@ -32,11 +32,6 @@ export interface ICollection {
 	 * Stisknuti
 	 */
 	onPress: (record: IDataCollection) => void;
-
-	/**
-	 * Dlouhe stisknuti
-	 */
-	onLongPress: (record: IDataCollection) => void;
 }
 
 /**
@@ -51,7 +46,6 @@ export default class Collection extends React.PureComponent<ICollection> {
 	public static defaultProps: ICollection = {
 		complete: false,
 		dram: 0,
-		onLongPress: null,
 		onPress: null,
 		record: null
 	};
@@ -63,17 +57,13 @@ export default class Collection extends React.PureComponent<ICollection> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { complete, dram, onLongPress, onPress, record } = this.props;
+		const { complete, dram, onPress, record } = this.props;
 		// priprava zrani
 		const ripening = format.range(record.ripening, strings("overviewRipeningYears"));
 		// sestaveni a vraceni
 		return (
-			<Pressable
-				style={({ pressed }) => [styles.wrapper, pressed ? styles.wrapperPressed : null]}
-				onPress={() => onPress(record)}
-				onLongPress={() => onLongPress(record)}
-			>
-				<Image source={record.image} bare={true} style={styles.image} />
+			<Pressable style={({ pressed }) => [styles.wrapper, pressed ? styles.wrapperPressed : null]} onPress={() => onPress(record)}>
+				<Image source={record.image} grayscale={record.volume - record.drunk <= 0} bare={true} style={styles.image} />
 				<View style={styles.info}>
 					<Typography type="Headline6" style={styles.infoName}>
 						{record.name}

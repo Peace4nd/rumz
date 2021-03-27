@@ -5,9 +5,6 @@ const styles = StyleSheet.create({
 	label: {
 		marginBottom: Measurement.Padding / 2
 	},
-	touchable: {
-		flex: 1
-	},
 	valueMissing: {
 		color: Color.Muted
 	},

@@ -10,6 +10,7 @@ import Create from "./routes/create";
 import Options from "./routes/options";
 import { Collection, Detail } from "./routes/overview";
 import Stats from "./routes/stats";
+import Update from "./routes/update";
 
 /**
  * Aplikacni vstupni bod
@@ -44,6 +45,7 @@ class App extends React.PureComponent {
 							<Route exact={true} strict={true} path={"/overview"} component={Collection} />
 							<Route exact={true} strict={true} path={"/overview/:id"} component={Detail} />
 							<Route exact={true} strict={true} path={"/create"} component={Create} />
+							<Route exact={true} strict={true} path={"/update/:id"} component={Update} />
 							<Route exact={true} strict={true} path={"/stats"} component={Stats} />
 							<Route exact={true} strict={true} path={"/options"} component={Options} />
 						</Switch>

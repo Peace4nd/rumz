@@ -3,7 +3,6 @@ import { Pressable, View } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import FetchBlob from "react-native-fetch-blob";
 import { IInput, IInputCore } from "..";
-import { IFileDocument } from "../../../types/file";
 import Icon from "../../icon";
 import Image from "../../image";
 import Typography from "../../typography";
@@ -17,7 +16,7 @@ interface IInputImageState {
 /**
  * Dostupne vlastnosti
  */
-export type IInputImage = IInput<IFileDocument>;
+export type IInputImage = IInput<string>;
 
 /**
  * Obrazkovy vstup
@@ -57,7 +56,7 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 		const { icon, placeholder, value } = this.props;
 		const { selected } = this.state;
 		// cesta k obrazku
-		const path = selected?.uri || value?.path;
+		const path = selected?.uri || value;
 		// sestaveni a vraceni
 		return (
 			<Pressable style={[styles.wrapperBasic, styles.wrapperImage]} onPress={this.handleClick}>
@@ -97,16 +96,7 @@ export default class InputImage extends React.PureComponent<IInputImage, IInputI
 					},
 					() => {
 						FetchBlob.fs.stat(decodeURIComponent(res.fileCopyUri)).then((stat) => {
-							this.props.onChange(
-								{
-									filename: stat.filename,
-									lastModified: new Date(stat.lastModified),
-									mime: res.type,
-									path: stat.path,
-									size: parseInt(stat.size, 10)
-								},
-								{ filled: true, valid: true }
-							);
+							this.props.onChange(stat.path, { filled: true, valid: true });
 						});
 					}
 				);

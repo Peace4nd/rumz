@@ -23,10 +23,13 @@
 	"createTaste": "Chuť",
 	"createCask": "Typ sudu",
 	"createImage": "Obrázek",
+	"createDrunk": "Vypito",
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
 
 	"overviewEmpty": "Kolekce je prázdná",
+	"overviewUndefined": "Tato hodnota nebyla vyplněna",
+	"overviewShare": "Sdílet",
 	"overviewRipeningYears": "let",
 	"overviewDramTitle": "Přidat vypitého panáka",
 	"overviewDramDrink": "Vypít",
@@ -34,7 +37,6 @@
 	"overviewEditTitle": "Editace",
 	"overviewEditSave": "Uložit",
 	"overviewEditRemove": "Smazat",
-	"overviewUndefined": "Tato hodnota nebyla vyplněna",
 
 	"optionsTitle": "Nastavení",
 	"optionsGoogleTitle": "Přihlášení Google",
@@ -49,6 +51,7 @@
 	"optionsBackupCount": "Pocet rumů v kolekci: {0}",
 	"optionsBackupLast": "Posledni záloha: {0|date}",
 	"optionsBackupSize": "Velikost zálohy: {0|bytes}",
+	"optionsMandatoryTitle": "Povinné položky",
 
 	"confirmTitleDelete": "Opravdu smazat?",
 	"confirmButtonCancel": "Zrušit",

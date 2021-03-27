@@ -1,9 +1,9 @@
-import { faGlassWhiskey, faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import SplashScreen from "react-native-splash-screen";
 import { batch, connect, DispatchProp } from "react-redux";
-import { Collection, Dialog, Grid, Icon, Input, Route, Typography } from "../../components";
-import { loadRecords, updateRecord } from "../../redux/actions/collection";
+import { Collection, Grid, Icon, Route, Typography } from "../../components";
+import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { loadOptions } from "../../redux/actions/options";
 import { IDataCollection, IDataOptions } from "../../types/data";
@@ -12,12 +12,6 @@ import { IStorageSections } from "../../types/storage";
 import ga from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
-
-interface IOverviewCollectionState {
-	selected: IDataCollection;
-	opened: boolean;
-	dram: number;
-}
 
 interface IOverviewCollectionProps extends DispatchProp {
 	collection: IDataCollection[];
@@ -29,16 +23,7 @@ interface IOverviewCollectionProps extends DispatchProp {
 /**
  * Prehled
  */
-class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOverviewCollectionState> {
-	/**
-	 * Vychozi stav
-	 */
-	public state: IOverviewCollectionState = {
-		dram: 0,
-		opened: false,
-		selected: null
-	};
-
+class OverviewCollection extends Route.Content<IOverviewCollectionProps> {
 	/**
 	 * Pripojeni komponenty
 	 */
@@ -76,7 +61,6 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { opened } = this.state;
 		const { init } = this.props;
 		// sestaveni a vraceni
 		return (
@@ -93,21 +77,6 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 			>
 				{/* kolekce */}
 				<Grid.Wrapper>{this.renderRecords()}</Grid.Wrapper>
-				{/* modal pro pridani panaku */}
-				<Dialog
-					opened={opened}
-					title={strings("overviewDramTitle")}
-					onToggle={(state) => {
-						this.setState({ opened: state });
-					}}
-					button={{
-						icon: faGlassWhiskey,
-						label: strings("overviewDramDrink"),
-						onPress: this.handleDramUpdate
-					}}
-				>
-					<Input.Spinner placeholder={strings("overviewDramCount")} min={1} max={99} onChange={this.handleDramChange} />
-				</Dialog>
 			</Route.Wrapper>
 		);
 	}
@@ -137,13 +106,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 			.map((record) => (
 				<Grid.Row key={record.id}>
 					<Grid.Column>
-						<Collection
-							record={record}
-							dram={options.dram}
-							complete={this.calculateCompleteness(record)}
-							onPress={this.handleDetail}
-							onLongPress={this.handleDramOpen}
-						/>
+						<Collection record={record} dram={options.dram} complete={this.calculateCompleteness(record)} onPress={this.handleDetail} />
 					</Grid.Column>
 				</Grid.Row>
 			));
@@ -174,52 +137,6 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps, IOvervi
 	 */
 	private handleDetail = (record: IDataCollection): void => {
 		this.redirect("/overview/:id", { id: record.id });
-	};
-
-	/**
-	 * Otevreni okna pro zadani panaku
-	 *
-	 * @param {IDataCollection} record Aktualni zaznam
-	 */
-	private handleDramOpen = (record: IDataCollection): void => {
-		this.setState({
-			opened: true,
-			selected: record
-		});
-	};
-
-	/**
-	 * Zmena poctu panaku
-	 *
-	 * @param {number} value Pocet
-	 */
-	private handleDramChange = (value: number): void => {
-		this.setState({
-			dram: value
-		});
-	};
-
-	/**
-	 * Aktualizace panaku
-	 */
-	private handleDramUpdate = (): void => {
-		// rozlozeni props
-		const { options } = this.props;
-		const { dram, selected } = this.state;
-		// aktualizace zaznamu
-		this.setState(
-			{
-				opened: false,
-				selected: null
-			},
-			() => {
-				this.props.dispatch(
-					updateRecord(selected.id, {
-						drunk: selected.drunk + options.dram * dram
-					})
-				);
-			}
-		);
 	};
 }
 

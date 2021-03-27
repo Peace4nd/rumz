@@ -14,26 +14,26 @@ export function stringify(record: IDataCollection): string {
 	// definice
 	let output: string = "";
 	// sestaveni
-	output += makeLine("createName", format.string(record.name));
-	output += makeLine("createManufacturer", format.string(record.manufacturer));
-	output += makeLine("createVolume", format.number(record.volume, "ml"));
-	output += makeLine("createAlcohol", format.number(record.alcohol, "%"));
-	output += makeLine("createColor", format.array(record.color));
-	output += makeLine("createAroma", format.array(record.aroma));
-	output += makeLine("createTaste", format.array(record.taste));
-	output += makeLine("createCask", format.string(record.cask));
-	output += makeLine("createPrice", format.number(record.price, "Kč"));
-	output += makeLine("createRipening", format.range(record.ripening, strings("overviewRipeningYears")));
+	output += makeLine("createName", format.string(record.name).value);
+	output += makeLine("createManufacturer", format.string(record.manufacturer).value);
+	output += makeLine("createVolume", format.number(record.volume, "ml").value);
+	output += makeLine("createAlcohol", format.number(record.alcohol, "%").value);
+	output += makeLine("createColor", format.array(record.color).value);
+	output += makeLine("createAroma", format.array(record.aroma).value);
+	output += makeLine("createTaste", format.array(record.taste).value);
+	output += makeLine("createCask", format.string(record.cask).value);
+	output += makeLine("createPrice", format.number(record.price, "Kč").value);
+	output += makeLine("createRipening", format.range(record.ripening, strings("overviewRipeningYears")).value);
 	output += makeLine(
 		"createOrigin",
 		format.item(
 			record.origin,
 			Object.entries(country).map((entry) => ({ label: entry[1].name, value: entry[0] }))
-		)
+		).value
 	);
-	output += makeLine("createPurchased", format.date(record.purchased));
-	output += makeLine("createRating", format.rating(record.rating));
-	output += makeLine("createNotes", format.string(record.notes));
+	output += makeLine("createPurchased", format.date(record.purchased).value);
+	output += makeLine("createRating", format.rating(record.rating).value);
+	output += makeLine("createNotes", format.string(record.notes).value);
 	// vraceni
 	return output;
 }

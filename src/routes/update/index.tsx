@@ -5,6 +5,7 @@ import {
 	faEuroSign,
 	faFlask,
 	faGlassCheers,
+	faGlassWhiskey,
 	faGlobeAmericas,
 	faImage,
 	faIndustry,
@@ -19,33 +20,38 @@ import {
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
 import { connect, DispatchProp } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import { RouteComponentProps } from "react-router";
 import { Form, Route } from "../../components";
-import { pushRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
 import { IReduxCollection, IReduxStore } from "../../types/redux";
-import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
 
-interface ICreateState {
+interface IUpdateState {
 	record: IDataCollection;
+	changed: Partial<Record<keyof IDataCollection, boolean>>;
 	working: boolean;
 }
 
-interface ICreateProps extends DispatchProp {
+interface IUpdateProps extends DispatchProp {
 	options: IDataOptions;
 	predefined: IReduxCollection["predefined"];
+	record: IDataCollection;
+}
+
+interface IUpdateParams {
+	id: string;
 }
 
 /**
- * Pridani
+ * Editace
  */
-class Create extends Route.Content<ICreateProps, ICreateState> {
+class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 	/**
 	 * Vychozi stav
 	 */
-	public state: ICreateState = {
+	public state: IUpdateState = {
+		changed: {},
 		record: null,
 		working: false
 	};
@@ -57,11 +63,11 @@ class Create extends Route.Content<ICreateProps, ICreateState> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { options, predefined } = this.props;
+		const { options, predefined, record } = this.props;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
-				title={strings("createTitle")}
+				title={record.name}
 				features={{
 					actions: [
 						{
@@ -77,6 +83,7 @@ class Create extends Route.Content<ICreateProps, ICreateState> {
 				scrollable={true}
 			>
 				<Form<IDataCollection>
+					values={record}
 					fields={[
 						{
 							icon: faImage,
@@ -189,18 +196,23 @@ class Create extends Route.Content<ICreateProps, ICreateState> {
 							type: "multiline"
 						},
 						{
-							name: "id",
-							type: "hidden",
-							value: uuidv4()
+							icon: faGlassWhiskey,
+							name: "drunk",
+							placeholder: strings("createDrunk"),
+							type: "number",
+							unit: "ml"
 						},
 						{
-							name: "drunk",
-							type: "hidden",
-							value: 0
+							name: "id",
+							type: "hidden"
 						}
 					]}
-					onChange={(values) => {
+					onChange={(values, field) => {
 						this.setState({
+							changed: {
+								...this.state.changed,
+								[field]: true
+							},
 							record: values
 						});
 					}}
@@ -215,10 +227,22 @@ class Create extends Route.Content<ICreateProps, ICreateState> {
 	private handleSave = (): void => {
 		// schovani klavesnice
 		Keyboard.dismiss();
-		// rozlozeni props
-		const { id, image, ...rest } = this.state.record;
+		// zmenene polozky
+		const changed = Object.values(this.state.changed);
+		// pokud existuje zmena
+		if (changed.length > 0) {
+			// rozlozeni zaznamu
+			const { id, image, ...rest } = this.state.record;
+
+			console.log("===========================================");
+			console.log(JSON.stringify(this.state.changed, null, 4));
+			console.log("-------------------------------------------");
+			console.log(JSON.stringify(this.state.record, null, 4));
+			console.log("===========================================");
+
+			/*
 		// ulozeni
-		assets.create(image, id).then((path) => {
+		assets.create(image.path, id).then((path) => {
 			// redux
 			this.props.dispatch(
 				pushRecord({
@@ -232,10 +256,16 @@ class Create extends Route.Content<ICreateProps, ICreateState> {
 			// notifikace
 			ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
 		});
+		*/
+		} else {
+			// notifikace
+			ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
+		}
 	};
 }
 
-export default connect((store: IReduxStore) => ({
+export default connect((store: IReduxStore, props: IUpdateProps & RouteComponentProps<IUpdateParams>) => ({
 	options: store.options.values,
-	predefined: store.collection.predefined
-}))(Create);
+	predefined: store.collection.predefined,
+	record: store.collection.records.find((col) => col.id === props.match.params.id)
+}))(Update);

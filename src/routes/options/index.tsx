@@ -1,5 +1,5 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faPalette, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faListUl, faPalette } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { connect, DispatchProp } from "react-redux";
@@ -102,6 +102,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		);
 	}
 
+	/**
+	 * Povinne polozky
+	 *
+	 * @returns {JSX.Element} Element
+	 */
 	private renderRequiredCollection(): JSX.Element {
 		// rozlozeni props
 		const { options } = this.props;
@@ -127,12 +132,11 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 		// sestaveni
 		return (
 			<Grid.Wrapper>
-				<Grid.Title>{strings("optionsGoogleTitle")}</Grid.Title>
-
+				<Grid.Title>{strings("optionsMandatoryTitle")}</Grid.Title>
 				<Grid.Row>
 					<Grid.Column>
 						<Input.Tags
-							icon={faPlusCircle}
+							icon={faListUl}
 							items={Object.keys(available)}
 							labels={available}
 							value={options.mandatory}
@@ -400,6 +404,7 @@ class Options extends Route.Content<IOptionsProps, IOptionsState> {
 								handler: this.handleCaskAdd,
 								reset: true
 							}}
+							placeholder={strings("optionsCaskTitle")}
 						/>
 						{options.cask.length > 0 && (
 							<React.Fragment>

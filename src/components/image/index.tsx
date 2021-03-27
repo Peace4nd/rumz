@@ -1,5 +1,6 @@
 import React from "react";
 import { Image as NativeImage, ImageStyle, StyleProp, View, ViewStyle } from "react-native";
+import { Grayscale } from "react-native-color-matrix-image-filters";
 import styles from "./styles";
 
 /**
@@ -17,6 +18,11 @@ export interface IImage<B> {
 	bare?: B;
 
 	/**
+	 * Cernobile
+	 */
+	grayscale?: boolean;
+
+	/**
 	 * Doplnkove styly
 	 */
 	style?: B extends true ? StyleProp<ImageStyle> : StyleProp<ViewStyle>;
@@ -30,7 +36,7 @@ export interface IImage<B> {
  */
 const Image = <B extends boolean>(props: IImage<B>): JSX.Element => {
 	// rozlozeni props
-	const { bare, source, style } = props;
+	const { bare, grayscale, source, style } = props;
 	// overeni existence protokolu
 	let uri = source;
 	if (!/^(file|content):\/\//.test(source)) {
@@ -42,9 +48,23 @@ const Image = <B extends boolean>(props: IImage<B>): JSX.Element => {
 	}
 	// holy obrazek
 	if (bare === true) {
+		if (grayscale) {
+			return (
+				<Grayscale>
+					<NativeImage source={{ uri }} resizeMode="contain" style={style as StyleProp<ImageStyle>} />
+				</Grayscale>
+			);
+		}
 		return <NativeImage source={{ uri }} resizeMode="contain" style={style as StyleProp<ImageStyle>} />;
 	}
 	// sestaveni a vraceni
+	if (grayscale) {
+		return (
+			<Grayscale style={[styles.wrapper, style]}>
+				<NativeImage source={{ uri }} resizeMode="contain" style={styles.image} />
+			</Grayscale>
+		);
+	}
 	return (
 		<View style={[styles.wrapper, style]}>
 			<NativeImage source={{ uri }} resizeMode="contain" style={styles.image} />

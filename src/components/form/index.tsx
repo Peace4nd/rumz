@@ -60,7 +60,7 @@ export interface IFormFieldTags<V> extends IFormFieldShared<V>, Omit<IInputTags,
 
 export interface IFormFieldHidden<V> extends IFormFieldShared<V> {
 	type: "hidden";
-	value: unknown;
+	value?: unknown;
 }
 
 export type IFormField<V> =
@@ -87,7 +87,7 @@ export interface IForm<V> {
 	/**
 	 * Zmenova udalost
 	 */
-	onChange: (values: V) => void;
+	onChange: (values: V, field: keyof V) => void;
 
 	/**
 	 * Vychozi hodnoty
@@ -108,6 +108,9 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 		fields: this.createDefaultValues()
 	};
 
+	/**
+	 * Reference na pole
+	 */
 	private fields: IInputCore[] = [];
 
 	/**
@@ -144,6 +147,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 	 */
 	private renderField(field: IFormField<V>, index: number, last: boolean): JSX.Element {
 		// rozlozeni props
+		const { fields } = this.state;
 		const { name, type, ...rest } = field;
 		// definice
 		const returnKey: ReturnKeyType = last ? "done" : "next";
@@ -156,6 +160,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as Date}
 						onChange={(...input) => this.handleChange(name, ...input)}
 					/>
 				);
@@ -166,6 +171,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as string}
 						onChange={(...input) => this.handleChange(name, ...input)}
 					/>
 				);
@@ -176,6 +182,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as string}
 						onChange={(...input) => this.handleChange(name, ...input)}
 						returnKey={returnKey}
 						onSubmit={{
@@ -192,6 +199,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as number}
 						onChange={(...input) => this.handleChange(name, ...input)}
 						returnKey={returnKey}
 						onSubmit={{
@@ -208,6 +216,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as string}
 						onChange={(...input) => this.handleChange(name, ...input)}
 					/>
 				);
@@ -218,6 +227,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as number}
 						onChange={(...input) => this.handleChange(name, ...input)}
 					/>
 				);
@@ -228,6 +238,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as [number, number]}
 						onChange={(...input) => this.handleChange(name, ...input)}
 						returnKey={returnKey}
 						onSubmit={{
@@ -244,6 +255,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as string[]}
 						onChange={(...input) => this.handleChange(name, ...input)}
 						returnKey={returnKey}
 						onSubmit={{
@@ -260,6 +272,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 						ref={(ref) => {
 							this.fields[index] = ref;
 						}}
+						value={fields[name].value as string}
 						onChange={(...input) => this.handleChange(name, ...input)}
 						returnKey={returnKey}
 						onSubmit={{
@@ -291,6 +304,8 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 	 * @returns {IFormStateValues<V>} Hodnoty
 	 */
 	private createDefaultValues(): IFormStateValues<V> {
+		// rozlozeni props
+		const { values } = this.props;
 		// definice
 		const defaults: IFormStateValues<V> = {};
 		// prochazeni jednotlivych poli
@@ -317,6 +332,10 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 				case "hidden":
 					value = field.value;
 					break;
+			}
+			// preddefinovana
+			if (values?.[field.name] !== undefined) {
+				value = values[field.name];
 			}
 			// naplneni
 			defaults[field.name] = {
@@ -368,7 +387,7 @@ export default class Form<V> extends React.PureComponent<IForm<V>, IFormState<V>
 				}
 			},
 			() => {
-				this.props.onChange(this.getCurrentValues());
+				this.props.onChange(this.getCurrentValues(), name);
 			}
 		);
 	}

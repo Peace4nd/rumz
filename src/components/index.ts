@@ -1,10 +1,10 @@
 export { default as Button } from "./button";
 export { default as ButtonGroup } from "./button-group";
 export { default as Collection } from "./collection";
+export { default as ContextMenu } from "./context-menu";
 export { default as CountryFlag } from "./country-flag";
 export { default as Dialog } from "./dialog";
 export { default as Dropdown } from "./dropdown";
-export { default as Editable } from "./editable";
 export { default as Form } from "./form";
 export { default as Grid } from "./grid";
 export { default as Header } from "./header";
@@ -19,3 +19,4 @@ export { default as Route } from "./route";
 export { default as Spacer } from "./spacer";
 export { default as Tags } from "./tags";
 export { default as Typography } from "./typography";
+export { default as Value } from "./value";

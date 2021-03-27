@@ -4,6 +4,7 @@ import { connect, DispatchProp } from "react-redux";
 import { Route } from "../../components";
 import { IDataCollection } from "../../types/data";
 import { IReduxStore } from "../../types/redux";
+import { calculateStats } from "../../utils/stats";
 import strings from "../../utils/strings";
 
 interface IStatsProps extends DispatchProp {
@@ -20,6 +21,7 @@ class Stats extends Route.Content<IStatsProps> {
 	 * @returns {JSX.Element} Element
 	 */
 	public render(): JSX.Element {
+		const xxx = calculateStats(this.props.collection);
 		return (
 			<Route.Wrapper
 				title={strings("statsTitle")}
@@ -31,7 +33,7 @@ class Stats extends Route.Content<IStatsProps> {
 				}}
 				scrollable={true}
 			>
-				<Text>statistika</Text>
+				<Text>{JSON.stringify(xxx, null, 4)}</Text>
 			</Route.Wrapper>
 		);
 	}

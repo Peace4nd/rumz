@@ -27,6 +27,8 @@
 	"createSaveDone": "Rum byl přidán do kolekce",
 	"createSaveError": "Při ukládání nastala chyba. Některá pole nejsou vyplněná!",
 
+	"updateSaveDone": "Záznam byl úspěšně změněn",
+
 	"overviewEmpty": "Kolekce je prázdná",
 	"overviewUndefined": "Tato hodnota nebyla vyplněna",
 	"overviewShare": "Sdílet",

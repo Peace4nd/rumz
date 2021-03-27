@@ -2,9 +2,24 @@ import { Alert } from "react-native";
 import strings from "./strings";
 
 export interface IConfirm {
+	/**
+	 * Potvrzeni
+	 */
 	onConfirm: () => void;
+
+	/**
+	 * Zruseni
+	 */
 	onDismiss?: () => void;
+
+	/**
+	 * Popis
+	 */
 	description?: string;
+
+	/**
+	 * Zrusit kliknutim mimo
+	 */
 	cancelable?: boolean;
 }
 

@@ -10,6 +10,7 @@ import { IDataCollection, IDataOptions } from "../../types/data";
 import { IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import { stringify } from "../../utils/collection";
+import confirm from "../../utils/confirm";
 import country from "../../utils/country";
 import format from "../../utils/format";
 import storage from "../../utils/storage";
@@ -67,9 +68,6 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 		// rozlozeni props
 		const { record, options } = this.props;
 		const { opened } = this.state;
-
-		console.log(record);
-
 		// sestaveni a vraceni
 		return (
 			<React.Fragment>
@@ -270,12 +268,15 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 						{
 							icon: faTrash,
 							label: strings("overviewEditRemove"),
-							onPress: () => {
-								Promise.all([storage.collection.remove(record.id), assets.remove(record.image)]).then(() => {
-									this.props.dispatch(removeRecord(record.id));
-									this.redirect("/overview");
-								});
-							}
+							onPress: confirm.delete({
+								cancelable: true,
+								onConfirm: () => {
+									Promise.all([storage.collection.remove(record.id), assets.remove(record.image)]).then(() => {
+										this.props.dispatch(removeRecord(record.id));
+										this.redirect("/overview");
+									});
+								}
+							})
 						}
 					]}
 				/>

@@ -160,7 +160,7 @@ class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 							}}
 						>
 							<MenuTrigger customStyles={{ TriggerTouchableComponent: TouchableOpacity }}>
-								<Icon definition={action.icon} color="Highlight" />
+								<Icon definition={action.icon} color={action.disabled ? "Light" : "Highlight"} />
 							</MenuTrigger>
 							<MenuOptions>
 								{action.items.map((item, index) => (
@@ -176,7 +176,7 @@ class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 				case "path": {
 					return (
 						<TouchableOpacity onPress={() => history.push(action.path)} disabled={action.disabled || false}>
-							<Icon definition={action.icon} color="Highlight" />
+							<Icon definition={action.icon} color={action.disabled ? "Light" : "Highlight"} />
 						</TouchableOpacity>
 					);
 				}
@@ -184,7 +184,7 @@ class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 				case "press": {
 					return (
 						<TouchableOpacity onPress={action.onPress} disabled={action.disabled || false}>
-							<Icon definition={action.icon} color="Highlight" />
+							<Icon definition={action.icon} color={action.disabled ? "Light" : "Highlight"} />
 						</TouchableOpacity>
 					);
 				}

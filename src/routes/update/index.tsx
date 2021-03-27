@@ -22,8 +22,10 @@ import { Keyboard, ToastAndroid } from "react-native";
 import { connect, DispatchProp } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Form, Route } from "../../components";
+import { updateRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
 import { IReduxCollection, IReduxStore } from "../../types/redux";
+import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
 
@@ -64,6 +66,7 @@ class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 	public render(): JSX.Element {
 		// rozlozeni props
 		const { options, predefined, record } = this.props;
+		const { changed, working } = this.state;
 		// sestaveni a vraceni
 		return (
 			<Route.Wrapper
@@ -71,7 +74,7 @@ class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 				features={{
 					actions: [
 						{
-							disabled: this.state.working,
+							disabled: working || Object.values(changed).length === 0,
 							icon: faCheck,
 							onPress: this.handleSave,
 							type: "press"
@@ -79,7 +82,7 @@ class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 					],
 					back: true
 				}}
-				busy={this.state.working}
+				busy={working}
 				scrollable={true}
 			>
 				<Form<IDataCollection>
@@ -210,7 +213,7 @@ class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 					onChange={(values, field) => {
 						this.setState({
 							changed: {
-								...this.state.changed,
+								...changed,
 								[field]: true
 							},
 							record: values
@@ -225,41 +228,34 @@ class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 	 * Ulozeni
 	 */
 	private handleSave = (): void => {
+		// rozlozni props
+		const { changed, record } = this.state;
 		// schovani klavesnice
 		Keyboard.dismiss();
-		// zmenene polozky
-		const changed = Object.values(this.state.changed);
-		// pokud existuje zmena
-		if (changed.length > 0) {
-			// rozlozeni zaznamu
-			const { id, image, ...rest } = this.state.record;
-
-			console.log("===========================================");
-			console.log(JSON.stringify(this.state.changed, null, 4));
-			console.log("-------------------------------------------");
-			console.log(JSON.stringify(this.state.record, null, 4));
-			console.log("===========================================");
-
-			/*
-		// ulozeni
-		assets.create(image.path, id).then((path) => {
+		// definice
+		const update: Partial<IDataCollection> = {};
+		const changes = Object.keys(changed) as Array<keyof IDataCollection>;
+		// sestaveni aktualizovanyh dat
+		for (const change of changes) {
+			update[change as string] = record[change];
+		}
+		// pomocnik pro ulozeni
+		const saveHelper = (): void => {
 			// redux
-			this.props.dispatch(
-				pushRecord({
-					...rest,
-					id,
-					image: path
-				})
-			);
+			this.props.dispatch(updateRecord(record.id, update));
 			// presmerovani
-			this.redirect("/overview");
+			this.redirect("/overview/:id", { id: record.id });
 			// notifikace
-			ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
-		});
-		*/
+			ToastAndroid.show(strings("updateSaveDone"), ToastAndroid.LONG);
+		};
+		// aktualizace
+		if (changes.includes("image")) {
+			assets.create(update.image, record.id).then((path) => {
+				update.image = path;
+				saveHelper();
+			});
 		} else {
-			// notifikace
-			ToastAndroid.show(strings("createSaveDone"), ToastAndroid.LONG);
+			saveHelper();
 		}
 	};
 }

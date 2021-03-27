@@ -53,6 +53,7 @@ const Tags = (props: ITags): JSX.Element => {
 					onPress={
 						onDelete
 							? confirm.delete({
+									cancelable: true,
 									onConfirm: () => {
 										onDelete(item);
 									}

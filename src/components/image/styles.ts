@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		overflow: "hidden",
-		padding: 2 * Measurement.Padding
+		padding: 2 * Measurement.Padding,
+		width: "100%"
 	}
 });
 

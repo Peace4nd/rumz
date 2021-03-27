@@ -1,4 +1,4 @@
-import { faTimes, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faBars, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import Icon from "../icon";
@@ -63,7 +63,7 @@ export default class ContextMenu extends React.PureComponent<IContextMenu, ICont
 		return (
 			<View>
 				<TouchableOpacity style={styles.button} onPress={this.handleToggle}>
-					<Icon definition={faTimes} color="White" />
+					<Icon definition={faBars} color="White" />
 				</TouchableOpacity>
 				{opened && (
 					<View style={styles.menuWrapper}>

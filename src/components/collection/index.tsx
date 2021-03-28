@@ -68,7 +68,7 @@ export default class Collection extends React.PureComponent<ICollection> {
 					<Typography type="Headline6" style={styles.infoName}>
 						{record.name}
 					</Typography>
-					{record.subname && (
+					{!!record.subname && (
 						<Typography type="Subtitle2" style={styles.infoSubname}>
 							{record.subname}
 						</Typography>

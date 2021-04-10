@@ -149,13 +149,10 @@ class Update extends Route.Content<IUpdateProps, IUpdateState, IUpdateParams> {
 						},
 						{
 							icon: faBox,
-							items: options.cask.map((item) => ({
-								label: item,
-								value: item
-							})),
+							items: options.cask,
 							name: "cask",
 							placeholder: strings("createCask"),
-							type: "picker"
+							type: "tags"
 						},
 						{
 							icon: faEuroSign,

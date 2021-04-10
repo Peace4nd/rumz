@@ -80,7 +80,7 @@ export interface IDataCollection {
 	/**
 	 * Zrani v sudu
 	 */
-	cask: string;
+	cask: string[];
 
 	/**
 	 * Barva (zlata, hneda, tmava zlata, ...)

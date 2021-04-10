@@ -155,7 +155,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 						{/* sud */}
 						<Grid.Row>
 							<Grid.Column>
-								<Value label={strings("createCask")} mandatory={options.mandatory.includes("cask")} formated={format.string(record.cask)} />
+								<Value label={strings("createCask")} mandatory={options.mandatory.includes("cask")} formated={format.array(record.cask)} />
 							</Grid.Column>
 						</Grid.Row>
 						{/* cena */}

@@ -6,7 +6,7 @@ import { Collection, Grid, Icon, Route, Typography } from "../../components";
 import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { loadOptions } from "../../redux/actions/options";
-import { IDataCollection, IDataOptions } from "../../types/data";
+import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
 import { IReduxGoogle, IReduxStore } from "../../types/redux";
 import { IStorageSections } from "../../types/storage";
 import ga from "../../utils/google";
@@ -14,6 +14,7 @@ import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 interface IOverviewCollectionProps extends DispatchProp {
+	completeness: IDataCollectionCompleteness;
 	collection: IDataCollection[];
 	google: IReduxGoogle;
 	options: IDataOptions;
@@ -88,7 +89,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps> {
 	 */
 	private renderRecords(): JSX.Element | JSX.Element[] {
 		// rozlozeni props
-		const { collection, options } = this.props;
+		const { collection, completeness, options } = this.props;
 		// pokud nexistuje zaznam
 		if (collection.length === 0) {
 			return (
@@ -106,28 +107,10 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps> {
 			.map((record) => (
 				<Grid.Row key={record.id}>
 					<Grid.Column>
-						<Collection record={record} dram={options.dram} complete={this.calculateCompleteness(record)} onPress={this.handleDetail} />
+						<Collection record={record} dram={options.dram} complete={completeness[record.id]} onPress={this.handleDetail} />
 					</Grid.Column>
 				</Grid.Row>
 			));
-	}
-
-	/**
-	 * Overeni kompletniho zaznamu
-	 *
-	 * @param {IDataCollection} record Zaznam
-	 * @returns {boolean} Kompletni zaznam
-	 */
-	private calculateCompleteness(record: IDataCollection): boolean {
-		// rozlozeni props
-		const { options } = this.props;
-		// overeni
-		let complete = true;
-		options.mandatory.forEach((property) => {
-			complete = complete && Boolean(record[property]);
-		});
-		// vraceni
-		return complete;
 	}
 
 	/**
@@ -142,6 +125,7 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps> {
 
 export default connect((store: IReduxStore) => ({
 	collection: store.collection.records,
+	completeness: store.collection.completeness,
 	google: store.google,
 	init: store.collection.init && store.options.init,
 	options: store.options.values

@@ -104,6 +104,11 @@ export interface IDataCollection {
 }
 
 /**
+ * Mira dokonceni
+ */
+export type IDataCollectionCompleteness = Record<string, boolean>;
+
+/**
  * Datovy typ nastaveni
  */
 export interface IDataOptions {

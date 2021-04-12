@@ -7,7 +7,7 @@ import styles from "./styles";
 export interface IDisplayValue {
 	label?: string;
 	mandatory: boolean;
-	formated?: IFormatOutput;
+	formated: IFormatOutput;
 	render?: () => JSX.Element;
 }
 
@@ -25,6 +25,25 @@ const DisplayValue = (props: IDisplayValue): JSX.Element => {
 	if (formated?.empty === true) {
 		mandatoryStyles = mandatory ? styles.valueMissingMandatory : styles.valueMissing;
 	}
+	// priprava hodnoty
+	let value: JSX.Element = null;
+	if (mandatory && formated.empty) {
+		value = (
+			<Typography type="Body1" style={mandatoryStyles}>
+				{formated.value}
+			</Typography>
+		);
+	} else {
+		if (render) {
+			value = render();
+		} else {
+			value = (
+				<Typography type="Body1" style={mandatoryStyles}>
+					{formated.value}
+				</Typography>
+			);
+		}
+	}
 	// sestaveni
 	return (
 		<View style={[styles.wrapper]}>
@@ -33,13 +52,7 @@ const DisplayValue = (props: IDisplayValue): JSX.Element => {
 					{label}
 				</Typography>
 			)}
-			{render ? (
-				render()
-			) : (
-				<Typography type="Body1" style={mandatoryStyles}>
-					{formated.value}
-				</Typography>
-			)}
+			{value}
 		</View>
 	);
 };

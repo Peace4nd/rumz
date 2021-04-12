@@ -1,7 +1,7 @@
 import { User } from "@react-native-community/google-signin";
 import { Action } from "redux";
 import { IGoogleDriveFile } from "../utils/google";
-import { IDataCollection, IDataOptions } from "./data";
+import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "./data";
 
 /**
  * Typy
@@ -14,6 +14,7 @@ export type IReduxType =
 	| "collection-update"
 	| "collection-remove"
 	| "collection-predefined"
+	| "collection-completeness"
 	| "options-load"
 	| "options-update"
 	| "backup-load";
@@ -86,6 +87,11 @@ export interface IReduxCollection extends IDataWrapperArray<IDataCollection> {
 		 */
 		manufacturer: Array<IDataCollection["manufacturer"]>;
 	};
+
+	/**
+	 * Dokoncenost zaznamu
+	 */
+	completeness: IDataCollectionCompleteness;
 }
 
 /**

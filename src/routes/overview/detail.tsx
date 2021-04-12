@@ -6,7 +6,7 @@ import { RouteComponentProps } from "react-router";
 import { ContextMenu, CountryFlag, Dialog, Grid, Image, Input, Rating, Route, Typography, Value } from "../../components";
 import { removeRecord, updateRecord } from "../../redux/actions/collection";
 import { Color, Size } from "../../styles";
-import { IDataCollection, IDataOptions } from "../../types/data";
+import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
 import { IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import { stringify } from "../../utils/collection";
@@ -39,6 +39,7 @@ interface IOverviewDetailState {
 }
 
 interface IOverviewDetailProps extends DispatchProp {
+	completeness: IDataCollectionCompleteness;
 	record: IDataCollection;
 	options: IDataOptions;
 }
@@ -66,7 +67,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { record, options } = this.props;
+		const { completeness, record, options } = this.props;
 		const { opened } = this.state;
 		// sestaveni a vraceni
 		return (
@@ -85,7 +86,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 						{/* obrazek */}
 						<Grid.Row>
 							<Grid.Column>
-								<Image source={record.image} />
+								<Image source={record.image} badge={completeness[record.id] ? "Base" : "Muted"} />
 							</Grid.Column>
 						</Grid.Row>
 						{/* nazev */}
@@ -184,6 +185,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 								<Value
 									label={strings("createOrigin")}
 									mandatory={options.mandatory.includes("origin")}
+									formated={format.string(record.origin)}
 									render={() => (
 										<View style={styles.originWrapper}>
 											<CountryFlag code={record.origin} style={styles.originFlag} />
@@ -209,6 +211,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 								<Value
 									label={strings("createRating")}
 									mandatory={options.mandatory.includes("rating")}
+									formated={format.rating(record.rating)}
 									render={() => <Rating value={record.rating} />}
 								/>
 							</Grid.Column>
@@ -342,6 +345,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 }
 
 export default connect((store: IReduxStore, props: IOverviewDetailProps & RouteComponentProps<IOverviewDetailParams>) => ({
+	completeness: store.collection.completeness,
 	options: store.options.values,
 	record: store.collection.records.find((col) => col.id === props.match.params.id)
 }))(OverviewDetail);

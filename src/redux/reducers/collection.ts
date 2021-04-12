@@ -1,10 +1,11 @@
 import update from "immutability-helper";
-import { IDataCollection } from "../../types/data";
+import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
 import { IReduxAction, IReduxCollection } from "../../types/redux";
 
 // vychozi state
 export const DEFAULT_STATE: IReduxCollection = {
 	changed: new Date(),
+	completeness: {},
 	init: false,
 	predefined: {
 		manufacturer: []
@@ -22,8 +23,11 @@ export const DEFAULT_STATE: IReduxCollection = {
 export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): IReduxCollection => {
 	switch (action.type) {
 		case "collection-load": {
-			// preddefinovani vyrobci
+			// priprava
+			const payload = action.payload as { options: IDataOptions; records: IDataCollection[] };
+			// vyrobci + mira dokonceni
 			action.async({ type: "collection-predefined" });
+			action.async({ payload: payload.options, type: "collection-completeness" });
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -33,29 +37,33 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 					$set: true
 				},
 				records: {
-					$set: action.payload || DEFAULT_STATE.records
+					$set: payload.records || DEFAULT_STATE.records
 				}
 			});
 		}
 		case "collection-push": {
-			// preddefinovani vyrobci
+			// priprava
+			const payload = action.payload as { options: IDataOptions; record: IDataCollection };
+			// vyrobci + mira dokonceni
 			action.async({ type: "collection-predefined" });
+			action.async({ payload: payload.options, type: "collection-completeness" });
 			// aktualizace
 			return update(state, {
 				changed: {
 					$set: new Date()
 				},
 				records: {
-					$push: [action.payload as IDataCollection]
+					$push: [payload.record]
 				}
 			});
 		}
 		case "collection-update": {
 			// priprava
-			const payload = action.payload as { id: string; record: Partial<IDataCollection> };
+			const payload = action.payload as { id: string; options: IDataOptions; record: Partial<IDataCollection> };
 			const index = state.records.findIndex((record) => record.id === payload.id);
-			// preddefinovani vyrobci
+			// vyrobci + mira dokonceni
 			action.async({ type: "collection-predefined" });
+			action.async({ payload: payload.options, type: "collection-completeness" });
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -69,10 +77,12 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 			});
 		}
 		case "collection-remove": {
-			// nalezeni
-			const index = state.records.findIndex((record) => record.id === action.payload);
-			// preddefinovani vyrobci
+			// priprava
+			const payload = action.payload as { options: IDataOptions; id: string };
+			const index = state.records.findIndex((record) => record.id === payload.id);
+			// vyrobci + mira dokonceni
 			action.async({ type: "collection-predefined" });
+			action.async({ payload: payload.options, type: "collection-completeness" });
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -98,6 +108,25 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 					manufacturer: {
 						$set: manufacturer
 					}
+				}
+			});
+		}
+		case "collection-completeness": {
+			// definice
+			const options = action.payload as IDataOptions;
+			const completeness: IDataCollectionCompleteness = {};
+			// prochazeni zaznamu
+			for (const record of state.records) {
+				let complete = true;
+				options.mandatory.forEach((property) => {
+					complete = complete && Boolean(record[property]);
+				});
+				completeness[record.id] = complete;
+			}
+			// aktualizace
+			return update(state, {
+				completeness: {
+					$set: completeness
 				}
 			});
 		}

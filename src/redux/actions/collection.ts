@@ -1,5 +1,6 @@
 import { IDataCollection } from "../../types/data";
 import { IReduxAction } from "../../types/redux";
+import store from "../store";
 
 /**
  * Nacteni kompletni kolekce zaznamu do kolekce
@@ -8,8 +9,12 @@ import { IReduxAction } from "../../types/redux";
  * @returns {IReduxAction} Akce
  */
 export function loadRecords(records: IDataCollection[]): IReduxAction {
+	const options = store.getState().options.values;
 	return {
-		payload: records,
+		payload: {
+			options,
+			records
+		},
 		type: "collection-load"
 	};
 }
@@ -21,8 +26,12 @@ export function loadRecords(records: IDataCollection[]): IReduxAction {
  * @returns {IReduxAction} Akce
  */
 export function pushRecord(record: IDataCollection): IReduxAction {
+	const options = store.getState().options.values;
 	return {
-		payload: record,
+		payload: {
+			options,
+			record
+		},
 		type: "collection-push"
 	};
 }
@@ -35,9 +44,11 @@ export function pushRecord(record: IDataCollection): IReduxAction {
  * @returns {IReduxAction} Akce
  */
 export function updateRecord(id: string, record: Partial<IDataCollection>): IReduxAction {
+	const options = store.getState().options.values;
 	return {
 		payload: {
 			id,
+			options,
 			record
 		},
 		type: "collection-update"
@@ -51,8 +62,12 @@ export function updateRecord(id: string, record: Partial<IDataCollection>): IRed
  * @returns {IReduxAction} Akce
  */
 export function removeRecord(id: string): IReduxAction {
+	const options = store.getState().options.values;
 	return {
-		payload: id,
+		payload: {
+			id,
+			options
+		},
 		type: "collection-remove"
 	};
 }

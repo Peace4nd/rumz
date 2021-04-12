@@ -124,7 +124,7 @@ export function item(value: ItemValue, items: PickerItemProps[]): IFormatOutput 
  * @returns {IFormatOutput} Formatovana hodnota
  */
 export function rating(value: number): IFormatOutput {
-	if (isNaN(value)) {
+	if (isNaN(value) || value <= 0) {
 		return outputHelper(true);
 	}
 	return outputHelper(false, value.toFixed(0) + "/10");

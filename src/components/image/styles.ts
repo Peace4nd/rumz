@@ -1,7 +1,21 @@
 import { StyleSheet } from "react-native";
-import { Color, Measurement } from "../../styles";
+import { Color, Measurement, Size } from "../../styles";
 
 const styles = StyleSheet.create({
+	badge: {
+		alignItems: "center",
+		height: Size["8x"],
+		justifyContent: "center",
+		position: "absolute",
+		right: -1 * Size["4x"],
+		top: -1 * Size["4x"],
+		transform: [
+			{
+				rotate: "45deg"
+			}
+		],
+		width: Size["8x"]
+	},
 	image: {
 		aspectRatio: 1,
 		flex: 1

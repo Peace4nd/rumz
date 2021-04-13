@@ -20,7 +20,7 @@ export interface IDataCollection {
 	/**
 	 * Datum zakoupeni
 	 */
-	purchased: Date;
+	purchased: string;
 
 	/**
 	 * Obrazky

@@ -46,11 +46,11 @@ const store = createStore(reducers, {}, middleware);
 // serializace dat do uloziste
 let currentState: IReduxStore = null;
 const handleChange = debounce(1000, () => {
-	// predchoyi stav
+	// predchozi stav
 	const previousState: IReduxStore = currentState;
 	// aktualni stav
 	currentState = store.getState();
-	// pokud predchoyi stav neexistuje
+	// pokud predchozi stav neexistuje
 	if (previousState === null) {
 		storage.collection.write(currentState.collection);
 		storage.options.write(currentState.options);

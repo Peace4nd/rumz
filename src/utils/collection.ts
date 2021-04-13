@@ -21,7 +21,7 @@ export function stringify(record: IDataCollection): string {
 	output += makeLine("createColor", format.array(record.color).value);
 	output += makeLine("createAroma", format.array(record.aroma).value);
 	output += makeLine("createTaste", format.array(record.taste).value);
-	output += makeLine("createCask", format.string(record.cask).value);
+	output += makeLine("createCask", format.array(record.cask).value);
 	output += makeLine("createPrice", format.number(record.price, "Kč").value);
 	output += makeLine("createRipening", format.range(record.ripening, strings("overviewRipeningYears")).value);
 	output += makeLine(

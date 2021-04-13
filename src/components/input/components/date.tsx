@@ -10,13 +10,13 @@ import styles from "../styles";
 
 interface IInputDateState {
 	visible: boolean;
-	value: Date;
+	value: moment.MomentInput;
 }
 
 /**
  * Dostupne vlastnosti
  */
-export type IInputDate = IInput<Date>;
+export type IInputDate = IInput<moment.MomentInput, Date>;
 
 /**
  * Textovy vstup
@@ -55,15 +55,17 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 		// rozlozeni props
 		const { icon, placeholder } = this.props;
 		const { value, visible } = this.state;
+		// standardizace data
+		const converted = moment(value);
 		// sestaveni a vraceni
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>
 				<View style={[styles.wrapperBasic, icon ? styles.wrapperIcon : null]}>
 					{icon && <Icon style={styles.icon} definition={icon} color="Dark" />}
 					<Typography type="Body1" style={[styles.fieldBasic, value ? null : styles.fieldPlaceholder]}>
-						{value ? moment(value).format("DD. MM. YYYY") : placeholder}
+						{value ? converted.format("DD. MM. YYYY") : placeholder}
 					</Typography>
-					{visible && <DateTimePicker value={value || new Date()} mode="date" display="calendar" onChange={this.handleChange} />}
+					{visible && <DateTimePicker value={converted.toDate()} mode="date" display="calendar" onChange={this.handleChange} />}
 				</View>
 			</TouchableWithoutFeedback>
 		);

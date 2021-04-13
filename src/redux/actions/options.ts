@@ -1,4 +1,5 @@
 import { IDataOptions } from "../../types/data";
+import { RecursivePartial } from "../../types/helpers";
 import { IReduxAction } from "../../types/redux";
 import { IMergeArray } from "../../utils/merge";
 
@@ -22,7 +23,7 @@ export function loadOptions(values: IDataOptions): IReduxAction {
  * @param {IMergeArray} array Zpracovani pole
  * @returns {IReduxAction} Akce
  */
-export function updateOptions(values: Partial<IDataOptions>, array: IMergeArray = "append"): IReduxAction {
+export function updateOptions(values: RecursivePartial<IDataOptions>, array: IMergeArray = "append"): IReduxAction {
 	return {
 		payload: {
 			array,

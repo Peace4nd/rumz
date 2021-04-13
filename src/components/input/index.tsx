@@ -19,7 +19,7 @@ export interface IInputState {
 /**
  * Dostupne vlastnosti
  */
-export interface IInput<V> {
+export interface IInput<VI, VO = VI> {
 	/**
 	 * Placeholder
 	 */
@@ -28,12 +28,12 @@ export interface IInput<V> {
 	/**
 	 * Vychozi hodnota
 	 */
-	value?: V;
+	value?: VI;
 
 	/**
 	 * Zmena hodnoty
 	 */
-	onChange: (value: V, state: IInputState) => void;
+	onChange: (value: VO, state: IInputState) => void;
 
 	/**
 	 * Odeslani
@@ -68,7 +68,7 @@ export interface IInput<V> {
 	/**
 	 * Validator
 	 */
-	validator?: (value: V) => string;
+	validator?: (value: VI) => string;
 }
 
 /**

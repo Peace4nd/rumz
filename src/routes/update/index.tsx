@@ -19,12 +19,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
-import { connect, DispatchProp } from "react-redux";
+import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Form, Route } from "../../components";
 import { updateRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
-import { IReduxCollection, IReduxStore } from "../../types/redux";
+import { IReduxCollection, IReduxDispatch, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
@@ -35,7 +35,7 @@ interface IUpdateState {
 	working: boolean;
 }
 
-interface IUpdateProps extends DispatchProp {
+interface IUpdateProps extends IReduxDispatch {
 	options: IDataOptions;
 	predefined: IReduxCollection["predefined"];
 	record: IDataCollection;

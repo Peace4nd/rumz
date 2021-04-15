@@ -1,5 +1,6 @@
 import { User } from "@react-native-community/google-signin";
 import { Action } from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { IGoogleDriveFile } from "../utils/google";
 import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "./data";
 
@@ -22,9 +23,18 @@ export type IReduxType =
 /**
  * Akce
  */
-export interface IReduxAction<P = unknown> extends Action<IReduxType> {
-	payload?: P;
-	async?: <A = any>(action: IReduxAction<A>) => void;
+export type IReduxAction = Action<IReduxType> & { payload?: unknown };
+
+/**
+ * Thunk
+ */
+export type IReduxThunk = ThunkAction<void, IReduxStore, unknown, IReduxAction>;
+
+/**
+ * Dispatch
+ */
+export interface IReduxDispatch {
+	dispatch: ThunkDispatch<IReduxStore, unknown, IReduxAction>;
 }
 
 /**

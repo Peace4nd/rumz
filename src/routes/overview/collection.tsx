@@ -1,19 +1,19 @@
 import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import SplashScreen from "react-native-splash-screen";
-import { batch, connect, DispatchProp } from "react-redux";
+import { batch, connect } from "react-redux";
 import { Collection, Grid, Icon, Route, Typography } from "../../components";
 import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { loadOptions } from "../../redux/actions/options";
 import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
-import { IReduxGoogle, IReduxStore } from "../../types/redux";
+import { IReduxDispatch, IReduxGoogle, IReduxStore } from "../../types/redux";
 import { IStorageSections } from "../../types/storage";
 import ga from "../../utils/google";
 import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
-interface IOverviewCollectionProps extends DispatchProp {
+interface IOverviewCollectionProps extends IReduxDispatch {
 	completeness: IDataCollectionCompleteness;
 	collection: IDataCollection[];
 	google: IReduxGoogle;

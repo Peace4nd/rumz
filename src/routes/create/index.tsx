@@ -18,12 +18,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Keyboard, ToastAndroid } from "react-native";
-import { connect, DispatchProp } from "react-redux";
+import { connect } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { Form, Route } from "../../components";
 import { pushRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
-import { IReduxCollection, IReduxStore } from "../../types/redux";
+import { IReduxCollection, IReduxDispatch, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
@@ -33,7 +33,7 @@ interface ICreateState {
 	working: boolean;
 }
 
-interface ICreateProps extends DispatchProp {
+interface ICreateProps extends IReduxDispatch {
 	options: IDataOptions;
 	predefined: IReduxCollection["predefined"];
 }

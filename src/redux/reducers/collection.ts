@@ -24,10 +24,7 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 	switch (action.type) {
 		case "collection-load": {
 			// priprava
-			const payload = action.payload as { options: IDataOptions; records: IDataCollection[] };
-			// vyrobci + mira dokonceni
-			action.async({ type: "collection-predefined" });
-			action.async({ payload: payload.options, type: "collection-completeness" });
+			const payload = action.payload as IDataCollection[];
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -37,33 +34,26 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 					$set: true
 				},
 				records: {
-					$set: payload.records || DEFAULT_STATE.records
+					$set: payload || DEFAULT_STATE.records
 				}
 			});
 		}
 		case "collection-push": {
-			// priprava
-			const payload = action.payload as { options: IDataOptions; record: IDataCollection };
-			// vyrobci + mira dokonceni
-			action.async({ type: "collection-predefined" });
-			action.async({ payload: payload.options, type: "collection-completeness" });
+			const payload = action.payload as IDataCollection;
 			// aktualizace
 			return update(state, {
 				changed: {
 					$set: new Date()
 				},
 				records: {
-					$push: [payload.record]
+					$push: [payload]
 				}
 			});
 		}
 		case "collection-update": {
 			// priprava
-			const payload = action.payload as { id: string; options: IDataOptions; record: Partial<IDataCollection> };
+			const payload = action.payload as { id: string; record: Partial<IDataCollection> };
 			const index = state.records.findIndex((record) => record.id === payload.id);
-			// vyrobci + mira dokonceni
-			action.async({ type: "collection-predefined" });
-			action.async({ payload: payload.options, type: "collection-completeness" });
 			// aktualizace
 			return update(state, {
 				changed: {
@@ -78,11 +68,8 @@ export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): 
 		}
 		case "collection-remove": {
 			// priprava
-			const payload = action.payload as { options: IDataOptions; id: string };
-			const index = state.records.findIndex((record) => record.id === payload.id);
-			// vyrobci + mira dokonceni
-			action.async({ type: "collection-predefined" });
-			action.async({ payload: payload.options, type: "collection-completeness" });
+			const payload = action.payload as string;
+			const index = state.records.findIndex((record) => record.id === payload);
 			// aktualizace
 			return update(state, {
 				changed: {

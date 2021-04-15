@@ -2,14 +2,14 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faListUl, faPalette } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Image, StyleSheet } from "react-native";
-import { connect, DispatchProp } from "react-redux";
+import { connect } from "react-redux";
 import { Button, ButtonGroup, Grid, Input, Route, Spacer, Tags, Typography } from "../../components";
 import { loadBackup } from "../../redux/actions/backup";
 import { loadRecords } from "../../redux/actions/collection";
 import { signResolved } from "../../redux/actions/google";
 import { loadOptions, updateOptions } from "../../redux/actions/options";
 import { IDataCollection, IDataOptions, IDataOptionsProperties } from "../../types/data";
-import { IReduxBackup, IReduxGoogle, IReduxStore } from "../../types/redux";
+import { IReduxBackup, IReduxDispatch, IReduxGoogle, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import ga, { IGoogleDriveFile } from "../../utils/google";
 import storage, { DATABASE } from "../../utils/storage";
@@ -23,7 +23,7 @@ interface IOptionsState {
 	backupUpload: boolean;
 }
 
-interface IOptionsProps extends DispatchProp {
+interface IOptionsProps extends IReduxDispatch {
 	backup: IReduxBackup;
 	collection: IDataCollection[];
 	google: IReduxGoogle;

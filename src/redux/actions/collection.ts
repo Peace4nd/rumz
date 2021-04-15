@@ -1,21 +1,25 @@
 import { IDataCollection } from "../../types/data";
-import { IReduxAction } from "../../types/redux";
-import store from "../store";
+import { IReduxThunk } from "../../types/redux";
 
 /**
  * Nacteni kompletni kolekce zaznamu do kolekce
  *
  * @param {IDataCollection[]} records Zaznamy
- * @returns {IReduxAction} Akce
+ * @returns {IReduxThunk} Akce
  */
-export function loadRecords(records: IDataCollection[]): IReduxAction {
-	const options = store.getState().options.values;
-	return {
-		payload: {
-			options,
-			records
-		},
-		type: "collection-load"
+export function loadRecords(records: IDataCollection[]): IReduxThunk {
+	return (dispatch, getState) => {
+		dispatch({
+			payload: records,
+			type: "collection-load"
+		});
+		dispatch({
+			type: "collection-predefined"
+		});
+		dispatch({
+			payload: getState().options.values,
+			type: "collection-completeness"
+		});
 	};
 }
 
@@ -23,16 +27,21 @@ export function loadRecords(records: IDataCollection[]): IReduxAction {
  * Pridani zaznamu do kolekce
  *
  * @param {IDataCollection} record Zaznam
- * @returns {IReduxAction} Akce
+ * @returns {IReduxThunk} Akce
  */
-export function pushRecord(record: IDataCollection): IReduxAction {
-	const options = store.getState().options.values;
-	return {
-		payload: {
-			options,
-			record
-		},
-		type: "collection-push"
+export function pushRecord(record: IDataCollection): IReduxThunk {
+	return (dispatch, getState) => {
+		dispatch({
+			payload: record,
+			type: "collection-push"
+		});
+		dispatch({
+			type: "collection-predefined"
+		});
+		dispatch({
+			payload: getState().options.values,
+			type: "collection-completeness"
+		});
 	};
 }
 
@@ -41,17 +50,24 @@ export function pushRecord(record: IDataCollection): IReduxAction {
  *
  * @param {string} id ID zaznamu
  * @param {Partial<IDataCollection>} record Zaznam
- * @returns {IReduxAction} Akce
+ * @returns {IReduxThunk} Akce
  */
-export function updateRecord(id: string, record: Partial<IDataCollection>): IReduxAction {
-	const options = store.getState().options.values;
-	return {
-		payload: {
-			id,
-			options,
-			record
-		},
-		type: "collection-update"
+export function updateRecord(id: string, record: Partial<IDataCollection>): IReduxThunk {
+	return (dispatch, getState) => {
+		dispatch({
+			payload: {
+				id,
+				record
+			},
+			type: "collection-update"
+		});
+		dispatch({
+			type: "collection-predefined"
+		});
+		dispatch({
+			payload: getState().options.values,
+			type: "collection-completeness"
+		});
 	};
 }
 
@@ -59,15 +75,20 @@ export function updateRecord(id: string, record: Partial<IDataCollection>): IRed
  * Odstraneni zaznamu z kolekce
  *
  * @param {string} id Identifikator
- * @returns {IReduxAction} Akce
+ * @returns {IReduxThunk} Akce
  */
-export function removeRecord(id: string): IReduxAction {
-	const options = store.getState().options.values;
-	return {
-		payload: {
-			id,
-			options
-		},
-		type: "collection-remove"
+export function removeRecord(id: string): IReduxThunk {
+	return (dispatch, getState) => {
+		dispatch({
+			payload: id,
+			type: "collection-remove"
+		});
+		dispatch({
+			type: "collection-predefined"
+		});
+		dispatch({
+			payload: getState().options.values,
+			type: "collection-completeness"
+		});
 	};
 }

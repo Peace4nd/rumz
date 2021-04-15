@@ -1,13 +1,13 @@
 import { faGlassWhiskey, faPencilAlt, faShareAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Share, StyleSheet, View } from "react-native";
-import { connect, DispatchProp } from "react-redux";
+import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { ContextMenu, CountryFlag, Dialog, Grid, Image, Input, Rating, Route, Typography, Value } from "../../components";
 import { removeRecord, updateRecord } from "../../redux/actions/collection";
 import { Color, Size } from "../../styles";
 import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
-import { IReduxStore } from "../../types/redux";
+import { IReduxDispatch, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import { stringify } from "../../utils/collection";
 import confirm from "../../utils/confirm";
@@ -38,7 +38,7 @@ interface IOverviewDetailState {
 	dram: number;
 }
 
-interface IOverviewDetailProps extends DispatchProp {
+interface IOverviewDetailProps extends IReduxDispatch {
 	completeness: IDataCollectionCompleteness;
 	record: IDataCollection;
 	options: IDataOptions;

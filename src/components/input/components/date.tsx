@@ -56,7 +56,7 @@ export default class InputDate extends React.PureComponent<IInputDate, IInputDat
 		const { icon, placeholder } = this.props;
 		const { value, visible } = this.state;
 		// standardizace data
-		const converted = moment(value);
+		const converted = moment(value || new Date());
 		// sestaveni a vraceni
 		return (
 			<TouchableWithoutFeedback onPress={this.handleOpen}>

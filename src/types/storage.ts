@@ -16,7 +16,7 @@ export type IStorageKey = keyof IStorageSections;
 /**
  * Definice metod pro objekt
  */
-export interface IStorageActions<T> {
+export interface IStorageBasic<T> {
 	/**
 	 * Nacteni cele kolekce
 	 *

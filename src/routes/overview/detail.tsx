@@ -275,8 +275,8 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 								cancelable: true,
 								onConfirm: () => {
 									Promise.all([storage.collection.remove(record.id), assets.remove(record.image)]).then(() => {
-										this.props.dispatch(removeRecord(record.id));
 										this.redirect("/overview");
+										this.props.dispatch(removeRecord(record.id));
 									});
 								}
 							})

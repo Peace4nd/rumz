@@ -54,7 +54,9 @@ export default {
 	 * @param {string} file Soubor
 	 */
 	remove: async (file: string): Promise<void> => {
-		await fs.unlink(file);
+		if (await fs.exists(file)) {
+			await fs.unlink(file);
+		}
 	},
 
 	/**

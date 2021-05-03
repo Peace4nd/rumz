@@ -92,8 +92,6 @@ nejvyssi cena
 nejlepe hodnocene
 nejstarsi	
 top vyrobce
-
-- pri zadavani noveho rumu zkollektovat existujici hodnoty a nabizet je pres vyskakovaci menu
 */
 export default connect((store: IReduxStore) => ({
 	collection: store.collection.records

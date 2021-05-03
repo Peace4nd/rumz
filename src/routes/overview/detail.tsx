@@ -288,29 +288,6 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 	}
 
 	/**
-	 * Uprava hodnoty
-	 *
-	 * @param {string} id Identifikator
-	 * @param {keyof IDataCollection} field Pole
-	 * @param {unknown} value Hodnota
-	 */
-	private handleChange(id: string, field: keyof IDataCollection, value: unknown): void {
-		this.props.dispatch(updateRecord(id, { [field]: value }));
-	}
-
-	/**
-	 * Uprava obrazku
-	 *
-	 * @param {string} id Identifikator
-	 * @param {unknown} value Hodnota
-	 */
-	private handleImage(id: string, value: string): void {
-		assets.create(value, id).then((path) => {
-			this.props.dispatch(updateRecord(id, { image: path }));
-		});
-	}
-
-	/**
 	 * Zmena poctu panaku
 	 *
 	 * @param {number} value Pocet

@@ -91,9 +91,9 @@ export function range(value: number[], unit?: string): IFormatOutput {
 			return outputHelper(false, value[0].toFixed(0) + " - " + value[1].toFixed(0), unit);
 		} else {
 			if (value[0]) {
-				return outputHelper(false, ">" + value[0].toFixed(0), unit);
+				return outputHelper(false, "≥" + value[0].toFixed(0), unit);
 			} else {
-				return outputHelper(false, "<" + value[1].toFixed(0), unit);
+				return outputHelper(false, "≤" + value[1].toFixed(0), unit);
 			}
 		}
 	}

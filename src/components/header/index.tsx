@@ -71,9 +71,14 @@ export type IHeaderAction = IHeaderActionPath | IHeaderActionPress | IHeaderActi
  */
 export interface IHeader {
 	/**
-	 * Titulek
+	 * Nadpis
 	 */
 	title: string;
+
+	/**
+	 * Podnadpis
+	 */
+	subtitle?: string;
 
 	/**
 	 * Zpet
@@ -106,7 +111,7 @@ class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { actions, back, title } = this.props;
+		const { actions, back, subtitle, title } = this.props;
 		// sestaveni a vraceni
 		return (
 			<View style={styles.wrapper}>
@@ -117,6 +122,11 @@ class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 					<Typography type="Headline6" style={styles.title}>
 						{title}
 					</Typography>
+					{subtitle && (
+						<Typography type="Subtitle2" style={styles.subtitle}>
+							{subtitle}
+						</Typography>
+					)}
 				</View>
 				<View style={[styles.sectionAction, styles.sectionActionRight]}>
 					{actions.map((action, index) => (

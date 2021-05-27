@@ -24,6 +24,11 @@ export interface IRoute {
 	title: string;
 
 	/**
+	 * Podnadpis
+	 */
+	subtitle?: string;
+
+	/**
 	 * Funkce
 	 */
 	features?: {
@@ -88,6 +93,7 @@ export default class Route extends React.PureComponent<IRoute, IRouteState> {
 			search: false
 		},
 		scrollable: false,
+		subtitle: null,
 		title: null
 	};
 
@@ -111,7 +117,7 @@ export default class Route extends React.PureComponent<IRoute, IRouteState> {
 	 */
 	public render(): JSX.Element {
 		// rozlozeni props
-		const { features, title } = this.props;
+		const { features, subtitle, title } = this.props;
 		// definice
 		const preparedActions: IHeaderAction[] = [];
 		// doplnkove akce
@@ -153,6 +159,7 @@ export default class Route extends React.PureComponent<IRoute, IRouteState> {
 				<SafeAreaView style={styles.wrapper}>
 					<Header
 						title={title}
+						subtitle={subtitle}
 						back={
 							features.back
 								? {

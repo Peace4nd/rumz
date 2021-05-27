@@ -74,6 +74,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 			<React.Fragment>
 				<Route.Wrapper
 					title={record.name}
+					subtitle={record.subname}
 					features={{
 						back: true,
 						menu: {

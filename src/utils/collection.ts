@@ -15,6 +15,7 @@ export function stringify(record: IDataCollection): string {
 	let output: string = "";
 	// sestaveni
 	output += makeLine("createName", format.string(record.name).value);
+	output += makeLine("createSubname", format.string(record.subname).value);
 	output += makeLine("createManufacturer", format.string(record.manufacturer).value);
 	output += makeLine("createVolume", format.number(record.volume, "ml").value);
 	output += makeLine("createAlcohol", format.number(record.alcohol, "%").value);

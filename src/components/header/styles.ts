@@ -30,6 +30,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center"
 	},
+	subtitle: {
+		color: Color.Dark,
+		marginTop: Measurement.Padding / 2
+	},
 	title: {
 		color: Color.Highlight
 	},

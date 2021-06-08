@@ -10,6 +10,7 @@ import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "./da
 export type IReduxType =
 	| "google-resolved"
 	| "google-token"
+	| "collection-bottle"
 	| "collection-load"
 	| "collection-push"
 	| "collection-update"

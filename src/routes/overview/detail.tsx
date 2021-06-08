@@ -1,10 +1,10 @@
-import { faGlassWhiskey, faPencilAlt, faShareAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faGlassWhiskey, faPencilAlt, faShareAlt, faTrash, faWineBottle } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Share, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { ContextMenu, CountryFlag, Dialog, Grid, Image, Input, Rating, Route, Typography, Value } from "../../components";
-import { removeRecord, updateRecord } from "../../redux/actions/collection";
+import { addBottle, removeRecord, updateRecord } from "../../redux/actions/collection";
 import { Color, Size } from "../../styles";
 import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
 import { IReduxDispatch, IReduxStore } from "../../types/redux";
@@ -267,6 +267,14 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 								this.setState({
 									opened: true
 								});
+							}
+						},
+						{
+							icon: faWineBottle,
+							label: strings("overviewAddBottle"),
+							onPress: () => {
+								this.redirect("/overview");
+								this.props.dispatch(addBottle(record.id));
 							}
 						},
 						{

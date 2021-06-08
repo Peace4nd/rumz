@@ -101,6 +101,11 @@ export interface IDataCollection {
 	 * Vypite mnozsti
 	 */
 	drunk: number;
+
+	/**
+	 * Pocet lahvi
+	 */
+	bottle: number;
 }
 
 /**

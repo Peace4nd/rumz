@@ -3,7 +3,7 @@ import { Color, Measurement, Size } from "../../styles";
 
 const styles = StyleSheet.create({
 	image: {
-		aspectRatio: 1,
+		aspectRatio: 3 / 4,
 		flex: 0,
 		height: "100%"
 	},
@@ -27,17 +27,6 @@ const styles = StyleSheet.create({
 	infoName: {
 		flex: 0
 	},
-	infoPortions: {
-		alignItems: "center",
-		backgroundColor: Color.Light,
-		borderRadius: Measurement.Radius / 2,
-		flexDirection: "row",
-		justifyContent: "center",
-		padding: Measurement.Padding
-	},
-	infoPortionsIcon: {
-		marginRight: Measurement.Padding
-	},
 	infoRipening: {
 		alignItems: "center",
 		flexDirection: "row",
@@ -49,17 +38,26 @@ const styles = StyleSheet.create({
 		marginTop: Measurement.Padding / 2
 	},
 	status: {
-		bottom: 0,
-		height: Size["1x"],
-		left: 0,
-		position: "absolute",
-		right: 0
+		flex: 0,
+		flexDirection: "column",
+		flexWrap: "wrap",
+		height: "100%",
+		padding: Measurement.Padding
 	},
-	statusComplete: {
-		backgroundColor: Color.Base
+	statusItem: {
+		alignItems: "center",
+		flex: 0,
+		flexDirection: "row",
+		justifyContent: "flex-start",
+		marginBottom: Measurement.Padding,
+		width: Size["6x"]
 	},
-	statusIncomplete: {
-		backgroundColor: Color.Muted
+	statusItemIcon: {
+		flex: 0,
+		marginRight: Measurement.Padding
+	},
+	statusItemValue: {
+		flex: 1
 	},
 	wrapper: {
 		backgroundColor: Color.White,
@@ -71,8 +69,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		height: Measurement.Components.Collection.Height,
 		overflow: "hidden",
-		padding: Measurement.Padding,
-		paddingBottom: Measurement.Padding + Size["1x"]
+		padding: Measurement.Padding
 	},
 	wrapperPressed: {
 		opacity: 0.2

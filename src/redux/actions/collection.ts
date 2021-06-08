@@ -92,3 +92,18 @@ export function removeRecord(id: string): IReduxThunk {
 		});
 	};
 }
+
+/**
+ * Pridani nove lahve
+ *
+ * @param {string} id  Identifikator
+ * @returns {IReduxThunk} Akce
+ */
+export function addBottle(id: string): IReduxThunk {
+	return (dispatch) => {
+		dispatch({
+			payload: id,
+			type: "collection-bottle"
+		});
+	};
+}

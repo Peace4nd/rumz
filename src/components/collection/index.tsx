@@ -1,4 +1,4 @@
-import { faGlassWhiskey } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faGlassWhiskey, faTimes, faWineBottle } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Pressable, View } from "react-native";
 import { CountryFlag, Icon } from "..";
@@ -65,15 +65,15 @@ export default class Collection extends React.PureComponent<ICollection> {
 			<Pressable style={({ pressed }) => [styles.wrapper, pressed ? styles.wrapperPressed : null]} onPress={() => onPress(record)}>
 				<Image source={record.image} grayscale={record.volume - record.drunk <= 0} bare={true} style={styles.image} />
 				<View style={styles.info}>
-					<Typography type="Headline6" style={styles.infoName}>
+					<Typography type="Headline6" style={styles.infoName} numberOfLines={1}>
 						{record.name}
 					</Typography>
 					{!!record.subname && (
-						<Typography type="Subtitle2" style={styles.infoSubname}>
+						<Typography type="Subtitle2" style={styles.infoSubname} numberOfLines={1}>
 							{record.subname}
 						</Typography>
 					)}
-					<Typography type="Body1" style={styles.infoManufacturer}>
+					<Typography type="Body1" style={styles.infoManufacturer} numberOfLines={1}>
 						{record.manufacturer}
 					</Typography>
 					<View style={styles.infoAdditional}>
@@ -81,13 +81,25 @@ export default class Collection extends React.PureComponent<ICollection> {
 						<View style={styles.infoRipening}>
 							<Typography type="Body2">{ripening.empty ? null : ripening.value}</Typography>
 						</View>
-						<View style={styles.infoPortions}>
-							<Icon definition={faGlassWhiskey} size="2x" style={styles.infoPortionsIcon} />
-							<Typography type="Body2">{Math.ceil((record.volume - record.drunk) / dram)}x</Typography>
-						</View>
 					</View>
 				</View>
-				<View style={[styles.status, complete ? styles.statusComplete : styles.statusIncomplete]} />
+				<View style={styles.status}>
+					<View style={styles.statusItem}>
+						<Icon definition={faGlassWhiskey} size="2x" style={styles.statusItemIcon} />
+						<Typography type="Body2" style={styles.statusItemValue}>
+							{Math.ceil((record.volume - record.drunk) / dram)}x
+						</Typography>
+					</View>
+					<View style={styles.statusItem}>
+						<Icon definition={faWineBottle} size="2x" style={styles.statusItemIcon} />
+						<Typography type="Body2" style={styles.statusItemValue}>
+							{record.bottle}x
+						</Typography>
+					</View>
+					<View style={styles.statusItem}>
+						<Icon definition={complete ? faCheck : faTimes} size="2x" style={styles.statusItemIcon} />
+					</View>
+				</View>
 			</Pressable>
 		);
 	}

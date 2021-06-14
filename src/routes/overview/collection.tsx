@@ -72,7 +72,14 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps> {
 					menu: {
 						enabled: true
 					},
-					search: true
+					search: {
+						callback: (text) => {
+							const res = this.props.collection.filter((record) => record.name.toLowerCase().includes(text.toLowerCase().trim()));
+
+							console.log(res);
+						},
+						enabled: true
+					}
 				}}
 				scrollable={true}
 			>

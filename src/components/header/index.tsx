@@ -122,7 +122,7 @@ class Header extends React.PureComponent<IHeader & RouteComponentProps> {
 					<Typography type="Headline6" style={styles.title}>
 						{title}
 					</Typography>
-					{subtitle && (
+					{!!subtitle && (
 						<Typography type="Subtitle2" style={styles.subtitle}>
 							{subtitle}
 						</Typography>

@@ -24,7 +24,7 @@ import { RouteComponentProps } from "react-router";
 import { Form, Route } from "../../components";
 import { updateRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
-import { IReduxCollection, IReduxDispatch, IReduxStore } from "../../types/redux";
+import { IReduxDispatch, IReduxRecords, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
@@ -37,7 +37,7 @@ interface IUpdateState {
 
 interface IUpdateProps extends IReduxDispatch {
 	options: IDataOptions;
-	predefined: IReduxCollection["predefined"];
+	predefined: IReduxRecords["predefined"];
 	record: IDataCollection;
 }
 

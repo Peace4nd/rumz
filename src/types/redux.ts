@@ -2,7 +2,6 @@ import { User } from "@react-native-community/google-signin";
 import { Action } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { IGoogleDriveFile } from "../utils/google";
-import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "./data";
 
 /**
  * Typy
@@ -10,16 +9,19 @@ import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "./da
 export type IReduxType =
 	| "google-resolved"
 	| "google-token"
+	| "backup-load"
+	| "collections-load"
+	| "collections-add"
+	| "options-load"
+	| "options-update"
+	// refactor
 	| "collection-bottle"
 	| "collection-load"
 	| "collection-push"
 	| "collection-update"
 	| "collection-remove"
 	| "collection-predefined"
-	| "collection-completeness"
-	| "options-load"
-	| "options-update"
-	| "backup-load";
+	| "collection-completeness";
 
 /**
  * Akce
@@ -41,23 +43,9 @@ export interface IReduxDispatch {
 /**
  * Sdilene vlastnisti pro wrapper
  */
-export interface IDataWrapperShared {
+export interface IReduxData {
 	changed: Date;
 	init: boolean;
-}
-
-/**
- * Wrapper pro pole
- */
-export interface IDataWrapperArray<T> extends IDataWrapperShared {
-	records: T[];
-}
-
-/**
- * Wrapper pro objekt
- */
-export interface IDataWrapperObject<T> extends IDataWrapperShared {
-	values: T;
 }
 
 /**
@@ -86,29 +74,46 @@ export interface IReduxBackup {
 }
 
 /**
- * Kolekce
+ * Zaznamy konkretni kolekce
  */
-export interface IReduxCollection extends IDataWrapperArray<IDataCollection> {
-	/**
-	 * Preddefinovane hodnoty
-	 */
-	predefined: {
-		/**
-		 * Vyrobce
-		 */
-		manufacturer: Array<IDataCollection["manufacturer"]>;
-	};
-
-	/**
-	 * Dokoncenost zaznamu
-	 */
-	completeness: IDataCollectionCompleteness;
+export interface IReduxRecordsData extends IReduxData {
+	data: any[];
 }
 
 /**
- * Nastaveni
+ * Zaznamy vsech kolekci
  */
-export type IReduxOptions = IDataWrapperObject<IDataOptions>;
+export type IReduxRecords = Record<string, IReduxRecordsData>;
+
+/**
+ * Nastaveni konkretni kolekce
+ */
+export interface IReduxOptionsData extends IReduxData {
+	data: any;
+}
+
+/**
+ * Nastaveni vsech kolekci
+ */
+export type IReduxOptions = Record<string, IReduxOptionsData>;
+
+/**
+ * Informace o kolekce
+ */
+export interface IReduxCollectionsData {
+	title: string;
+	created: Date;
+	changed: Date;
+	records: number;
+}
+
+/**
+ * Kolekce
+ */
+export interface IReduxCollections {
+	selected: string;
+	stored: Record<string, IReduxCollectionsData>;
+}
 
 /**
  * Store
@@ -116,6 +121,7 @@ export type IReduxOptions = IDataWrapperObject<IDataOptions>;
 export interface IReduxStore {
 	backup: IReduxBackup;
 	google: IReduxGoogle;
-	collection: IReduxCollection;
+	records: IReduxRecords;
+	collections: IReduxCollections;
 	options: IReduxOptions;
 }

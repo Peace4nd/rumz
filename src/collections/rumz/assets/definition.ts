@@ -17,7 +17,7 @@ import {
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
 import { v4 } from "uuid";
-import { ICollection } from "../../types/collection";
+import { ICollection } from "../../../types/collection";
 import { ICollectionRecord } from "./types";
 
 export default {
@@ -142,13 +142,5 @@ export default {
 			type: "hidden"
 		}
 	],
-	labels: {
-		create: "createTitle",
-		save: {
-			done: "Rum byl přidán do kolekce",
-			error: "Při ukládání nastala chyba. Některá pole nejsou vyplněná!"
-		},
-		title: "Rumotéka"
-	},
-	name: "rumz"
+	title: "Rumotéka"
 } as ICollection<ICollectionRecord>;

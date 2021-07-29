@@ -3,7 +3,7 @@ import { matchPath } from "react-router";
 /**
  * Dostupne routy
  */
-export type IRouterPath = "/create" | "/update/:id" | "/overview" | "/overview/:id" | "/stats" | "/options";
+export type IRouterPath = "/collections" | "/create" | "/update/:id" | "/overview" | "/overview/:id" | "/stats" | "/options";
 
 /**
  * Overeni ouhlasu pozadovane cesty a aktualniho URL

@@ -1,17 +1,17 @@
-import { IReduxCollection, IReduxOptions } from "./redux";
+import { IReduxOptionsData, IReduxRecordsData } from "./redux";
 
 /**
  * Sekce uloziste
  */
 export interface IStorageSections {
-	collection: IReduxCollection;
-	options: IReduxOptions;
+	records: IReduxRecordsData;
+	options: IReduxOptionsData;
 }
 
 /**
  * Typ uloziste
  */
-export type IStorageKey = keyof IStorageSections;
+export type IStorageKey = keyof IStorageSections | "collections";
 
 /**
  * Definice metod pro objekt
@@ -33,14 +33,22 @@ export interface IStorageBasic<T> {
 }
 
 /**
- * Definice metody pro odstraneni
+ * Definice metod pro objekt
  */
-export interface IStorageRemove {
+export interface IStorageNamespace<T> {
 	/**
-	 * Odstraneni konkretniho zaznamu
+	 * Nacteni cele kolekce
 	 *
-	 * @param {string} id Identifikator
-	 * @returns {Promise<void>} Kompletni kolekce
+	 * @param {string} guid ID kolekce
+	 * @returns {Promise<T>} Kompletni kolekce
 	 */
-	remove: (id: string) => Promise<void>;
+	read: (guid: string) => Promise<T>;
+
+	/**
+	 * Aktualizace zaznamu v kolekci
+	 *
+	 * @param {string} guid ID kolekce
+	 * @param {T} data Data
+	 */
+	write: (guid: string, data: T) => Promise<void>;
 }

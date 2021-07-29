@@ -6,6 +6,7 @@ import { MenuProvider } from "react-native-popup-menu";
 import { Provider } from "react-redux";
 import { BackButton, NativeRouter, Redirect, Route, Switch } from "react-router-native";
 import store from "./redux/store";
+import Collections from "./routes/collections";
 import Create from "./routes/create";
 import Options from "./routes/options";
 import { Collection, Detail } from "./routes/overview";
@@ -22,6 +23,8 @@ class App extends React.PureComponent {
 	public componentDidMount(): void {
 		// pozadavek na prava
 		this.requestPermissions();
+		// tady zkontrolovat existujici kolece a kouknout jaka je aktivni, pripadne nabidvnout vytvoreni nove
+
 		// inicializace google API
 		GoogleSignin.configure({
 			forceCodeForRefreshToken: true,
@@ -41,7 +44,8 @@ class App extends React.PureComponent {
 					<NativeRouter>
 						<BackButton />
 						<Switch>
-							<Redirect exact={true} strict={true} from="/" to={"/overview"} />
+							<Redirect exact={true} strict={true} from="/" to={"/collections"} />
+							<Route exact={true} strict={true} path={"/collections"} component={Collections} />
 							<Route exact={true} strict={true} path={"/overview"} component={Collection} />
 							<Route exact={true} strict={true} path={"/overview/:id"} component={Detail} />
 							<Route exact={true} strict={true} path={"/create"} component={Create} />

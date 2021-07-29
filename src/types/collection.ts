@@ -150,15 +150,7 @@ export type ICollectionField<D> =
 	| ICollectionFieldHidden<D>;
 
 export interface ICollection<T> {
-	name: string;
+	title: string;
 	actions: any;
 	fields: Array<ICollectionField<T>>;
-	labels: {
-		create: string;
-		title: string;
-		save: {
-			done: string;
-			error: string;
-		};
-	};
 }

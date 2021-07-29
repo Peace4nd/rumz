@@ -13,7 +13,6 @@ import { stringify } from "../../utils/collection";
 import confirm from "../../utils/confirm";
 import country from "../../utils/country";
 import format from "../../utils/format";
-import storage from "../../utils/storage";
 import strings from "../../utils/strings";
 
 const styles = StyleSheet.create({
@@ -283,7 +282,7 @@ class OverviewDetail extends Route.Content<IOverviewDetailProps, IOverviewDetail
 							onPress: confirm.delete({
 								cancelable: true,
 								onConfirm: () => {
-									Promise.all([storage.collection.remove(record.id), assets.remove(record.image)]).then(() => {
+									assets.remove(record.image).then(() => {
 										this.redirect("/overview");
 										this.props.dispatch(removeRecord(record.id));
 									});

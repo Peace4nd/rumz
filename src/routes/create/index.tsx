@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Form, Route } from "../../components";
 import { pushRecord } from "../../redux/actions/collection";
 import { IDataCollection, IDataOptions } from "../../types/data";
-import { IReduxCollection, IReduxDispatch, IReduxStore } from "../../types/redux";
+import { IReduxDispatch, IReduxRecords, IReduxStore } from "../../types/redux";
 import assets from "../../utils/assets";
 import country from "../../utils/country";
 import strings from "../../utils/strings";
@@ -35,7 +35,7 @@ interface ICreateState {
 
 interface ICreateProps extends IReduxDispatch {
 	options: IDataOptions;
-	predefined: IReduxCollection["predefined"];
+	predefined: IReduxRecords["predefined"];
 }
 
 /**

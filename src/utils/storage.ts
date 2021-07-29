@@ -1,31 +1,40 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DEFAULT_STATE as collectionDefaul } from "../redux/reducers/collection";
-import { DEFAULT_STATE as optionsDefault } from "../redux/reducers/options";
-import { IReduxCollection, IReduxOptions } from "../types/redux";
-import { IStorageBasic, IStorageKey, IStorageRemove, IStorageSections } from "../types/storage";
+import { IReduxCollections, IReduxOptionsData, IReduxRecordsData } from "../types/redux";
+import { IStorageBasic, IStorageKey, IStorageNamespace, IStorageSections } from "../types/storage";
 
 /**
  * Ulozeni dat
  *
+ * @param {string} guid ID kolekce
  * @param {IStorageKey} key Klic
  * @param {unknown} value Data
  */
-async function write(key: IStorageKey, value: unknown): Promise<void> {
+async function write(guid: string, key: IStorageKey, value: unknown): Promise<void> {
 	const raw = JSON.stringify(value);
-	await AsyncStorage.setItem(key, raw);
+	if (guid) {
+		await AsyncStorage.setItem(`${key}[${guid}]`, raw);
+	} else {
+		await AsyncStorage.setItem(key, raw);
+	}
 }
 
 /**
  * Nacteni objektu dat
  *
+ * @param {string} guid ID kolekce
  * @param {IStorageKey} key Klic
  * @param {T} defaults Vychozi hodnota
  * @returns {Promise<T>} Data
  */
-async function read<T>(key: IStorageKey, defaults?: T): Promise<T> {
+async function read<T>(guid: string, key: IStorageKey, defaults?: T): Promise<T> {
 	// nacteni dat
-	const raw = await AsyncStorage.getItem(key);
-	if (raw != null) {
+	let raw = null;
+	if (guid) {
+		raw = await AsyncStorage.getItem(`${key}[${guid}]`);
+	} else {
+		raw = await AsyncStorage.getItem(key);
+	}
+	if (raw) {
 		return JSON.parse(raw) as T;
 	}
 	// failsafe
@@ -33,41 +42,40 @@ async function read<T>(key: IStorageKey, defaults?: T): Promise<T> {
 }
 
 /**
- * Kolekce
+ * Zaznamy
  */
-const collection: IStorageBasic<IReduxCollection> & IStorageRemove = {
-	read: async () => read("collection", collectionDefaul),
-	remove: async (id) => {
-		// nacteni a vyhledani zaznamu
-		const store = await read<IReduxCollection>("collection");
-		const index = store.records.findIndex((record) => record.id === id);
-		// pokud existuje
-		if (index !== -1) {
-			store.records.splice(index, 1);
-			await write("collection", store);
-		}
-	},
-	write: async (data) => write("collection", data)
+const records: IStorageNamespace<IReduxRecordsData> = {
+	read: async (guid) => read(guid, "records"),
+	write: async (guid, data) => write(guid, "records", data)
 };
 
 /**
  * Nastaveni
  */
-const options: IStorageBasic<IReduxOptions> = {
-	read: async () => read("options", optionsDefault),
-	write: async (data) => write("options", data)
+const options: IStorageNamespace<IReduxOptionsData> = {
+	read: async (guid) => read(guid, "options"),
+	write: async (guid, data) => write(guid, "options", data)
+};
+
+/**
+ * Kolekce
+ */
+const collections: IStorageBasic<IReduxCollections> = {
+	read: async () => read(null, "collections"),
+	write: async (data) => write(null, "collections", data)
 };
 
 /**
  * Serializace storu
  *
+ * @param {string} guid ID kolekce Kolekce
  * @returns {Promise<string>} Data
  */
-async function stringify(): Promise<string> {
+async function stringify(guid: string): Promise<string> {
 	// sestaveni dat
 	const data: IStorageSections = {
-		collection: await collection.read(),
-		options: await options.read()
+		options: await options.read(guid),
+		records: await records.read(guid)
 	};
 	// vraceni
 	return JSON.stringify(data);
@@ -76,13 +84,14 @@ async function stringify(): Promise<string> {
 /**
  * Ziskani kompletnich dat
  *
+ * @param {string} guid ID kolekce Kolekce
  * @returns {Promise<IStorageSections>} Data
  */
-async function readAll(): Promise<IStorageSections> {
+async function readAll(guid: string): Promise<IStorageSections> {
 	// sestaveni dat
 	const data = {
-		collection: await collection.read(),
-		options: await options.read()
+		options: await options.read(guid),
+		records: await records.read(guid)
 	};
 	// vraceni
 	return data;
@@ -93,8 +102,9 @@ export const DATABASE: string = "data.json";
 
 // vychozi export
 export default {
-	collection,
+	collections,
 	options,
 	readAll,
+	records,
 	stringify
 };

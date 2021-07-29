@@ -1,9 +1,9 @@
 import update from "immutability-helper";
 import { IDataCollection, IDataCollectionCompleteness, IDataOptions } from "../../types/data";
-import { IReduxAction, IReduxCollection } from "../../types/redux";
+import { IReduxAction, IReduxRecords } from "../../types/redux";
 
 // vychozi state
-export const DEFAULT_STATE: IReduxCollection = {
+export const DEFAULT_STATE: IReduxRecords = {
 	changed: new Date(),
 	completeness: {},
 	init: false,
@@ -16,11 +16,11 @@ export const DEFAULT_STATE: IReduxCollection = {
 /**
  * Kolekce
  *
- * @param {IReduxCollection} state Aktualni stav
+ * @param {IReduxRecords} state Aktualni stav
  * @param {IReduxAction} action Akce
- * @returns {IReduxCollection} Store
+ * @returns {IReduxRecords} Store
  */
-export default (state: IReduxCollection = DEFAULT_STATE, action: IReduxAction): IReduxCollection => {
+export default (state: IReduxRecords = DEFAULT_STATE, action: IReduxAction): IReduxRecords => {
 	switch (action.type) {
 		case "collection-bottle": {
 			// priprava

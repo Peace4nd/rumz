@@ -1,19 +1,20 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 import { debounce } from "throttle-debounce";
-import { IReduxStore } from "../types/redux";
 import storage from "../utils/storage";
 import backup from "./reducers/backup";
-import collection from "./reducers/collection";
+import collections from "./reducers/collections";
 import google from "./reducers/google";
 import options from "./reducers/options";
+import records from "./reducers/records";
 
 // reducery
 const reducers = combineReducers({
 	backup,
-	collection,
+	collections,
 	google,
-	options
+	options,
+	records
 });
 
 // priprava
@@ -21,26 +22,13 @@ const middleware = applyMiddleware(thunk);
 const store = createStore(reducers, {}, middleware);
 
 // serializace dat do uloziste
-let currentState: IReduxStore = null;
 const handleChange = debounce(1000, () => {
-	// predchozi stav
-	const previousState: IReduxStore = currentState;
 	// aktualni stav
-	currentState = store.getState();
-	// pokud predchozi stav neexistuje
-	if (previousState === null) {
-		storage.collection.write(currentState.collection);
-		storage.options.write(currentState.options);
-	} else {
-		// kolekce
-		if (previousState.collection.changed !== currentState.collection.changed) {
-			storage.collection.write(currentState.collection);
-		}
-		// nastaveni
-		if (previousState.options.changed !== currentState.options.changed) {
-			storage.options.write(currentState.options);
-		}
-	}
+	const state = store.getState();
+	// serializace
+	storage.collections.write(state.collections);
+	storage.records.write(state.records);
+	storage.options.write(state.options);
 });
 store.subscribe(handleChange);
 

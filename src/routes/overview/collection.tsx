@@ -35,9 +35,9 @@ class OverviewCollection extends Route.Content<IOverviewCollectionProps> {
 		SplashScreen.hide();
 		// nacteni databaze
 		if (!init) {
-			storage.readAll().then((data: IStorageSections) => {
+			storage.readAll(null).then((data: IStorageSections) => {
 				batch(() => {
-					this.props.dispatch(loadRecords(data.collection.records));
+					this.props.dispatch(loadRecords(data.records.records));
 					this.props.dispatch(loadOptions(data.options.values));
 				});
 			});

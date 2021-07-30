@@ -1,2 +1,7 @@
-export { default as definition } from "./assets/definition";
-export * from "./assets/types";
+import options from "./options";
+import records from "./records";
+
+export default {
+	options,
+	records
+};

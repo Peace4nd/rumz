@@ -1,11 +1,15 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { PickerItemProps } from "@react-native-picker/picker";
+import { IReduxOptionsData } from "./redux";
 
-export interface ICollectionFieldShared<D> {
+/**
+ * Sdilene vlastnosti napric kazdym polem
+ */
+export interface ICollectionFieldShared<F, V> {
 	/**
 	 * Nazev hodnoty
 	 */
-	name: keyof D;
+	name: F;
 
 	/**
 	 * Popisek
@@ -13,36 +17,54 @@ export interface ICollectionFieldShared<D> {
 	label: string;
 
 	/**
+	 * Popis
+	 */
+	description: string;
+
+	/**
 	 * Ikona
 	 */
 	icon: IconDefinition;
 
 	/**
-	 * Validator
+	 * Validace hodnoty
+	 *
+	 * @param {V} value Hodnota
 	 */
-	validator?: (value: any) => string;
+	validate?: (value: V) => string;
 
 	/**
-	 * Vytvoreni nove vychozi hodnoty
+	 * Vychozi hodnota
+	 *
+	 * @param {IReduxOptionsData} options Nastaveni
 	 */
-	defaults?: () => any;
+	value?: (options: IReduxOptionsData) => V;
 }
 
-export interface ICollectionFieldDate<D> extends ICollectionFieldShared<D> {
+/**
+ * Datum
+ */
+export interface ICollectionFieldDate<F> extends ICollectionFieldShared<F, Date> {
 	/**
 	 * Typ
 	 */
 	type: "date";
 }
 
-export interface ICollectionFieldImage<D> extends ICollectionFieldShared<D> {
+/**
+ * Obrazky
+ */
+export interface ICollectionFieldImage<F> extends ICollectionFieldShared<F, string[]> {
 	/**
 	 * Typ
 	 */
 	type: "image";
 }
 
-export interface ICollectionFieldMultiline<D> extends ICollectionFieldShared<D> {
+/**
+ * Viceradkovy text
+ */
+export interface ICollectionFieldMultiline<F> extends ICollectionFieldShared<F, string> {
 	/**
 	 * Typ
 	 */
@@ -54,7 +76,10 @@ export interface ICollectionFieldMultiline<D> extends ICollectionFieldShared<D> 
 	lines: number;
 }
 
-export interface ICollectionFieldNumber<D> extends ICollectionFieldShared<D> {
+/**
+ * Cislo
+ */
+export interface ICollectionFieldNumber<F> extends ICollectionFieldShared<F, number> {
 	/**
 	 * Typ
 	 */
@@ -66,7 +91,10 @@ export interface ICollectionFieldNumber<D> extends ICollectionFieldShared<D> {
 	unit?: string;
 }
 
-export interface ICollectionFieldPicker<D> extends ICollectionFieldShared<D> {
+/**
+ * Vyberove menu (jedna polozka)
+ */
+export interface ICollectionFieldPicker<F> extends ICollectionFieldShared<F, string> {
 	/**
 	 * Typ
 	 */
@@ -74,38 +102,72 @@ export interface ICollectionFieldPicker<D> extends ICollectionFieldShared<D> {
 
 	/**
 	 * Polozky
+	 *
+	 * @param {IReduxOptionsData} options Nastaveni
 	 */
-	items: PickerItemProps[];
+	items: (options: IReduxOptionsData) => PickerItemProps[];
 }
 
-export interface ICollectionFieldRange<D> extends Omit<ICollectionFieldShared<D>, "label" | "icon"> {
+/**
+ * Rozsah
+ */
+export interface ICollectionFieldRange<F> extends Omit<ICollectionFieldShared<F, [number, number]>, "label" | "icon"> {
 	/**
 	 * Typ
 	 */
 	type: "range";
 
+	/**
+	 * Popisek
+	 */
 	label: [string, string];
+
+	/**
+	 * Ikona
+	 */
 	icon: [IconDefinition, IconDefinition];
 }
 
-export interface ICollectionFieldRating<D> extends ICollectionFieldShared<D> {
+/**
+ * Hodnoceni
+ */
+
+export interface ICollectionFieldRating<F> extends ICollectionFieldShared<F, number> {
 	/**
 	 * Typ
 	 */
 	type: "rating";
 }
 
-export interface ICollectionFieldSpinner<D> extends ICollectionFieldShared<D> {
+/**
+ * Spinner
+ */
+export interface ICollectionFieldSpinner<F> extends ICollectionFieldShared<F, number> {
 	/**
 	 * Typ
 	 */
 	type: "spinner";
+
+	/**
+	 * Maximalni hodnota
+	 */
 	max: number;
+
+	/**
+	 * Minimalni hodnota
+	 */
 	min: number;
+
+	/**
+	 * Krok
+	 */
 	step: number;
 }
 
-export interface ICollectionFieldTags<D> extends ICollectionFieldShared<D> {
+/**
+ * Tagy (vice hodnot)
+ */
+export interface ICollectionFieldTags<F> extends ICollectionFieldShared<F, string[]> {
 	/**
 	 * Typ
 	 */
@@ -113,44 +175,70 @@ export interface ICollectionFieldTags<D> extends ICollectionFieldShared<D> {
 
 	/**
 	 * Polozky
+	 *
+	 * @param {IReduxOptionsData} options Nastaveni
 	 */
-	items: string[];
+	items: (options: IReduxOptionsData) => string[];
 
 	/**
 	 * Popisky hodnot
+	 *
+	 * @param {IReduxOptionsData} options Nastaveni
 	 */
-	labels?: Record<string, string>;
+	labels?: (options: IReduxOptionsData) => Record<string, string>;
 }
 
-export interface ICollectionFieldText<D> extends ICollectionFieldShared<D> {
+/**
+ * Text
+ */
+export interface ICollectionFieldText<F> extends ICollectionFieldShared<F, string> {
 	/**
 	 * Typ
 	 */
 	type: "text";
 }
 
-export interface ICollectionFieldHidden<D> extends ICollectionFieldShared<D> {
+/**
+ * Skryte pole
+ */
+export interface ICollectionFieldHidden<F> extends Omit<ICollectionFieldShared<F, string>, "icon" | "label" | "validate"> {
 	/**
 	 * Typ
 	 */
 	type: "hidden";
 }
 
-export type ICollectionField<D> =
-	| ICollectionFieldDate<D>
-	| ICollectionFieldImage<D>
-	| ICollectionFieldMultiline<D>
-	| ICollectionFieldNumber<D>
-	| ICollectionFieldPicker<D>
-	| ICollectionFieldRange<D>
-	| ICollectionFieldRating<D>
-	| ICollectionFieldSpinner<D>
-	| ICollectionFieldText<D>
-	| ICollectionFieldTags<D>
-	| ICollectionFieldHidden<D>;
+/**
+ * Pole kolekce
+ */
+export type ICollectionField<F> =
+	| ICollectionFieldDate<F>
+	| ICollectionFieldImage<F>
+	| ICollectionFieldMultiline<F>
+	| ICollectionFieldNumber<F>
+	| ICollectionFieldPicker<F>
+	| ICollectionFieldRange<F>
+	| ICollectionFieldRating<F>
+	| ICollectionFieldSpinner<F>
+	| ICollectionFieldText<F>
+	| ICollectionFieldTags<F>
+	| ICollectionFieldHidden<F>;
 
-export interface ICollection<T> {
-	title: string;
-	actions: any;
-	fields: Array<ICollectionField<T>>;
+/**
+ * Kolekce
+ */
+export interface ICollection<F> {
+	/**
+	 * Popisek
+	 */
+	title?: string;
+
+	/**
+	 * Pole
+	 */
+	fields: Array<ICollectionField<F>>;
+
+	actions?: any;
+
+	menu?: any;
 }

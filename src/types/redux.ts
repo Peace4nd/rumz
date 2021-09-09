@@ -76,8 +76,8 @@ export interface IReduxBackup {
 /**
  * Zaznamy konkretni kolekce
  */
-export interface IReduxRecordsData extends IReduxData {
-	data: any[];
+export interface IReduxRecordsData<D = any> extends IReduxData {
+	data: D[];
 }
 
 /**
@@ -88,8 +88,8 @@ export type IReduxRecords = Record<string, IReduxRecordsData>;
 /**
  * Nastaveni konkretni kolekce
  */
-export interface IReduxOptionsData extends IReduxData {
-	data: any;
+export interface IReduxOptionsData<D = any> extends IReduxData {
+	data: D;
 }
 
 /**

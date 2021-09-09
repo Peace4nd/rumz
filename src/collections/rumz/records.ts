@@ -16,8 +16,9 @@ import {
 	faSmile,
 	faWineBottle
 } from "@fortawesome/free-solid-svg-icons";
-import { v4 } from "uuid";
+import { ICollectionOptions, ICollectionRecord } from ".";
 import { ICollection } from "../../types/collection";
+import Country from "../../utils/country";
 
 export default {
 	fields: [
@@ -47,7 +48,15 @@ export default {
 			icon: faIndustry,
 			label: "Výrobce",
 			name: "manufacturer",
-			// predefined: predefined.manufacturer,
+			predefined: (options, records) => {
+				const values: string[] = [];
+				for (const record of records.data) {
+					if (values.indexOf(record.manufacturer) === -1) {
+						values.push(record.manufacturer);
+					}
+				}
+				return values;
+			},
 			type: "text"
 		},
 		{
@@ -68,7 +77,7 @@ export default {
 		{
 			description: "Barva (zlatá, hnědá, jantarová, ...)",
 			icon: faPalette,
-			// items: (options) => options.data.color,
+			items: (options) => options.data.color,
 			label: "Barva",
 			name: "color",
 			type: "tags"
@@ -76,7 +85,7 @@ export default {
 		{
 			description: "Čichové vlastnosti (tóny kávy, vanilky, ...)",
 			icon: faFlask,
-			// items: options.properties.aroma,
+			items: (options) => options.data.aroma,
 			label: "Aroma",
 			name: "aroma",
 			type: "tags"
@@ -84,7 +93,7 @@ export default {
 		{
 			description: "Chuťové vlastnosti (pomeranče, vanilka, ...)",
 			icon: faGlassCheers,
-			// items: options.properties.taste,
+			items: (options) => options.data.taste,
 			label: "Chuť",
 			name: "taste",
 			type: "tags"
@@ -92,7 +101,7 @@ export default {
 		{
 			description: "Typ sudu ve kterém rum zrál",
 			icon: faBox,
-			// items: options.cask,
+			items: (options) => options.data.cask,
 			label: "Typ sudu",
 			name: "cask",
 			type: "tags"
@@ -115,10 +124,7 @@ export default {
 		{
 			description: "Země původu (ISO kód)",
 			icon: faGlobeAmericas,
-			/* items: Object.entries(country).map((entry) => ({
-				label: entry[1].name,
-				value: entry[0]
-			})),*/
+			items: Country.picker(),
 			label: "Země původu",
 			name: "origin",
 			type: "picker"
@@ -148,41 +154,20 @@ export default {
 		{
 			description: "Identifikátor",
 			name: "id",
-			type: "hidden",
-			value: () => v4()
+			type: "hidden"
 		},
 		{
 			description: "Vypití množství (v ml)",
 			name: "drunk",
 			type: "hidden",
-			value: () => 0
+			value: 0
 		},
 		{
 			description: "Počet lahví",
 			name: "bottle",
 			type: "hidden",
-			value: () => 1
+			value: 1
 		}
 	],
 	title: "Rumotéka"
-} as ICollection<
-	| "id"
-	| "name"
-	| "subname"
-	| "purchased"
-	| "image"
-	| "origin"
-	| "manufacturer"
-	| "alcohol"
-	| "price"
-	| "volume"
-	| "notes"
-	| "rating"
-	| "ripening"
-	| "cask"
-	| "color"
-	| "aroma"
-	| "taste"
-	| "drunk"
-	| "bottle"
->;
+} as ICollection<ICollectionRecord, ICollectionOptions>;

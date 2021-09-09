@@ -1,4 +1,5 @@
 import { faBox, faFlask, faGlassCheers, faGlassWhiskey, faListUl, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { ICollectionOptions, ICollectionRecord } from ".";
 import { ICollection } from "../../types/collection";
 
 export default {
@@ -47,4 +48,4 @@ export default {
 			type: "tags"
 		}
 	]
-} as ICollection<"dram" | "color" | "aroma" | "taste" | "cask" | "mandatory">;
+} as ICollection<ICollectionRecord, ICollectionOptions>;

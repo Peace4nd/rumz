@@ -104,7 +104,7 @@ export interface ICollectionFieldPicker<R, O> extends ICollectionFieldShared<R, 
 	 * @param {IReduxOptionsData<O>} options Nastaveni
 	 * @param {IReduxRecordsData<R>} records Zaznamy
 	 */
-	items: (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => PickerItemProps[];
+	items: O extends null ? null : (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => PickerItemProps[];
 }
 
 /**
@@ -178,7 +178,7 @@ export interface ICollectionFieldTags<R, O> extends ICollectionFieldShared<R, st
 	 * @param {IReduxOptionsData<O>} options Nastaveni
 	 * @param {IReduxRecordsData<R>} records Zaznamy
 	 */
-	items: (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => string[];
+	items: O extends null ? null : (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => string[];
 
 	/**
 	 * Popisky hodnot
@@ -186,7 +186,7 @@ export interface ICollectionFieldTags<R, O> extends ICollectionFieldShared<R, st
 	 * @param {IReduxOptionsData<O>} options Nastaveni
 	 * @param {IReduxRecordsData<R>} records Zaznamy
 	 */
-	labels?: (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => Record<string, string>;
+	labels?: O extends null ? null : (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => Record<string, string>;
 }
 
 /**
@@ -204,13 +204,13 @@ export interface ICollectionFieldText<R, O> extends ICollectionFieldShared<R, st
 	 * @param {IReduxOptionsData<O>} options Nastaveni
 	 * @param {IReduxRecordsData<R>} records Zaznamy
 	 */
-	predefined: (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => string[];
+	predefined: O extends null ? null : (options: IReduxOptionsData<O>, records: IReduxRecordsData<R>) => string[];
 }
 
 /**
  * Skryte pole
  */
-export interface ICollectionFieldHidden<R> extends Omit<ICollectionFieldShared<R, string>, "icon" | "label" | "validate"> {
+export interface ICollectionFieldHidden<R> extends Omit<ICollectionFieldShared<R, string | number>, "icon" | "label" | "validate"> {
 	/**
 	 * Typ
 	 */
@@ -234,14 +234,9 @@ export type ICollectionField<R, O> =
 	| ICollectionFieldHidden<R>;
 
 /**
- * Kolekce
+ * Hlavni zatnamy
  */
-export interface ICollection<R, O> {
-	/**
-	 * Popisek
-	 */
-	title?: string;
-
+export interface ICollectionRecord<R, O> {
 	/**
 	 * Pole
 	 */
@@ -250,4 +245,36 @@ export interface ICollection<R, O> {
 	actions?: any;
 
 	menu?: any;
+}
+
+/**
+ * Nastaveni
+ */
+export interface ICollectionOptions<O> {
+	/**
+	 * Pole
+	 */
+	fields: Array<ICollectionField<O, null>>;
+
+	actions?: any;
+}
+
+/**
+ * Kolekce
+ */
+export interface ICollection<R, O> {
+	/**
+	 * Popisek
+	 */
+	title: string;
+
+	/**
+	 * Zaznamy
+	 */
+	records: ICollectionRecord<R, O>;
+
+	/**
+	 * Nastaveni
+	 */
+	options: ICollectionOptions<O>;
 }
